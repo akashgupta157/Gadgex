@@ -7,7 +7,26 @@ import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import CloseIcon from "@mui/icons-material/Close";
+import { useForm } from "react-hook-form";
+const style = {
+  bgcolor: "#131213",
+  // border: '2px solid #000',
+};
+
 export default function Navbar() {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => console.log(data);
   return (
     <>
       <nav>
@@ -88,7 +107,7 @@ export default function Navbar() {
           </IconButton>
         </Paper>
         <div id="part2">
-          <FaUserAlt />
+          <FaUserAlt onClick={handleOpen} />
           <BsCartFill />
         </div>
       </nav>
@@ -111,6 +130,69 @@ export default function Navbar() {
           </IconButton>
         </Paper>
       </div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style} id="box">
+          <CloseIcon
+            onClick={handleClose}
+            style={{
+              color: "white",
+              position: "relative",
+              left: "95%",
+              top: "0",
+              cursor: "pointer",
+            }}
+          ></CloseIcon>
+          <div id="modal1">
+            <button>Login</button>
+            <button>Create Account</button>
+          </div>
+          <form id="ca" onSubmit={handleSubmit(onSubmit)}>
+            <label>Enter your Name</label>
+            <input
+              {...register("Name", {
+                required: true,
+                maxLength: 20,
+                minLength:3,
+                pattern: /^[A-Za-z]+$/i,
+              })}
+            />
+            {errors?.Name?.type === "required" && <p>This field is required</p>}
+            {errors?.Name?.type === "maxLength" && (<p>Name cannot exceed 20 characters</p>)}
+            {errors?.Name?.type === "minLength" && (<p>Name must be at 3 characters</p>)}
+            {errors?.Name?.type === "pattern" && (<p>Alphabetical characters only</p>)}
+
+            <label>Enter your Email</label>
+            <input
+              {...register("Email", {
+                required: true,
+                pattern:/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+              })}
+            />
+            {errors?.Email?.type === "required" && <p>This field is required</p>}
+            {errors?.Email?.type === "pattern" && (<p>Invalid email address</p>)}
+
+            <label>Create your Password</label>
+            <input
+              type="password"
+              {...register("Password", {
+                required: true,
+                minLength:6,
+                maxLength:6
+              })}
+            />
+            {errors?.Password?.type === "required" && <p>This field is required</p>}
+            {errors?.Password?.type === "minLength" && (<p>Password must be at 6 characters</p>)}
+            {errors?.Password?.type === "maxLength" && (<p>Password must be at 6 characters</p>)}
+
+            <input type="submit" />
+          </form>
+        </Box>
+      </Modal>
     </>
   );
 }
