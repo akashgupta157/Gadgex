@@ -4,6 +4,9 @@
   box-sizing: border-box;
   font-family: "Gotham", sans-serif;
 }
+button{
+  cursor: pointer;
+}
 nav {
   background-color: black;
   padding: 10px;
@@ -43,72 +46,88 @@ nav {
   margin-bottom: 5px;
   cursor: pointer;
 }
-#search1{
+#search1 {
   display: none;
 }
-#box{
+#box {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width:35%;
+  width: 35%;
   box-shadow: 24;
   padding: 20px;
 }
-#modal1{
+#modal1 {
   margin: auto;
   width: 75%;
-  border: .2px solid white;
+  border: 0.2px solid white;
   text-align: center;
   border-radius: 5px;
 }
-#modal1 button{
-  padding:15px;
+#modal1 button {
+  padding: 15px;
   width: 50%;
   font-size: 16px;
   background: transparent;
   color: white;
   border: 0;
 }
-#modal1 button:first-child{
+#modal1 button:first-child {
   border-right: 1px solid white;
 }
-#ca{
+#ca,
+#loginform {
   margin: auto;
   display: flex;
   flex-direction: column;
   width: 80%;
   padding: 10px;
 }
-#ca input{
+#loginform{
+  display: none;
+}
+#ca input,
+#loginform input {
   font-size: 16px;
   margin: auto;
   width: 80%;
   height: 40px;
   padding-left: 5px;
   border: 1px solid white;
-  background-color:transparent;
+  background-color: transparent;
   color: white;
 }
-#ca input[type="submit"]{
-  background-color:#00e8be;
+#ca input[type="submit"],
+#loginform input[type="submit"] {
+  background-color: #00e8be;
   color: black;
   font-weight: bolder;
   border: 0;
   border-radius: 5px;
   margin-top: 15px;
+  cursor: pointer;
 }
-#ca p{
+#ca p,
+#loginform p {
   color: red;
   padding-left: 10%;
   margin-top: 5px;
   margin-bottom: 5px;
+  display: flex;
+  align-items: center;
 }
-#ca label{
+#ca label,
+#loginform label {
   color: white;
   padding-left: 10%;
   margin-top: 10px;
   margin-bottom: 5px;
+}
+#modal1 .clrbtn {
+  background-color: #00e8be;
+  color: black;
+  font-weight: bolder;
 }
 @media screen and (min-width: 866px) and (max-width: 1024px) /* Laptop */ {
   #menu p {
@@ -122,22 +141,25 @@ nav {
     margin-left: 10px;
     margin-bottom: 5px;
   }
+  #box {
+    width: 50%;
+  }
 }
-@media screen and (min-width:481px) and (max-width: 865px) /* Tablet */ {
-  #search{
+@media screen and (min-width: 481px) and (max-width: 865px) /* Tablet */ {
+  #search {
     display: none;
   }
   #menu p {
     display: none;
   }
-  nav{
+  nav {
     justify-content: space-between;
     align-items: center;
     padding-left: 40px;
     padding-right: 40px;
     padding-bottom: 0;
   }
-  #nav1{
+  #nav1 {
     background-color: black;
     padding-left: 40px;
     padding-bottom: 10px;
@@ -145,26 +167,29 @@ nav {
     top: 69px;
     width: 100%;
   }
-  #search1{
+  #search1 {
     display: flex;
     width: 70%;
   }
   .hb {
-    margin-left:0px;
+    margin-left: 0px;
     margin-bottom: 5px;
   }
-  #part2{
+  #part2 {
     margin-bottom: 5px;
+  }
+  #box {
+    width: 60%;
   }
 }
- @media screen and (max-width: 480px) /* Mobile */ {
-  #search{
+@media screen and (max-width: 480px) /* Mobile */ {
+  #search {
     display: none;
   }
   #menu p {
     display: none;
   }
-  nav{
+  nav {
     justify-content: space-between;
     align-items: center;
     padding-left: 10px;
@@ -172,13 +197,13 @@ nav {
     padding-bottom: 0;
   }
   .hb {
-    margin-left:0px;
+    margin-left: 0px;
     margin-bottom: 5px;
   }
-  #logo{
+  #logo {
     width: 120px;
-  } 
-  #nav1{
+  }
+  #nav1 {
     background-color: black;
     padding-bottom: 10px;
     padding-left: 5px;
@@ -187,7 +212,7 @@ nav {
     top: 55px;
     width: 100%;
   }
-  #search1{
+  #search1 {
     display: flex;
     width: 100%;
     height: 35px;
@@ -201,7 +226,7 @@ nav {
     font-size: 20px;
     margin-bottom: 5px;
   }
-  #box{
+  #box {
     width: 90%;
   }
-} 
+}

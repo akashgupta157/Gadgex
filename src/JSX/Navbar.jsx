@@ -11,9 +11,11 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
 import { useForm } from "react-hook-form";
+import ErrorIcon from "@mui/icons-material/Error";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const style = {
   bgcolor: "#131213",
-  // border: '2px solid #000',
 };
 
 export default function Navbar() {
@@ -26,7 +28,111 @@ export default function Navbar() {
     watch,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const {
+    register: register1,
+    handleSubmit: hS1,
+    formState: { errors: errors1 },
+  } = useForm();
+  const onSubmit = (data) => {
+    let obj = {
+      name: data.Name,
+      id: data.Email,
+      password: data.Password,
+      cart: [],
+    };
+    fetch("https://incandescent-nettle-pirate.glitch.me/profile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(obj),
+    });
+    toast.success("Account Created Successfully", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    let loginbtn = document.getElementById("login");
+    let loginform = document.getElementById("loginform");
+    let signinbtn = document.getElementById("signin");
+    let signinform = document.getElementById("ca");
+    signinbtn.classList.remove("clrbtn");
+    loginbtn.classList.add("clrbtn");
+    loginform.style.display = "flex";
+    signinform.style.display = "none";
+  };
+  const onLoginSubmit = (dat) => {
+    const email = dat.Email;
+    const password = dat.Password;
+    fetch(`https://incandescent-nettle-pirate.glitch.me/profile/${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (Object.keys(data).length === 0) {
+          toast.error("Account Not Found ", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        } else {
+          if (data.password !== password) {
+            toast.error("Password do not match ", {
+              position: "top-center",
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+          } else {
+            toast.success("Sign In Successfull!", {
+              position: "top-center",
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+            setTimeout(() => {
+              handleClose();
+            }, 2000);
+          }
+        }
+      });
+  };
+  const login = () => {
+    let loginbtn = document.getElementById("login");
+    let loginform = document.getElementById("loginform");
+    let signinbtn = document.getElementById("signin");
+    let signinform = document.getElementById("ca");
+    signinbtn.classList.remove("clrbtn");
+    loginbtn.classList.add("clrbtn");
+    loginform.style.display = "flex";
+    signinform.style.display = "none";
+  };
+  const signin = () => {
+    let loginbtn = document.getElementById("login");
+    let loginform = document.getElementById("loginform");
+    let signinbtn = document.getElementById("signin");
+    let signinform = document.getElementById("ca");
+    signinbtn.classList.add("clrbtn");
+    loginbtn.classList.remove("clrbtn");
+    loginform.style.display = "none";
+    signinform.style.display = "flex";
+  };
   return (
     <>
       <nav>
@@ -148,47 +254,138 @@ export default function Navbar() {
             }}
           ></CloseIcon>
           <div id="modal1">
-            <button>Login</button>
-            <button>Create Account</button>
+            <button id="login" onClick={login}>
+              Login
+            </button>
+            <button id="signin" onClick={signin} className="clrbtn">
+              Signin
+            </button>
           </div>
           <form id="ca" onSubmit={handleSubmit(onSubmit)}>
             <label>Enter your Name</label>
             <input
+              autoComplete="off"
               {...register("Name", {
                 required: true,
                 maxLength: 20,
-                minLength:3,
+                minLength: 3,
                 pattern: /^[A-Za-z]+$/i,
               })}
             />
-            {errors?.Name?.type === "required" && <p>This field is required</p>}
-            {errors?.Name?.type === "maxLength" && (<p>Name cannot exceed 20 characters</p>)}
-            {errors?.Name?.type === "minLength" && (<p>Name must be at 3 characters</p>)}
-            {errors?.Name?.type === "pattern" && (<p>Alphabetical characters only</p>)}
+            {errors?.Name?.type === "required" && (
+              <p>
+                <ErrorIcon /> This field is required
+              </p>
+            )}
+            {errors?.Name?.type === "maxLength" && (
+              <p>
+                <ErrorIcon /> Name cannot exceed 20 characters
+              </p>
+            )}
+            {errors?.Name?.type === "minLength" && (
+              <p>
+                <ErrorIcon /> Name must be at 3 characters
+              </p>
+            )}
+            {errors?.Name?.type === "pattern" && (
+              <p>
+                <ErrorIcon /> Alphabetical characters only
+              </p>
+            )}
 
             <label>Enter your Email</label>
             <input
+              autoComplete="off"
               {...register("Email", {
                 required: true,
-                pattern:/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
               })}
             />
-            {errors?.Email?.type === "required" && <p>This field is required</p>}
-            {errors?.Email?.type === "pattern" && (<p>Invalid email address</p>)}
+            {errors?.Email?.type === "required" && (
+              <p>
+                <ErrorIcon /> This field is required
+              </p>
+            )}
+            {errors?.Email?.type === "pattern" && (
+              <p>
+                <ErrorIcon /> Invalid email address
+              </p>
+            )}
 
             <label>Create your Password</label>
             <input
               type="password"
+              autoComplete="off"
               {...register("Password", {
                 required: true,
-                minLength:6,
-                maxLength:6
+                minLength: 6,
+                maxLength: 6,
               })}
             />
-            {errors?.Password?.type === "required" && <p>This field is required</p>}
-            {errors?.Password?.type === "minLength" && (<p>Password must be at 6 characters</p>)}
-            {errors?.Password?.type === "maxLength" && (<p>Password must be at 6 characters</p>)}
+            {errors?.Password?.type === "required" && (
+              <p>
+                <ErrorIcon /> This field is required
+              </p>
+            )}
+            {errors?.Password?.type === "minLength" && (
+              <p>
+                <ErrorIcon /> Password must be 6 characters
+              </p>
+            )}
+            {errors?.Password?.type === "maxLength" && (
+              <p>
+                <ErrorIcon /> Password must be 6 characters
+              </p>
+            )}
 
+            <input type="submit" />
+          </form>
+
+          <form action="" id="loginform" onSubmit={hS1(onLoginSubmit)}>
+            <label>Enter your Email</label>
+            <input
+              autoComplete="off"
+              {...register1("Email", {
+                required: true,
+                pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+              })}
+            />
+            {errors1?.Email?.type === "required" && (
+              <p>
+                <ErrorIcon /> This field is required
+              </p>
+            )}
+            {errors1?.Email?.type === "pattern" && (
+              <p>
+                <ErrorIcon /> Invalid email address
+              </p>
+            )}
+
+            <label>Enter your Password</label>
+            <input
+              type="password"
+              autoComplete="off"
+              {...register1("Password", {
+                required: true,
+                minLength: 6,
+                maxLength: 6,
+              })}
+            />
+            {errors1?.Password?.type === "required" && (
+              <p>
+                <ErrorIcon /> This field is required
+              </p>
+            )}
+            {errors1?.Password?.type === "minLength" && (
+              <p>
+                <ErrorIcon /> Password must be 6 characters
+              </p>
+            )}
+            {errors1?.Password?.type === "maxLength" && (
+              <p>
+                <ErrorIcon /> Password must be 6 characters
+              </p>
+            )}
             <input type="submit" />
           </form>
         </Box>
