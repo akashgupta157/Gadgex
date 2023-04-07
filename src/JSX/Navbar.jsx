@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import "../CSS/Navbar.css";
 import { FaUserAlt } from "react-icons/fa";
 import { BsCartFill } from "react-icons/bs";
@@ -12,21 +12,23 @@ import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
 import { useForm } from "react-hook-form";
 import ErrorIcon from "@mui/icons-material/Error";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthContext } from "../Context/AuthContext";
+import LogoutIcon from "@mui/icons-material/Logout";
 const style = {
   bgcolor: "#131213",
 };
-
 export default function Navbar() {
-  const [open, setOpen] = React.useState(false);
+  const { setAuth, Login, user } = useContext(AuthContext);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
+    reset,
   } = useForm();
   const {
     register: register1,
@@ -106,9 +108,13 @@ export default function Navbar() {
               progress: undefined,
               theme: "colored",
             });
-            setTimeout(() => {
-              handleClose();
-            }, 2000);
+            setAuth(true);
+            Login(data);
+            handleClose();
+            let l1 = document.getElementById("l1");
+            let l2 = document.getElementById("l2");
+            l1.style.display = "none";
+            l2.style.display = "flex";
           }
         }
       });
@@ -132,6 +138,24 @@ export default function Navbar() {
     loginbtn.classList.remove("clrbtn");
     loginform.style.display = "none";
     signinform.style.display = "flex";
+  };
+  const logout = () => {
+    let l1 = document.getElementById("l2");
+    let l2 = document.getElementById("l1");
+    l1.style.display = "none";
+    l2.style.display = "flex";
+    setAuth(false);
+    Login();
+    toast.success("Logout Successfull!", {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    })
   };
   return (
     <>
@@ -213,8 +237,21 @@ export default function Navbar() {
           </IconButton>
         </Paper>
         <div id="part2">
-          <FaUserAlt onClick={handleOpen} />
-          <BsCartFill />
+          <p>{user ? user.name : null}</p>
+          <FaUserAlt
+            id="l1"
+            style={{ cursor: "pointer" }}
+            onClick={handleOpen}
+          />
+          <LogoutIcon
+            id="l2"
+            style={{ cursor: "pointer", display: "none" }}
+            onClick={logout}
+          />
+          <div id="cl">
+            <BsCartFill style={{ cursor: "pointer" }} />
+            <button>{user ? user.cart.length : 0}</button>
+          </div>
         </div>
       </nav>
       <div id="nav1">
@@ -236,6 +273,7 @@ export default function Navbar() {
           </IconButton>
         </Paper>
       </div>
+
       <Modal
         open={open}
         onClose={handleClose}

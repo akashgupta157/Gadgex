@@ -4,7 +4,7 @@
   box-sizing: border-box;
   font-family: "Gotham", sans-serif;
 }
-button{
+button {
   cursor: pointer;
 }
 nav {
@@ -16,10 +16,12 @@ nav {
   justify-content: space-around;
   position: sticky;
   top: 0;
+  z-index: 100;
 }
 #part1 {
   display: flex;
-  width: 20%;
+  align-items: center;
+  justify-content: center;
 }
 #logo {
   width: 160px;
@@ -38,13 +40,12 @@ nav {
   font-weight: 300;
 }
 #part2 {
-  width: 100px;
+  width: 200px;
+  /* border: 1px solid; */
   display: flex;
   justify-content: end;
-  gap: 35px;
   font-size: 20px;
-  margin-bottom: 5px;
-  cursor: pointer;
+  gap: 25px;
 }
 #search1 {
   display: none;
@@ -84,7 +85,7 @@ nav {
   width: 80%;
   padding: 10px;
 }
-#loginform{
+#loginform {
   display: none;
 }
 #ca input,
@@ -129,6 +130,24 @@ nav {
   color: black;
   font-weight: bolder;
 }
+#cl{
+  display: flex;
+}
+#cl button{
+  position:relative;
+  bottom: 5px;
+  right: 10px;
+  background-color: #00e8be;
+  color: black;
+  font-size: 15px;
+  border-radius:15px;
+  width:15px;
+  height:15px;
+  display: flex;
+  align-items:center;
+  justify-content: center;
+  border: 0;
+}
 @media screen and (min-width: 866px) and (max-width: 1024px) /* Laptop */ {
   #menu p {
     display: none;
@@ -166,6 +185,7 @@ nav {
     position: sticky;
     top: 69px;
     width: 100%;
+    z-index: 100;
   }
   #search1 {
     display: flex;
@@ -196,12 +216,17 @@ nav {
     padding-right: 10px;
     padding-bottom: 0;
   }
+  #part1 {
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+  }
   .hb {
     margin-left: 0px;
     margin-bottom: 5px;
   }
   #logo {
-    width: 120px;
+    width: 100px;
   }
   #nav1 {
     background-color: black;
@@ -209,8 +234,9 @@ nav {
     padding-left: 5px;
     padding-right: 5px;
     position: sticky;
-    top: 55px;
+    top: 50px;
     width: 100%;
+    z-index: 100;
   }
   #search1 {
     display: flex;
@@ -219,7 +245,7 @@ nav {
     align-items: center;
   }
   #part2 {
-    width: 100px;
+    width: 130px;
     display: flex;
     justify-content: end;
     gap: 15px;

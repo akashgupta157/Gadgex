@@ -1,0 +1,13 @@
+#slider1{
+    /* border: 1px solid red; */
+    width: 85%;
+    margin: auto;
+    margin-top: 15px;
+    /* overflow: hidden; */
+}
+#slider1 img{
+    width: 90%;
+    margin: auto;
+    display: block;
+    z-index: 1;
+}
