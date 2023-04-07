@@ -46,6 +46,7 @@ nav {
   justify-content: end;
   font-size: 20px;
   gap: 25px;
+  align-items:center;
 }
 #search1 {
   display: none;
@@ -205,6 +206,9 @@ nav {
 @media screen and (max-width: 480px) /* Mobile */ {
   #search {
     display: none;
+  }
+  #menu{
+    padding-left: 0px;
   }
   #menu p {
     display: none;

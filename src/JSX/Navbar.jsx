@@ -6,7 +6,7 @@ import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
@@ -20,6 +20,7 @@ const style = {
   bgcolor: "#131213",
 };
 export default function Navbar() {
+  const nav=useNavigate()
   const { setAuth, Login, user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -249,7 +250,9 @@ export default function Navbar() {
             onClick={logout}
           />
           <div id="cl">
-            <BsCartFill style={{ cursor: "pointer" }} />
+            <BsCartFill style={{ cursor: "pointer" }} onClick={()=>{
+              nav("/cart")
+            }} />
             <button>{user ? user.cart.length : 0}</button>
           </div>
         </div>

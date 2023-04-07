@@ -1,0 +1,171 @@
+#icon {
+  width: 300px;
+  display: flex;
+  justify-content: space-around;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 50px;
+  margin: auto;
+}
+#yt,
+#fb,
+#ig,
+#li,
+#ti {
+  font-size: 30px;
+  cursor: pointer;
+}
+#yt:hover {
+  color: red;
+}
+#fb:hover {
+  color: #3b5998;
+}
+#ig:hover {
+  color: #dc2743;
+}
+#li:hover {
+  color: #0a66c2;
+}
+#ti:hover {
+  color: #00acee;
+}
+.divider {
+  color: red;
+}
+ #que {
+  background: #1d1d1d;
+  display: flex;
+  justify-content: center;
+  padding: 40px ;
+  gap: 20px;
+}
+#rib{
+    display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+#copy{
+    display: none;
+}
+#foot {
+  display: none;
+}
+.que1 {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  .que1 div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .que1 div span {
+    font-weight: 600;
+    width: 140px;
+    font-size: 14px;
+    color: white;
+  }
+  .que1 div span:hover {
+    color: #01e8bf;
+  }
+  #que span{
+    color: white;
+  }
+  #dept p,
+    #rib p {
+      font-weight: 800;
+      color: white;
+      font-size: 15px;
+    } 
+@media screen and (min-width: 866px) and (max-width: 1024px) /* Laptop */ {
+    #que{
+        padding: 50px;
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+    }
+    #copy{
+        display: none;
+    }
+    #rib{
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+    #dept p,
+    #rib p {
+      font-weight: 800;
+      color: white;
+      font-size: 15px;
+    }
+    #que span{
+        color: white;
+    }
+}
+@media screen and (min-width: 481px) and (max-width: 865px) /* Tablet */ {
+  #que {
+    padding: 30px;
+  }
+  #copy{
+    text-align: center;
+    padding: 20px;
+    color: white;
+    font-size: 15px;
+  }
+  #dept p,
+  #rib p {
+    font-weight: 800;
+    color: white;
+    font-size: 15px;
+    text-align: center;
+  }
+  #dept form {
+    margin: auto;
+  }
+  #ill span {
+    display: none;
+  }
+  #d1 {
+    display: none;
+  }
+  #rib {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+  }
+}
+@media screen and (max-width: 480px) /* Mobile */ {
+  #que {
+    display: none;
+  }
+  #foot {
+    display: grid;
+    padding: 30px 20px 30px 20px;
+    background-color: #1d1d1d;
+  }
+  #con {
+    margin: auto;
+    /* border: 1px solid red; */
+    text-align: center;
+  }
+  #con p {
+    font-weight: 800;
+    color: white;
+    font-size: 15px;
+    text-align: left;
+  }
+  #con form {
+    margin: auto;
+  }
+  #copy {
+    margin-top: 10px;
+    color: white;
+    text-align: center;
+  }
+  #icon {
+    padding-bottom: 10px;
+  }
+}
