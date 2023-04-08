@@ -46,7 +46,7 @@ nav {
   justify-content: end;
   font-size: 20px;
   gap: 25px;
-  align-items:center;
+  align-items: center;
 }
 #search1 {
   display: none;
@@ -79,18 +79,21 @@ nav {
   border-right: 1px solid white;
 }
 #ca,
-#loginform {
+#loginform,
+#admin {
   margin: auto;
   display: flex;
   flex-direction: column;
   width: 80%;
   padding: 10px;
 }
-#loginform {
+#loginform,
+#admin {
   display: none;
 }
 #ca input,
-#loginform input {
+#loginform input,
+#admin input {
   font-size: 16px;
   margin: auto;
   width: 80%;
@@ -101,7 +104,8 @@ nav {
   color: white;
 }
 #ca input[type="submit"],
-#loginform input[type="submit"] {
+#loginform input[type="submit"],
+#admin input[type="submit"] {
   background-color: #00e8be;
   color: black;
   font-weight: bolder;
@@ -120,7 +124,8 @@ nav {
   align-items: center;
 }
 #ca label,
-#loginform label {
+#loginform label,
+#admin label {
   color: white;
   padding-left: 10%;
   margin-top: 10px;
@@ -131,23 +136,40 @@ nav {
   color: black;
   font-weight: bolder;
 }
-#cl{
+#cl {
   display: flex;
 }
-#cl button{
-  position:relative;
+#cl button {
+  position: relative;
   bottom: 5px;
   right: 10px;
   background-color: #00e8be;
   color: black;
   font-size: 15px;
-  border-radius:15px;
-  width:15px;
-  height:15px;
+  border-radius: 15px;
+  width: 15px;
+  height: 15px;
   display: flex;
-  align-items:center;
+  align-items: center;
   justify-content: center;
   border: 0;
+}
+#loginform small {
+  color: #00e8be;
+  font-weight: 700;
+  text-decoration: underline;
+  margin: auto;
+  padding-top: 10px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+#admin p {
+  color: #00e8be;
+  font-weight: 700;
+  font-size: 20px;
+  text-align: center;
 }
 @media screen and (min-width: 866px) and (max-width: 1024px) /* Laptop */ {
   #menu p {
@@ -207,7 +229,7 @@ nav {
   #search {
     display: none;
   }
-  #menu{
+  #menu {
     padding-left: 0px;
   }
   #menu p {

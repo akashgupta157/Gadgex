@@ -20,7 +20,7 @@ const style = {
   bgcolor: "#131213",
 };
 export default function Navbar() {
-  const nav=useNavigate()
+  const nav = useNavigate();
   const { setAuth, Login, user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -129,6 +129,8 @@ export default function Navbar() {
     loginbtn.classList.add("clrbtn");
     loginform.style.display = "flex";
     signinform.style.display = "none";
+    let adminform = document.getElementById("admin");
+    adminform.style.display = "none";
   };
   const signin = () => {
     let loginbtn = document.getElementById("login");
@@ -139,6 +141,8 @@ export default function Navbar() {
     loginbtn.classList.remove("clrbtn");
     loginform.style.display = "none";
     signinform.style.display = "flex";
+    let adminform = document.getElementById("admin");
+    adminform.style.display = "none";
   };
   const logout = () => {
     let l1 = document.getElementById("l2");
@@ -155,8 +159,19 @@ export default function Navbar() {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "colored"
-    })
+      theme: "colored",
+    });
+  };
+  const admin = () => {
+    let loginform = document.getElementById("loginform");
+    let adminform = document.getElementById("admin");
+    adminform.style.display = "flex";
+    loginform.style.display = "none";
+  };
+  const adminlogin = (e) => {
+    // e.preventDefault()
+    handleClose();
+    nav("/admindashbord");
   };
   return (
     <>
@@ -250,9 +265,12 @@ export default function Navbar() {
             onClick={logout}
           />
           <div id="cl">
-            <BsCartFill style={{ cursor: "pointer" }} onClick={()=>{
-              nav("/cart")
-            }} />
+            <BsCartFill
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                nav("/cart");
+              }}
+            />
             <button>{user ? user.cart.length : 0}</button>
           </div>
         </div>
@@ -427,7 +445,16 @@ export default function Navbar() {
                 <ErrorIcon /> Password must be 6 characters
               </p>
             )}
+            <small onClick={admin}>Login as Admin</small>
             <input type="submit" />
+          </form>
+          <form action="" id="admin">
+            <p>Login as Admin</p>
+            <label>Enter your Username</label>
+            <input type="text" required />
+            <label>Enter your Password</label>
+            <input type="password" required />
+            <input type="submit" onClick={adminlogin} />
           </form>
         </Box>
       </Modal>
