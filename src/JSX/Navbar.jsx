@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../Context/AuthContext";
 import LogoutIcon from "@mui/icons-material/Logout";
+import Drawer from '@mui/material/Drawer';
 const style = {
   bgcolor: "#131213",
 };
@@ -171,7 +172,7 @@ export default function Navbar() {
   const adminlogin = (e) => {
     // e.preventDefault()
     handleClose();
-    nav("/admindashbord");
+    nav("/admindashboard");
   };
   return (
     <>
@@ -458,6 +459,9 @@ export default function Navbar() {
           </form>
         </Box>
       </Modal>
+      <Drawer>
+
+      </Drawer>
     </>
   );
 }

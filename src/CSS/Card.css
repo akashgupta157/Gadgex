@@ -1,0 +1,44 @@
+#dept {
+  background-color: #1f1e1f;
+  border-radius: 10px;
+  cursor: pointer;
+  width:95%;
+  margin:auto;
+}
+#dept img {
+  margin: auto;
+  display: block;
+  width: 70%;
+}
+#dept p {
+  font-size: 16px;
+  margin: 0;
+  padding: 15px 30px 0px 20px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+}
+#heart {
+  color: white;
+  position: relative;
+  left: 85%;
+  top: 20px;
+}
+#heart:hover {
+  color: #00e8be;
+}
+#price {
+  padding: 20px;
+}
+#price small {
+  font-size: 19px;
+  font-weight: 700;
+  color: white;
+}
+#price strike {
+  padding-left: 2px;
+  color: gray;
+}

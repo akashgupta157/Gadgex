@@ -1,0 +1,59 @@
+#sidebar {
+  background: black;
+  height:100%;
+  width: 20%;
+  position: fixed;
+  display: grid;
+  padding-bottom: 100px;
+}
+#card {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: 90%;
+  gap: 20px;
+  padding: 20px;
+  height: 200px;
+  margin-left: 20%;
+}
+.hail {
+  border: 1px solid;
+  height: 200px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+.sideicon {
+  color: white;
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.sideicon:hover {
+  color: #00e8be;
+}
+#rightside{
+  margin-left: 20%;
+  width: 100%;
+}
+#addform{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 10px;
+  margin: auto;
+  width: 80%;
+  padding-top: 50px;
+}
+#ss{
+  width: 20%;
+  margin: auto;
+  margin-top: 30px;
+}
+

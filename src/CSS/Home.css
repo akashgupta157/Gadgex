@@ -14,6 +14,17 @@
   margin: 45px 10px 10px;
   font-weight: 600;
 }
+.sd{
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 20px;
+}
+.sd img{
+  width: 100%;
+  display: block;
+  margin: auto;
+  border-radius: 10px;
+}
 @media screen and (min-width: 866px) and (max-width: 1024px) /* Laptop */ {
 }
 @media screen and (min-width: 481px) and (max-width: 865px) /* Tablet */ {
@@ -26,5 +37,20 @@
     display: block;
     margin: auto;
     aspect-ratio: 2;
+  }
+  #new img{
+    width: 90%;
+    height: 20%;
+  }
+  .sd{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 20px;
+  }
+  .sd img{
+    width: 100%;
+    display: block;
+    margin: auto;
+    border-radius: 10px;
   }
 }
