@@ -4,6 +4,54 @@
   box-sizing: border-box;
   font-family: "Gotham", sans-serif;
 }
+#drawer{
+  position: fixed;
+  background-color:#121313;
+  width: 30%;
+  left: 10%;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  overflow-y:scroll;
+  height: 100vh; 
+  padding-bottom: 100px;
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+}
+#drawer::-webkit-scrollbar {
+  width: 5px;
+}
+#drawer::-webkit-scrollbar-track {
+  background: #121313; 
+}
+#drawer::-webkit-scrollbar-thumb {
+  background: #00e8be; 
+  cursor: pointer;
+}
+#drawer p{
+  font-size: 20px;
+  font-weight: 700;
+}
+#drawer summary{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-size: 18px;
+  font-weight: 300;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+#drawer summary:hover,#drawer small:hover{
+  background-color: #00e8be;
+}
+#drawer small{
+  padding:5px;
+  font-size: 16px;
+  font-weight: 100;
+  cursor: pointer;
+  padding-left: 20px;
+}
 button {
   cursor: pointer;
 }
@@ -27,7 +75,8 @@ nav {
   width: 160px;
 }
 .hb {
-  width: 35px;
+  width: 40px;
+  cursor: pointer;
 }
 #menu {
   display: flex;
@@ -35,9 +84,11 @@ nav {
   font-size: 13px;
   justify-content: flex-start;
   padding-left: 20px;
+  cursor: pointer;
 }
-#menu p {
-  font-weight: 300;
+#menu label{
+  display: flex;
+  align-items: center;
 }
 #part2 {
   width: 200px;
@@ -186,6 +237,9 @@ nav {
   #box {
     width: 50%;
   }
+  #drawer{
+    width: 40%;
+  }
 }
 @media screen and (min-width: 481px) and (max-width: 865px) /* Tablet */ {
   #search {
@@ -224,6 +278,9 @@ nav {
   #box {
     width: 60%;
   }
+  #drawer{
+    width: 70%;
+  }
 }
 @media screen and (max-width: 480px) /* Mobile */ {
   #search {
@@ -260,7 +317,7 @@ nav {
     padding-left: 5px;
     padding-right: 5px;
     position: sticky;
-    top: 50px;
+    top: 55px;
     width: 100%;
     z-index: 100;
   }
@@ -280,5 +337,9 @@ nav {
   }
   #box {
     width: 90%;
+  }
+  #drawer{
+    width: 100%;
+    left: 0;
   }
 }

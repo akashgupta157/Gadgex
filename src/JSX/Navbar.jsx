@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../CSS/Navbar.css";
 import { FaUserAlt } from "react-icons/fa";
 import { BsCartFill } from "react-icons/bs";
@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../Context/AuthContext";
 import LogoutIcon from "@mui/icons-material/Logout";
-import Drawer from '@mui/material/Drawer';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 const style = {
   bgcolor: "#131213",
 };
@@ -26,6 +26,18 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [checked, setChecked] = useState(false);
+  const handleChange = () => {
+    setChecked(!checked);
+  };
+  useEffect(() => {
+    if (!checked) {
+      document.getElementById("drawer").style.display = "none";
+    } else {
+      document.getElementById("drawer").style.display = "flex";
+    }
+  }, [checked]);
+
   const {
     register,
     handleSubmit,
@@ -182,57 +194,67 @@ export default function Navbar() {
             <img src="../Logo.png" alt="" id="logo" />
           </Link>
           <div id="menu">
-            <svg
-              className="hb"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 10 10"
-              stroke="#eee"
-              strokeWidth=".6"
-              fill="rgba(0,0,0,0)"
-              strokeLinecap="round"
-            >
-              <path d="M2,3L5,3L8,3M2,5L8,5M2,7L5,7L8,7">
-                <animate
-                  dur="0.2s"
-                  attributeName="d"
-                  values="M2,3L5,3L8,3M2,5L8,5M2,7L5,7L8,7;M3,3L5,5L7,3M5,5L5,5M3,7L5,5L7,7"
-                  fill="freeze"
-                  begin="start.begin"
-                />
-                <animate
-                  dur="0.2s"
-                  attributeName="d"
-                  values="M3,3L5,5L7,3M5,5L5,5M3,7L5,5L7,7;M2,3L5,3L8,3M2,5L8,5M2,7L5,7L8,7"
-                  fill="freeze"
-                  begin="reverse.begin"
-                />
-              </path>
-              <rect width="10" height="10" stroke="none">
-                <animate
-                  dur="2s"
-                  id="reverse"
-                  attributeName="width"
-                  begin="click"
-                />
-              </rect>
-              <rect width="10" height="10" stroke="none">
-                <animate
-                  dur="0.001s"
-                  id="start"
-                  attributeName="width"
-                  values="10;0"
-                  fill="freeze"
-                  begin="click"
-                />
-                <animate
-                  dur="0.001s"
-                  attributeName="width"
-                  values="0;10"
-                  fill="freeze"
-                  begin="reverse.begin"
-                />
-              </rect>
-            </svg>
+            <input
+              type="checkbox"
+              style={{ display: "none" }}
+              name=""
+              id="click"
+              checked={checked}
+              onChange={handleChange}
+            />
+            <label htmlFor="click">
+              <svg
+                className="hb"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 10 10"
+                stroke="#eee"
+                strokeWidth=".6"
+                fill="rgba(0,0,0,0)"
+                strokeLinecap="round"
+              >
+                <path d="M2,3L5,3L8,3M2,5L8,5M2,7L5,7L8,7">
+                  <animate
+                    dur="0.2s"
+                    attributeName="d"
+                    values="M2,3L5,3L8,3M2,5L8,5M2,7L5,7L8,7;M3,3L5,5L7,3M5,5L5,5M3,7L5,5L7,7"
+                    fill="freeze"
+                    begin="start.begin"
+                  />
+                  <animate
+                    dur="0.2s"
+                    attributeName="d"
+                    values="M3,3L5,5L7,3M5,5L5,5M3,7L5,5L7,7;M2,3L5,3L8,3M2,5L8,5M2,7L5,7L8,7"
+                    fill="freeze"
+                    begin="reverse.begin"
+                  />
+                </path>
+                <rect width="10" height="10" stroke="none">
+                  <animate
+                    dur="2s"
+                    id="reverse"
+                    attributeName="width"
+                    begin="click"
+                  />
+                </rect>
+                <rect width="10" height="10" stroke="none">
+                  <animate
+                    dur="0.001s"
+                    id="start"
+                    attributeName="width"
+                    values="10;0"
+                    fill="freeze"
+                    begin="click"
+                  />
+                  <animate
+                    dur="0.001s"
+                    attributeName="width"
+                    values="0;10"
+                    fill="freeze"
+                    begin="reverse.begin"
+                  />
+                </rect>
+              </svg>
+            </label>
             <p>Menu</p>
           </div>
         </div>
@@ -459,9 +481,173 @@ export default function Navbar() {
           </form>
         </Box>
       </Modal>
-      <Drawer>
-
-      </Drawer>
+      <div id="drawer">
+        <p>Shop by Category</p>
+        <div
+          style={{
+            paddingTop: "10px",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <details>
+            <summary>
+              Televisions & Accessories <ExpandMoreIcon />
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <small>All Televisions & Accessories</small>
+              <small>LED TVs</small>
+              <small>TV Accessories</small>
+              <small>Media Streaming Devices</small>
+              <small>Projectors</small>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Home Appliances
+              <ExpandMoreIcon />
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <small>Washing Machines</small>
+              <small>Air Conditioners</small>
+              <small>Refrigerators</small>
+              <small>Air Coolers</small>
+              <small>Fans</small>
+              <small>Room Heaters</small>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Phones & Wearables
+              <ExpandMoreIcon />
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <small>Mobiles Phones</small>
+              <small>Telephone</small>
+              <small>Wearables</small>
+              <small>Headphones & Earphones</small>
+              <small>Screen Protectors</small>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Computers & Tablets
+              <ExpandMoreIcon />
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <small>All Televisions & Accessories</small>
+              <small>LED TVs</small>
+              <small>TV Accessories</small>
+              <small>Media Streaming Devices</small>
+              <small>Projectors</small>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Kitchen Appliances
+              <ExpandMoreIcon />
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <small>All Televisions & Accessories</small>
+              <small>LED TVs</small>
+              <small>TV Accessories</small>
+              <small>Media Streaming Devices</small>
+              <small>Projectors</small>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Audio & Video
+              <ExpandMoreIcon />
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <small>All Televisions & Accessories</small>
+              <small>LED TVs</small>
+              <small>TV Accessories</small>
+              <small>Media Streaming Devices</small>
+              <small>Projectors</small>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Smart Devices
+              <ExpandMoreIcon />
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <small>All Televisions & Accessories</small>
+              <small>LED TVs</small>
+              <small>TV Accessories</small>
+              <small>Media Streaming Devices</small>
+              <small>Projectors</small>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Grooming & Personal Care
+              <ExpandMoreIcon />
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <small>All Televisions & Accessories</small>
+              <small>LED TVs</small>
+              <small>TV Accessories</small>
+              <small>Media Streaming Devices</small>
+              <small>Projectors</small>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Health & Fitness
+              <ExpandMoreIcon />
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <small>All Televisions & Accessories</small>
+              <small>LED TVs</small>
+              <small>TV Accessories</small>
+              <small>Media Streaming Devices</small>
+              <small>Projectors</small>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Cameras & Accessories
+              <ExpandMoreIcon />
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <small>All Televisions & Accessories</small>
+              <small>LED TVs</small>
+              <small>TV Accessories</small>
+              <small>Media Streaming Devices</small>
+              <small>Projectors</small>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Gaming
+              <ExpandMoreIcon />
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <small>All Televisions & Accessories</small>
+              <small>LED TVs</small>
+              <small>TV Accessories</small>
+              <small>Media Streaming Devices</small>
+              <small>Projectors</small>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Accessories
+              <ExpandMoreIcon />
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <small>All Televisions & Accessories</small>
+              <small>LED TVs</small>
+              <small>TV Accessories</small>
+              <small>Media Streaming Devices</small>
+              <small>Projectors</small>
+            </div>
+          </details>
+        </div>
+      </div>
     </>
   );
 }
