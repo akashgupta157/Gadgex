@@ -1,6 +1,6 @@
 #sidebar {
   background: black;
-  height:100%;
+  height: 100%;
   width: 20%;
   position: fixed;
   display: grid;
@@ -39,21 +39,45 @@
 .sideicon:hover {
   color: #00e8be;
 }
-#rightside{
+#rightside {
   margin-left: 20%;
   width: 100%;
 }
-#addform{
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 10px;
-  margin: auto;
-  width: 80%;
-  padding-top: 50px;
-}
-#ss{
-  width: 20%;
+#ss {
+  width: 40%;
   margin: auto;
   margin-top: 30px;
 }
-
+#addproduct form {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: auto;
+  padding: 20px;
+  border: 2px solid;
+  margin-top: 40px;
+  gap: 10px;
+  height: 80vh;
+  overflow-y: scroll;
+}
+#addproduct form p {
+  text-align: right;
+  padding: 5px;
+  color: #1976d2;
+  cursor: pointer;
+  font-weight: bold;
+}
+#addproduct form textarea {
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
+}
+#addproduct form textarea:hover {
+  border-color: black;
+}
+#ecategory,#mimage {
+  padding: 10px;
+  font-size: 16px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}

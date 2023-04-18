@@ -55,6 +55,92 @@ export default function Home() {
       },
     ],
   };
+  const wm = [
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1670588880/Croma%20Assets/Large%20Appliances/Washers%20and%20Dryers/Images/242865_0_uhtb54.png/mxw_240,f_auto",
+      name: "Bosch 9/6 kg 5 Star Inverter Fully Automatic Front Load Washer Dryer",
+      price: 27990,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1670591143/Croma%20Assets/Large%20Appliances/Washers%20and%20Dryers/Images/248076_0_vyw5if.png/mxw_1440,f_auto",
+      name: "Candy 6.5 kg 5 Star Fully Automatic Top Load Washing Machine ",
+      price: 15000,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1676636530/Croma%20Assets/Large%20Appliances/Washers%20and%20Dryers/Images/269579_bnblfs.png/mxw_1440,f_auto",
+      name: "SAMSUNG 8.5 kg 5 Star Semi Automatic Washing Machine with Air Turbo Drying System",
+      price: 18900,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1669196469/Croma%20Assets/Large%20Appliances/Washers%20and%20Dryers/Images/261905_0_fo5rts.png/mxw_1440,f_auto",
+      name: "Foxsky 7.2 Kg 5 Star Semi Automatic Washing Machine with 3D Scrub Technology ",
+      price: 15000,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1664421002/Croma%20Assets/Large%20Appliances/Washers%20and%20Dryers/Images/257199_0_tx35xr.png/mxw_1440,f_auto",
+      name: "Croma 6.5 kg 5 Star Semi Automatic Washing Machine with Spiral Pulsator ",
+      price: 12000,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1670592775/Croma%20Assets/Large%20Appliances/Washers%20and%20Dryers/Images/235268_0_grgu8c.png/mxw_1440,f_auto",
+      name: "LG 7.5 kg 5 Star Inverter Fully Automatic Top Load Washing Machine",
+      price: 28990,
+    },
+  ];
+  const ca = [
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1681400643/Croma%20Assets/Computers%20Peripherals/Computer%20Accessories%20and%20Tablets%20Accessories/Images/251383_0_lgedkn.png/mxw_240,f_auto",
+      name: "Aristocrat AMP Polyester Laptop Backpack for 17 Inch Laptop ",
+      price: 1200,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1643281752/Croma%20Assets/Computers%20Peripherals/Printers%20and%20Scanners/Images/247631_dcaanb.png/mxw_240,f_auto",
+      name: "HP DeskJet 2729 Wireless Color All-in-One Inkjet Printer ",
+      price: 7000,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1681402952/Croma%20Assets/Computers%20Peripherals/Computer%20Accessories%20and%20Tablets%20Accessories/Images/252054_0_gknwwu.png/mxw_1440,f_auto",
+      name: "logitech M186 Wireless Optical Mouse (1000 DPI, Smooth Cursor Control, Black)",
+      price: 1111,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1605181858/Croma%20Assets/Computers%20Peripherals/Storage%20Devices/Images/8985568739358.png/mxw_1440,f_auto",
+      name: "Sandisk Cruzer Blade 32GB USB 2.0 Flash Drive (SDCZ50-032G-B35 | Red/Black)",
+      price: 650,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1643355591/Croma%20Assets/Computers%20Peripherals/Toners%20and%20Ink%20Cartridges/Images/247650_jmnek3.png/mxw_1440,f_auto",
+      name: "Canon Ink Cart GI-790 Ink Bottle (0671C003AF, Black)",
+      price: 560,
+    },
+  ];
+  const ac = [
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1681446457/Croma%20Assets/Large%20Appliances/Air%20Conditioner/Images/270260_0_oetbjg.png/mxw_240,f_auto",
+      name: "Voltas Vectra 4 in 1 Convertible 1.3 Ton 3 Star Inverter Split AC with Anti Dust Filter",
+      price: 60636,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1681476800/Croma%20Assets/Large%20Appliances/Air%20Conditioner/Images/265345_exryuv.png/mxw_240,f_auto",
+      name: "Croma 4 in 1 Convertible 1 Ton 3 Star Inverter Split AC with Dust Filter ",
+      price: 38000,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1677846838/Croma%20Assets/Large%20Appliances/Air%20Conditioner/Images/268607_0_hxb7si.png/mxw_240,f_auto",
+      name: "LG 6 in 1 Convertible 1.5 Ton 5 Star Inverter Split AC with 4 Way Swing",
+      price: 75990,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1667484378/Croma%20Assets/Large%20Appliances/Air%20Conditioner/Images/247080_ew2dbp.png/mxw_240,f_auto",
+      name: "Croma 1 Ton 2 Star Split AC (Copper Condenser, Dust Filter, CRLASA0123T0231)",
+      price: 35000,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1681447590/Croma%20Assets/Large%20Appliances/Air%20Conditioner/Images/267578_0_kuvf9j.png/mxw_1440,f_auto",
+      name: "Daikin Standard Plus 1 Ton 3 Star Inverter Split AC (Copper Condenser, Dew Clean Technology, MTKL35U)",
+      price: 48200,
+    },
+  ];
   return (
     <div style={{ backgroundColor: "#121313" }}>
       <img
@@ -145,60 +231,25 @@ export default function Home() {
       <div className="sdiv">
         <p>Computer Accessories</p>
         <Slider {...settings} className="sde">
-          <Card
-            img={
-              "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1681400643/Croma%20Assets/Computers%20Peripherals/Computer%20Accessories%20and%20Tablets%20Accessories/Images/251383_0_lgedkn.png/mxw_240,f_auto"
-            }
-            name={
-              "Aristocrat AMP Polyester Laptop Backpack for 17 Inch Laptop "
-            }
-            price={1200}
-          />
-          <Card
-            img={
-              "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1643281752/Croma%20Assets/Computers%20Peripherals/Printers%20and%20Scanners/Images/247631_dcaanb.png/mxw_240,f_auto"
-            }
-            name={
-              "HP DeskJet 2729 Wireless Color All-in-One Inkjet Printer "
-            }
-            price={7000}
-          />
-          <Card
-            img={
-              "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1681402952/Croma%20Assets/Computers%20Peripherals/Computer%20Accessories%20and%20Tablets%20Accessories/Images/252054_0_gknwwu.png/mxw_1440,f_auto"
-            }
-            name={
-              "logitech M186 Wireless Optical Mouse (1000 DPI, Smooth Cursor Control, Black)"
-            }
-            price={1111}
-          />
-          <Card
-            img={
-              "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1605181858/Croma%20Assets/Computers%20Peripherals/Storage%20Devices/Images/8985568739358.png/mxw_1440,f_auto"
-            }
-            name={
-              "Sandisk Cruzer Blade 32GB USB 2.0 Flash Drive (SDCZ50-032G-B35 | Red/Black)"
-            }
-            price={650}
-          />
-          <Card
-            img={
-              "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1643355591/Croma%20Assets/Computers%20Peripherals/Toners%20and%20Ink%20Cartridges/Images/247650_jmnek3.png/mxw_1440,f_auto"
-            }
-            name={
-              "Canon Ink Cart GI-790 Ink Bottle (0671C003AF, Black)"
-            }
-            price={560}
-          />
-          {/* <Card
-            img={
-              ""
-            }
-            name={
-              ""
-            }
-            price={}
-          /> */}
+          {ca.map((e) => (
+            <Card key={e} img={e.img} name={e.name} price={e.price} />
+          ))}
+        </Slider>
+      </div>
+      <div className="sdiv">
+        <p>Air Conditioners</p>
+        <Slider {...settings} className="sde">
+          {ac.map((e) => (
+            <Card key={e} img={e.img} name={e.name} price={e.price} />
+          ))}
+        </Slider>
+      </div>
+      <div className="sdiv">
+        <p>Washing Machines</p>
+        <Slider {...settings} className="sde">
+          {wm.map((e) => (
+            <Card key={e} img={e.img} name={e.name} price={e.price} />
+          ))}
         </Slider>
       </div>
       <br />

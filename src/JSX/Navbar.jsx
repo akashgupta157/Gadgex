@@ -30,6 +30,10 @@ export default function Navbar() {
   const handleChange = () => {
     setChecked(!checked);
   };
+  const to = (e) => {
+    document.getElementById("drawer").style.display = "none";
+    nav("/product", { state: { end: e } });
+  };
   useEffect(() => {
     if (!checked) {
       document.getElementById("drawer").style.display = "none";
@@ -186,6 +190,12 @@ export default function Navbar() {
     handleClose();
     nav("/admindashboard");
   };
+  const detectDeviceType = () =>
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    )
+      ? "Mobile"
+      : "Desktop";
   return (
     <>
       <nav>
@@ -468,7 +478,9 @@ export default function Navbar() {
                 <ErrorIcon /> Password must be 6 characters
               </p>
             )}
-            <small onClick={admin}>Login as Admin</small>
+            {detectDeviceType() === "Mobile" ? null : (
+              <small onClick={admin}>Login as Admin</small>
+            )}
             <input type="submit" />
           </form>
           <form action="" id="admin">
@@ -495,11 +507,11 @@ export default function Navbar() {
               Televisions & Accessories <ExpandMoreIcon />
             </summary>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <small>All Televisions & Accessories</small>
-              <small>LED TVs</small>
-              <small>TV Accessories</small>
-              <small>Media Streaming Devices</small>
-              <small>Projectors</small>
+              <small onClick={() => to("TV")}>All Televisions & Accessories</small>
+              <small onClick={() => to("TV")}>LED TVs</small>
+              <small onClick={() => to("TV")}>TV Accessories</small>
+              <small onClick={() => to()}>Media Streaming Devices</small>
+              <small onClick={() => to()}>Projectors</small>
             </div>
           </details>
           <details>
@@ -508,12 +520,12 @@ export default function Navbar() {
               <ExpandMoreIcon />
             </summary>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <small>Washing Machines</small>
-              <small>Air Conditioners</small>
-              <small>Refrigerators</small>
-              <small>Air Coolers</small>
-              <small>Fans</small>
-              <small>Room Heaters</small>
+              <small onClick={() => to("Washing Machine")}>Washing Machines</small>
+              <small onClick={() => to("AC")}>Air Conditioners</small>
+              <small onClick={() => to("Refrigerator")}>Refrigerators</small>
+              <small onClick={() => to("")}>Air Coolers</small>
+              <small onClick={() => to()}>Fans</small>
+              <small onClick={() => to()}>Room Heaters</small>
             </div>
           </details>
           <details>
@@ -522,11 +534,11 @@ export default function Navbar() {
               <ExpandMoreIcon />
             </summary>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <small>Mobiles Phones</small>
-              <small>Telephone</small>
-              <small>Wearables</small>
-              <small>Headphones & Earphones</small>
-              <small>Screen Protectors</small>
+              <small onClick={() => to("Mobile")}>Mobiles Phones</small>
+              <small onClick={() => to("Headphone")}>Headphones & Earphones</small>
+              <small onClick={() => to("Mobile")}>Telephone</small>
+              <small onClick={() => to("Headphone")}>Wearables</small>
+              <small onClick={() => to("Mobile")}>Screen Protectors</small>
             </div>
           </details>
           <details>
@@ -535,11 +547,11 @@ export default function Navbar() {
               <ExpandMoreIcon />
             </summary>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <small>All Televisions & Accessories</small>
-              <small>LED TVs</small>
-              <small>TV Accessories</small>
-              <small>Media Streaming Devices</small>
-              <small>Projectors</small>
+              <small onClick={() => to()}>All Televisions & Accessories</small>
+              <small onClick={() => to()}>LED TVs</small>
+              <small onClick={() => to()}>TV Accessories</small>
+              <small onClick={() => to()}>Media Streaming Devices</small>
+              <small onClick={() => to()}>Projectors</small>
             </div>
           </details>
           <details>
@@ -548,7 +560,7 @@ export default function Navbar() {
               <ExpandMoreIcon />
             </summary>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <small>All Televisions & Accessories</small>
+              <small onClick={() => to()}>All Televisions & Accessories</small>
               <small>LED TVs</small>
               <small>TV Accessories</small>
               <small>Media Streaming Devices</small>
