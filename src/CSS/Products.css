@@ -24,19 +24,23 @@
 #p {
   display: flex;
   width: 100%;
-  border-bottom: .01px solid gray;
+  border-bottom: 0.01px solid gray;
   padding: 10px;
   justify-content: space-between;
   padding-top: 30px;
 }
 #pimg {
-  width: 200px;
   display: flex;
   flex-direction: column;
   color: white;
 }
-#pimg label{
-    margin: auto;
+#pimg img {
+  width: 200px;
+  display: block;
+  margin: auto;
+}
+#pimg label {
+  margin: auto;
 }
 #ptitle {
   color: white;
@@ -70,10 +74,99 @@
   padding: 10px;
   border-radius: 5px;
   font-weight: 600;
+  width: 100px;
+  text-align: center;
 }
-#pheart{
+#pheart {
+  color: white;
+}
+#pheart:hover {
+  color: #00e8be;
+}
+#bn{
+  padding-top: 20px;
+}
+#bn button{
+  margin-right: 20px;
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  font-size: 20px;
+  font-weight: 700;
+  border: 0;
+  border-radius: 5px;
+  background-color: white;
+  color: #121212;
+}
+#bn :first-child{
+  background-color: #00e8be;
+  color: white;
+}
+@media screen and (max-width: 480px) /* Mobile */ {
+  #mainbody {
+    /* border: 1px solid red; */
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  #mainbody #name p {
+    font-size: 25px;
+    font-weight: 600;
+  }
+  #mainbody #name small {
+    font-size: 15px;
+  }
+  #p {
+    display: flex;
+    border-bottom: 0.01px solid gray;
+    gap: 10px;
+  }
+  #pmain {
+    margin-top: 20px;
+    padding-top: 12px;
+  }
+  #ptitle {
+    font-weight: 600;
+    font-size: 16px;
+    width: 110%;
+  }
+  #pimg {
+    display: flex;
+    flex-direction: column;
     color: white;
-}
-#pheart:hover{
-    color: #00e8be;
+    padding-top: 20px;
+  }
+  #pimg img {
+    width: 100px;
+  }
+  #pimg span {
+    font-size: 12px;
+  }
+  #pof {
+    font-weight: 700;
+    font-size: 20px;
+  }
+  #pprice {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 120%;
+  }
+  #pprice strike,
+  #pprice small {
+    color: gray;
+    font-size: 12px;
+  }
+  #pprice p {
+    border: 1px solid gray;
+    padding: 1px;
+    border-radius: 5px;
+    font-weight: 600;
+    text-align: center;
+    width: 200px;
+  }
+  #pheart {
+    position: relative;
+  }
+  #bn{
+    display: none;
+  }
 }

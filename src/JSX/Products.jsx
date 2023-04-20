@@ -3,13 +3,16 @@ import { useLocation } from "react-router-dom";
 import "../CSS/Products.css";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Checkbox, FormControlLabel } from "@mui/material";
+import { ThreeDots } from "react-loader-spinner";
+import { set } from "react-hook-form";
 export default function Products() {
   const [data, setdata] = useState([]);
   const location = useLocation();
   const [isLoading, setisloading] = useState(true);
+  const [counter, setcounter] = useState(1);
   useEffect(() => {
     fetch(
-      `https://incandescent-nettle-pirate.glitch.me/products?category=${location.state.end}&_page=1&_limit=20`
+      `https://incandescent-nettle-pirate.glitch.me/products?category=${location.state.end}&_page=${counter}`
     )
       .then((response) => response.json())
       .then((data) => setdata(data))
@@ -20,11 +23,32 @@ export default function Products() {
   });
   return (
     <>
-      {isLoading ? null : (
+      {isLoading ? (
+        <div
+          style={{
+            backgroundColor: "#121212",
+            display: "flex",
+            justifyContent: "center",
+            height: "88vh",
+            paddingTop: "30px",
+          }}
+        >
+          <ThreeDots
+            height="80"
+            width="80"
+            radius="10"
+            color="#00e8be"
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{}}
+            wrapperClassName=""
+            visible={true}
+          />
+        </div>
+      ) : (
         <div id="mainbody">
           <div id="name">
             <p>{location.state.end}</p>
-            <small>{data.length} Products found</small>
+            <small>{data.length * 32} Products found</small>
           </div>
           <div>
             {data?.map((e) => (
@@ -67,10 +91,27 @@ export default function Products() {
                     <small>(Save ₹{e.price - e.offer_price})</small>
                     <p>{e.discount}% Off</p>
                   </div>
+                  <div id="bn">
+                    <button>Buy Now</button>
+                    <button>Add to Cart</button>
+                  </div>
                 </div>
                 <FavoriteBorderIcon id="pheart" />
               </div>
             ))}
+          </div>
+          <div>
+            <button
+              onClick={(e) => {
+                if (counter > 1) {
+                  setcounter(counter - 1);
+                }
+              }}
+            >
+              Previous
+            </button>
+            <p>{counter}</p>
+            <button onClick={(e) => setcounter(counter + 1)}>Next</button>
           </div>
         </div>
       )}

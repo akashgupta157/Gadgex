@@ -10,6 +10,7 @@ import TimelineIcon from "@mui/icons-material/Timeline";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import "../CSS/Dashboard.css";
 import { Button, TextField, TextareaAutosize, alertClasses } from "@mui/material";
+import { toast } from "react-toastify";
 export default function Dashboard() {
   const nav = useNavigate();
   const initialState = {
@@ -43,7 +44,18 @@ export default function Dashboard() {
       headers:{'Content-Type': 'application/json'},
       body: JSON.stringify({...product,discount:Math.floor(Math.random() * (50 - 20)) + 20,offer_price:Math.floor(product.price - ((Math.floor(Math.random() * (50 - 20)) + 20) / 100) * product.price)})
     })
+    toast.success("Data Added Successfully", {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     document.getElementById("addproductform").reset()
+
   };
   return (
     <>
