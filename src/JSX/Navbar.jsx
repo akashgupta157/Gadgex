@@ -33,7 +33,7 @@ export default function Navbar() {
   };
   const to = (e) => {
     document.getElementById("drawer").style.display = "none";
-    nav("/product", { state: { end: e } });
+    nav(`/product/${e}`, { state: { end: e } });
   };
   useEffect(() => {
     if (!checked) {

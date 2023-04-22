@@ -42,3 +42,18 @@
   padding-left: 2px;
   color: gray;
 }
+@media screen and (max-width: 480px) /* Mobile */ {
+  #price {
+    padding: 20px;
+  }
+  #price small {
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+  }
+  #price strike {
+    font-size: 14px;
+    padding-left: 10px;
+    color: gray;
+  }
+}

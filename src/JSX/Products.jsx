@@ -4,7 +4,6 @@ import "../CSS/Products.css";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { ThreeDots } from "react-loader-spinner";
-import { set } from "react-hook-form";
 export default function Products() {
   const [data, setdata] = useState([]);
   const location = useLocation();

@@ -11,7 +11,7 @@ export default function Allroute() {
     <Route path='/' element={<Home/>} />
     <Route path='/cart' element={<Cart/>} />
     <Route path='/admindashboard' element={<Dashboard/>} />
-    <Route path='/product' element={<Products/>} />
+    <Route path='/product/:id' element={<Products/>} />
     </Routes>
     </>
   )
