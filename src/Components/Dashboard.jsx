@@ -4,14 +4,57 @@ import { Link, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import StorageIcon from "@mui/icons-material/Storage";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import "../CSS/Dashboard.css";
-import { Button, TextField, TextareaAutosize, alertClasses } from "@mui/material";
+import { Button, TextField, TextareaAutosize } from "@mui/material";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
 export default function Dashboard() {
+  const [value, setValue] = useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   const nav = useNavigate();
   const initialState = {
     title: "",
@@ -22,6 +65,7 @@ export default function Dashboard() {
     mimage: [],
     kf: [],
   };
+  const url = `http://localhost:8080/products`;
   const [product, setProduct] = useState(initialState);
   const [inputValues, setInputValues] = useState({});
   const [counter, setCounter] = useState(0);
@@ -39,11 +83,18 @@ export default function Dashboard() {
   }, [inputValues]);
   const formSubmit = (e) => {
     e.preventDefault();
-    fetch("https://incandescent-nettle-pirate.glitch.me/products",{
-      method:"POST",
-      headers:{'Content-Type': 'application/json'},
-      body: JSON.stringify({...product,discount:Math.floor(Math.random() * (50 - 20)) + 20,offer_price:Math.floor(product.price - ((Math.floor(Math.random() * (50 - 20)) + 20) / 100) * product.price)})
-    })
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...product,
+        discount: Math.floor(Math.random() * (50 - 20)) + 20,
+        offer_price: Math.floor(
+          product.price -
+            ((Math.floor(Math.random() * (50 - 20)) + 20) / 100) * product.price
+        ),
+      }),
+    });
     toast.success("Data Added Successfully", {
       position: "top-center",
       autoClose: 1000,
@@ -54,8 +105,7 @@ export default function Dashboard() {
       progress: undefined,
       theme: "colored",
     });
-    document.getElementById("addproductform").reset()
-
+    document.getElementById("addproductform").reset();
   };
   return (
     <>
@@ -66,10 +116,13 @@ export default function Dashboard() {
           fontSize: "20px",
           color: "white",
           alignItems: "center",
-          padding: "10px 50px 10px 50px",
+          paddingLeft: "50px",
+          paddingRight: "50px",
           justifyContent: "space-between",
           position: "sticky",
           top: "0px",
+          zIndex: "1",
+          height: "12vh",
         }}
       >
         <Link to={"/"}>
@@ -97,40 +150,75 @@ export default function Dashboard() {
           <LogoutIcon id="l2" style={{ cursor: "pointer" }} />
         </div>
       </div>
-      <div id="row" style={{ display: "flex" }}>
-        <div id="sidebar">
-          <div className="sideicon">
-            <DashboardIcon />
-            Dashboard
-          </div>
-          <div className="sideicon">
-            <AddCircleIcon />
-            Add Product
-          </div>
-          <div className="sideicon">
-            <StorageIcon />
-            Manage Products
-          </div>
-          <div className="sideicon">
-            <AddCircleIcon />
-            Add Admin
-          </div>
-          <div className="sideicon">
-            <SupervisorAccountIcon />
-            Manage Admins
-          </div>
-          <div className="sideicon">
-            <ShoppingCartIcon />
-            Manage Orders
-          </div>
-          <div className="sideicon">
-            <TimelineIcon />
-            Analyse
-          </div>
-        </div>
-        <div id="rightside">
-          <div id="dashboard"></div>
-          <div id="addproduct">
+      <Box sx={{ width: "100%", display: "flex" }}>
+        <Box
+          sx={{
+            borderBottom: 1,
+            borderColor: "divider",
+            display: "flex",
+            flexDirection: "column",
+            width: "20%",
+            padding: "20px",
+            bgcolor:"black",
+            height: "88vh",
+          }}
+        >
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            orientation="vertical"
+            indicatorColor="primary"
+            textColor="primary"
+          >
+            <Tab
+              icon={<DashboardIcon />}
+              iconPosition="start"
+              label="Dashboard"
+              {...a11yProps(0)}
+            />
+            <Tab
+              icon={<AddCircleIcon />}
+              iconPosition="start"
+              label="Add Product"
+              {...a11yProps(1)}
+            />
+            <Tab
+              icon={<StorageIcon />}
+              iconPosition="start"
+              label="Manage Products"
+              {...a11yProps(2)}
+            />
+            <Tab
+              icon={<PersonAddAlt1Icon />}
+              iconPosition="start"
+              label="Add Admin"
+              {...a11yProps(3)}
+            />
+            <Tab
+              icon={<SupervisorAccountIcon />}
+              iconPosition="start"
+              label="Manage Admin"
+              {...a11yProps(4)}
+            />
+            <Tab
+              icon={<ShoppingCartIcon />}
+              iconPosition="start"
+              label="Manage Order"
+              {...a11yProps(5)}
+            />
+            <Tab
+              icon={<TimelineIcon />}
+              iconPosition="start"
+              label="Analyses"
+              {...a11yProps(6)}
+            />
+          </Tabs>
+        </Box>
+        <TabPanel value={value} index={0}>
+          Item One
+        </TabPanel>
+        <TabPanel value={value} index={1} id="addproduct">
+          <div>
             <form action="" id="addproductform" onSubmit={formSubmit}>
               <input
                 list="category"
@@ -213,13 +301,32 @@ export default function Dashboard() {
                   setProduct({ ...product, kf: e.target.value.split("\n") })
                 }
               />
-              <Button id="ss" type="submit" variant="contained">
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ width: "30%", margin: "auto", marginTop: "30px",color:"black",fontWeight:"800"}}
+              >
                 Submit
               </Button>
             </form>
           </div>
-        </div>
-      </div>
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          Item Three
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          Item Three
+        </TabPanel>
+        <TabPanel value={value} index={4}>
+          Item Three
+        </TabPanel>
+        <TabPanel value={value} index={5}>
+          Item Three
+        </TabPanel>
+        <TabPanel value={value} index={6}>
+          Item Three
+        </TabPanel>
+      </Box>
     </>
   );
 }

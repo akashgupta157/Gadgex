@@ -1,61 +1,14 @@
-#sidebar {
-  background: black;
-  height: 100%;
-  width: 20%;
-  position: fixed;
-  display: grid;
-  padding-bottom: 100px;
-}
-#card {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  width: 90%;
-  gap: 20px;
-  padding: 20px;
-  height: 200px;
-  margin-left: 20%;
-}
-.hail {
-  border: 1px solid;
-  height: 200px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 30px;
-  font-weight: bold;
-  color: white;
-  cursor: pointer;
-}
-.sideicon {
-  color: white;
-  display: flex;
-  align-items: center;
-  font-size: 25px;
-  justify-content: center;
-  gap: 5px;
-  cursor: pointer;
-}
-.sideicon:hover {
-  color: #00e8be;
-}
-#rightside {
-  margin-left: 20%;
-  width: 100%;
-}
-#ss {
-  width: 40%;
-  margin: auto;
-  margin-top: 30px;
+#addproduct {
+  width: 80%;
 }
 #addproduct form {
+  width: 80%;
+  margin: auto;
   display: flex;
   flex-direction: column;
-  width: 60%;
   margin: auto;
   padding: 20px;
   border: 2px solid;
-  margin-top: 40px;
   gap: 10px;
   height: 80vh;
   overflow-y: scroll;
@@ -75,9 +28,17 @@
 #addproduct form textarea:hover {
   border-color: black;
 }
-#ecategory,#mimage {
+#ecategory,
+#mimage {
   padding: 10px;
   font-size: 16px;
   padding-top: 15px;
   padding-bottom: 15px;
+}
+button[aria-selected="false"] {
+  color: white;
+  font-weight: 700;
+}
+button[aria-selected="true"] {
+  font-weight: 700;
 }

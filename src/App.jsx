@@ -1,15 +1,26 @@
-import { ToastContainer } from "react-toastify"
-import Allroute from "./Allroute"
-import Navbar from "./JSX/Navbar"
-import { useLocation } from "react-router-dom"
+import { ToastContainer } from "react-toastify";
+import Allroute from "./Allroute";
+import Navbar from "./Components/Navbar";
+import { useLocation } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#00e8be",
+    },
+  },
+});
 function App() {
-  const location=useLocation()
+  const location = useLocation();
   return (
-    <>
-    {location.pathname=="/admindashboard"||location.pathname=="/admin"?null:<Navbar/>}
-    <ToastContainer />
-    <Allroute/>
-    </>
-  )
+    <ThemeProvider theme={theme}>
+      {location.pathname == "/admindashboard" ||
+      location.pathname == "/admin" ? null : (
+        <Navbar />
+      )}
+      <ToastContainer />
+      <Allroute />
+    </ThemeProvider>
+  );
 }
-export default App
+export default App;

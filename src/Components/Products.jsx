@@ -4,22 +4,28 @@ import "../CSS/Products.css";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { ThreeDots } from "react-loader-spinner";
+import axios from "axios";
 export default function Products() {
   const [data, setdata] = useState([]);
   const location = useLocation();
   const [isLoading, setisloading] = useState(true);
   const [counter, setcounter] = useState(1);
-  useEffect(() => {
-    fetch(
-      `https://incandescent-nettle-pirate.glitch.me/products?category=${location.state.end}&_page=${counter}`
-    )
-      .then((response) => response.json())
-      .then((data) => setdata(data))
+  const url = `http://localhost:8080/products`;
+  const fetch = async () => {
+    await axios
+      .get(`${url}?category=${location.state.end}&_page=${counter}`)
+      .then((response) => setdata(response.data))
       .catch((err) => console.log(err));
     if (data.length > 1) {
       setisloading(false);
     }
-  });
+  };
+  useEffect(() => {
+    fetch();
+  }, []);
+  useEffect(() => {
+    fetch();
+  }, [location, counter]);
   return (
     <>
       {isLoading ? (
