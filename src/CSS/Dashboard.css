@@ -41,4 +41,44 @@ button[aria-selected="false"] {
 }
 button[aria-selected="true"] {
   font-weight: 700;
+  color: #00e8be;
+}
+td {
+  text-align: center;
+}
+td:first-child {
+  width: 40%;
+}
+table{
+  height: 80vh;
+}
+tbody tr:hover {
+  background-color: rgb(206, 242, 245);
+}
+thead tr {
+  background-color: black;
+  color: white;
+  position: sticky;
+  top: 100px;
+}
+th {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+#edit,
+#delete {
+  background-color: red;
+  border: 0;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  font-size: small;
+  font-weight: 600;
+  cursor: pointer;
+}
+#edit {
+  background-color: #1976d2;
+}
+.right{
+  margin-left: 300px;
 }

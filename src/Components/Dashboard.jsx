@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -17,9 +17,14 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import axios from "axios";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+import Modal from "@mui/material/Modal";
+import CloseIcon from "@mui/icons-material/Close";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return (
     <div
       role="tabpanel"
@@ -36,20 +41,17 @@ function TabPanel(props) {
     </div>
   );
 }
-
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
 };
-
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
-
 export default function Dashboard() {
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
@@ -65,10 +67,33 @@ export default function Dashboard() {
     mimage: [],
     kf: [],
   };
+  const editData = {
+    title: "",
+    price: 0,
+    kf: [],
+    discount: 0,
+  };
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const [openEdit, setOpenEdit] = useState(false);
+  const handleClickOpenEdit = () => {
+    setOpenEdit(true);
+  };
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
   const url = `http://localhost:8080/products`;
   const [product, setProduct] = useState(initialState);
+  const [data, setData] = useState([]);
+  const [edit, setEdit] = useState(editData);
   const [inputValues, setInputValues] = useState({});
   const [counter, setCounter] = useState(0);
+  const [id1, setid] = useState(0);
   const handleClick = () => {
     setCounter(counter + 1);
   };
@@ -81,20 +106,18 @@ export default function Dashboard() {
     let x = Object.values(inputValues);
     setProduct({ ...product, mimage: x });
   }, [inputValues]);
-  const formSubmit = (e) => {
+  const formSubmit = async (e) => {
     e.preventDefault();
-    fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...product,
-        discount: Math.floor(Math.random() * (50 - 20)) + 20,
-        offer_price: Math.floor(
-          product.price -
-            ((Math.floor(Math.random() * (50 - 20)) + 20) / 100) * product.price
-        ),
-      }),
-    });
+    let obj = {
+      ...product,
+      discount: Math.floor(Math.random() * (50 - 20)) + 20,
+      offer_price: Math.floor(
+        product.price -
+          ((Math.floor(Math.random() * (50 - 20)) + 20) / 100) * product.price
+      ),
+    };
+    const addProduct = await axios.post(url, obj);
+    setData([...data, addProduct.data].reverse());
     toast.success("Data Added Successfully", {
       position: "top-center",
       autoClose: 1000,
@@ -106,6 +129,85 @@ export default function Dashboard() {
       theme: "colored",
     });
     document.getElementById("addproductform").reset();
+  };
+  const fetchProduct = async () => {
+    const response = await axios.get(url);
+    return response.data;
+  };
+  useEffect(() => {
+    const getAll = async () => {
+      const allProducts = await fetchProduct();
+      if (allProducts) setData(allProducts.reverse());
+    };
+    getAll();
+  }, []);
+  const handleDelete = async () => {
+    await axios.delete(`${url}/${id1}`);
+    const deleteProducts = data.filter((data) => {
+      return data.id !== id1;
+    });
+    console.log(deleteProducts);
+    setData(deleteProducts);
+    handleClose();
+    toast.success("Data Delete Successfully", {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+  const Aa = (e) => {
+    fetch(`${url}/${e}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setEdit({
+          title: data.title,
+          price: +data.price,
+          kf: data.kf,
+          discount: data.discount,
+        });
+      });
+  };
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 700,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 3,
+  };
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    const obj = {
+      ...edit,
+      offer_price: Math.floor(edit.price - (edit.discount / 100) * edit.price),
+      price: +edit.price,
+    };
+    const editProduct = await axios.patch(`${url}/${id1}`, obj);
+    const { id } = editProduct.data;
+    setData(
+      data.map((e) => {
+        return e.id === id ? { ...editProduct.data } : e;
+      })
+    );
+    handleCloseEdit();
+    toast.success("Data Updated Successfully", {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   };
   return (
     <>
@@ -157,10 +259,11 @@ export default function Dashboard() {
             borderColor: "divider",
             display: "flex",
             flexDirection: "column",
-            width: "20%",
+            width: "300px",
             padding: "20px",
-            bgcolor:"black",
+            bgcolor: "black",
             height: "88vh",
+            position: "fixed",
           }}
         >
           <Tabs
@@ -214,10 +317,10 @@ export default function Dashboard() {
             />
           </Tabs>
         </Box>
-        <TabPanel value={value} index={0}>
+        <TabPanel value={value} index={0} className="right">
           Item One
         </TabPanel>
-        <TabPanel value={value} index={1} id="addproduct">
+        <TabPanel value={value} index={1} id="addproduct" className="right">
           <div>
             <form action="" id="addproductform" onSubmit={formSubmit}>
               <input
@@ -304,26 +407,222 @@ export default function Dashboard() {
               <Button
                 type="submit"
                 variant="contained"
-                sx={{ width: "30%", margin: "auto", marginTop: "30px",color:"black",fontWeight:"800"}}
+                sx={{
+                  width: "30%",
+                  margin: "auto",
+                  marginTop: "30px",
+                  color: "black",
+                  fontWeight: "800",
+                }}
               >
                 Submit
               </Button>
             </form>
           </div>
         </TabPanel>
-        <TabPanel value={value} index={2}>
+        <TabPanel value={value} index={2} className="right">
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Image</th>
+                <th>Brand</th>
+                <th>Category</th>
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data?.map((e) => (
+                <tr key={e.id}>
+                  <td>{e.title}</td>
+                  <td>
+                    ₹
+                    {new Intl.NumberFormat("en-IN", {
+                      maximumSignificantDigits: 3,
+                    }).format(e.price)}
+                    .00
+                  </td>
+                  <td>
+                    <img src={e.image} width={100} alt="" />
+                  </td>
+                  <td>{e.brand}</td>
+                  <td>{e.category}</td>
+                  <td>
+                    <button
+                      id="edit"
+                      onClick={() => {
+                        handleClickOpenEdit();
+                        setid(e.id);
+                        Aa(e.id);
+                      }}
+                    >
+                      Edit
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      id="delete"
+                      onClick={() => {
+                        handleClickOpen();
+                        setid(e.id);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Want to Delete the Product?"}
+            </DialogTitle>
+            <DialogActions>
+              <Button
+                onClick={handleClose}
+                sx={{
+                  bgcolor: "green",
+                  color: "white",
+                  "&:hover": { bgcolor: "green", color: "white" },
+                }}
+              >
+                Disagree
+              </Button>
+              <Button
+                onClick={() => handleDelete()}
+                autoFocus
+                sx={{
+                  bgcolor: "red",
+                  color: "white",
+                  "&:hover": { bgcolor: "red", color: "white" },
+                }}
+              >
+                Agree
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Modal
+            open={openEdit}
+            onClose={handleCloseEdit}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Edit Product
+                </Typography>
+                <CloseIcon
+                  sx={{ cursor: "pointer" }}
+                  onClick={handleCloseEdit}
+                />
+              </div>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <form
+                  onSubmit={handleEdit}
+                  action=""
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "20px",
+                  }}
+                >
+                  <TextField
+                    required
+                    autoComplete="off"
+                    id="outlined-basic"
+                    label="Title"
+                    sx={{ width: "100%" }}
+                    variant="outlined"
+                    value={edit.title}
+                    onChange={(e) =>
+                      setEdit({ ...edit, title: e.target.value })
+                    }
+                  />
+                  <TextField
+                    required
+                    autoComplete="off"
+                    id="outlined-basic"
+                    label="Price"
+                    sx={{ width: "100%" }}
+                    variant="outlined"
+                    value={+edit.price}
+                    onChange={(e) =>
+                      setEdit({ ...edit, price: +e.target.value })
+                    }
+                  />
+                  <TextField
+                    required
+                    autoComplete="off"
+                    id="outlined-basic"
+                    label="Discount"
+                    sx={{ width: "100%" }}
+                    variant="outlined"
+                    value={edit.discount}
+                    onChange={(e) =>
+                      setEdit({ ...edit, discount: e.target.value })
+                    }
+                  />
+                  <TextareaAutosize
+                    required
+                    autoComplete="off"
+                    minRows={1}
+                    value={edit.kf.join("\n")}
+                    variant="outlined"
+                    style={{
+                      minHeight: 100,
+                      fontSize: "16px",
+                      border: "1px solid black",
+                      padding: "10px",
+                    }}
+                    onChange={(e) =>
+                      setEdit({ ...edit, kf: e.target.value.split("\n") })
+                    }
+                  />
+                  <button
+                    style={{
+                      width: "20%",
+                      paddingTop: "10px",
+                      paddingBottom: "10px",
+                      margin: "auto",
+                      backgroundColor: "#00e8be",
+                      border: "0",
+                      fontSize: "16px",
+                      fontWeight: "bolder",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    Submit
+                  </button>
+                </form>
+              </Typography>
+            </Box>
+          </Modal>
+        </TabPanel>
+        <TabPanel value={value} index={3} className="right">
           Item Three
         </TabPanel>
-        <TabPanel value={value} index={3}>
+        <TabPanel value={value} index={4} className="right">
           Item Three
         </TabPanel>
-        <TabPanel value={value} index={4}>
+        <TabPanel value={value} index={5} className="right">
           Item Three
         </TabPanel>
-        <TabPanel value={value} index={5}>
-          Item Three
-        </TabPanel>
-        <TabPanel value={value} index={6}>
+        <TabPanel value={value} index={6} className="right">
           Item Three
         </TabPanel>
       </Box>
