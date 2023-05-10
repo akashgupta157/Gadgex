@@ -87,8 +87,16 @@ export default function Dashboard() {
   const handleCloseEdit = () => {
     setOpenEdit(false);
   };
-  const url = `http://localhost:8080/products`;
+  const [openView, setOpenView] = useState(false);
+  const handleClickOpenView = () => {
+    setOpenView(true);
+  };
+  const handleCloseView = () => {
+    setOpenView(false);
+  };
+  const url = `https://incandescent-nettle-pirate.glitch.me/products`;
   const [product, setProduct] = useState(initialState);
+  const [view, setView] = useState([]);
   const [data, setData] = useState([]);
   const [edit, setEdit] = useState(editData);
   const [inputValues, setInputValues] = useState({});
@@ -172,6 +180,13 @@ export default function Dashboard() {
         });
       });
   };
+  const Bb = (e) => {
+    fetch(`${url}/${e}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setView(data);
+      });
+  };
   const style = {
     position: "absolute",
     top: "50%",
@@ -209,6 +224,7 @@ export default function Dashboard() {
       theme: "colored",
     });
   };
+
   return (
     <>
       <div
@@ -429,6 +445,7 @@ export default function Dashboard() {
                 <th>Image</th>
                 <th>Brand</th>
                 <th>Category</th>
+                <th>View</th>
                 <th>Edit</th>
                 <th>Delete</th>
               </tr>
@@ -449,6 +466,18 @@ export default function Dashboard() {
                   </td>
                   <td>{e.brand}</td>
                   <td>{e.category}</td>
+                  <td>
+                    <button
+                      id="view"
+                      onClick={() => {
+                        handleClickOpenView();
+                        setid(e.id);
+                        Bb(e.id);
+                      }}
+                    >
+                      View
+                    </button>
+                  </td>
                   <td>
                     <button
                       id="edit"
@@ -609,6 +638,104 @@ export default function Dashboard() {
                     Submit
                   </button>
                 </form>
+              </Typography>
+            </Box>
+          </Modal>
+          <Modal
+            open={openView}
+            onClose={handleCloseView}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography id="modal-modal-title" variant="h5" component="h2">
+                  View Product
+                </Typography>
+                <CloseIcon
+                  sx={{ cursor: "pointer" }}
+                  onClick={handleCloseView}
+                />
+              </div>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <div>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <img src={view.image} width={200} alt="" />
+
+                    <div>
+                      <h4
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: "5px",
+                        }}
+                      >
+                        <h3>Title: </h3>
+                        {view.title}
+                      </h4>
+                      <h4
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                        }}
+                      >
+                        <h3>Price: </h3>₹
+                        {new Intl.NumberFormat("en-IN", {
+                          maximumSignificantDigits: 3,
+                        }).format(view.price)}
+                        .00
+                      </h4>
+                      <h4
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                        }}
+                      >
+                        <h3>Discount: </h3>
+                        {view.discount}%
+                      </h4>
+                      <h4
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                        }}
+                      >
+                        <h3>Offer Price: </h3>₹
+                        {new Intl.NumberFormat("en-IN", {
+                          maximumSignificantDigits: 3,
+                        }).format(view.offer_price)}
+                        .00
+                      </h4>
+                      <h4
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                        }}
+                      >
+                        <h3>Brand: </h3>
+                        {view.brand}
+                      </h4>
+                    </div>
+                  </div>
+                  <ul>
+                    <h3>Key Feature</h3>
+                    {view.kf?.map((e) => (
+                      <li key={e}>{e}</li>
+                    ))}
+                  </ul>
+                </div>
               </Typography>
             </Box>
           </Modal>

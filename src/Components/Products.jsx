@@ -4,31 +4,22 @@ import "../CSS/Products.css";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { ThreeDots } from "react-loader-spinner";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../Redux/productReducer/action";
 export default function Products() {
-  const [data, setdata] = useState([]);
   const location = useLocation();
-  const [isLoading, setisloading] = useState(true);
   const [counter, setcounter] = useState(1);
-  const url = `http://localhost:8080/products`;
-  const fetch = async () => {
-    await axios
-      .get(`${url}?category=${location.state.end}&_page=${counter}`)
-      .then((response) => setdata(response.data))
-      .catch((err) => console.log(err));
-    if (data.length > 1) {
-      setisloading(false);
-    }
-  };
+  const dispatch = useDispatch();
+  const data = useSelector((store) => store.productReducer);
   useEffect(() => {
-    fetch();
+    dispatch(getProducts(location, counter));
   }, []);
   useEffect(() => {
-    fetch();
-  }, [location, counter]);
+    dispatch(getProducts(location, counter));
+  }, [location,counter]);
   return (
     <>
-      {isLoading ? (
+      {data.isLoading ? (
         <div
           style={{
             backgroundColor: "#121212",
@@ -56,7 +47,7 @@ export default function Products() {
             <small>{data.length * 32} Products found</small>
           </div>
           <div>
-            {data?.map((e) => (
+            {data.product?.map((e) => (
               <div key={e.id} id="p">
                 <div id="pimg">
                   <img src={e.image} alt="" />
