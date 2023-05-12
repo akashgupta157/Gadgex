@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../CSS/Navbar.css";
 import { FaUserAlt } from "react-icons/fa";
 import { BsCartFill } from "react-icons/bs";
@@ -14,16 +14,21 @@ import { useForm } from "react-hook-form";
 import ErrorIcon from "@mui/icons-material/Error";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthContext } from "../Context/AuthContext";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from "@mui/icons-material/Menu";
+import { useDispatch } from "react-redux";
 const style = {
   bgcolor: "#131213",
 };
 export default function Navbar() {
+  const [authData, setAuthData] = useState({
+    isAuth: false,
+    userData: [],
+  });
+  localStorage.setItem("Auth", JSON.stringify(authData));
+  const adata = localStorage.getItem("Auth");
   const nav = useNavigate();
-  const { setAuth, Login, user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -87,6 +92,7 @@ export default function Navbar() {
     loginform.style.display = "flex";
     signinform.style.display = "none";
   };
+  const dispatch = useDispatch();
   const onLoginSubmit = (dat) => {
     const email = dat.Email;
     const password = dat.Password;
@@ -127,8 +133,10 @@ export default function Navbar() {
               progress: undefined,
               theme: "colored",
             });
-            setAuth(true);
-            Login(data);
+            setAuthData({
+              isAuth: true,
+              userData: data,
+            });
             handleClose();
             let l1 = document.getElementById("l1");
             let l2 = document.getElementById("l2");
@@ -138,13 +146,13 @@ export default function Navbar() {
         }
       });
   };
-  document.addEventListener('mouseup', function(e) {
-    var container = document.getElementById('drawer');
+  document.addEventListener("mouseup", function (e) {
+    var container = document.getElementById("drawer");
     if (!container.contains(e.target)) {
-        container.style.display = 'none';
-        setChecked(false);
+      container.style.display = "none";
+      setChecked(false);
     }
-});
+  });
   const login = () => {
     let loginbtn = document.getElementById("login");
     let loginform = document.getElementById("loginform");
@@ -170,12 +178,14 @@ export default function Navbar() {
     adminform.style.display = "none";
   };
   const logout = () => {
+    setAuthData({
+      isAuth: false,
+      userData: [],
+    });
     let l1 = document.getElementById("l2");
     let l2 = document.getElementById("l1");
     l1.style.display = "none";
     l2.style.display = "flex";
-    setAuth(false);
-    Login();
     toast.success("Logout Successfull!", {
       position: "top-center",
       autoClose: 1000,
@@ -196,7 +206,7 @@ export default function Navbar() {
   const adminlogin = (e) => {
     // e.preventDefault()
     handleClose();
-    nav("/admindashboard");
+    nav("/adminDashboard");
   };
   const detectDeviceType = () =>
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -209,7 +219,7 @@ export default function Navbar() {
       <nav>
         <div id="part1">
           <Link to={"/"}>
-            <img src="../Logo.png" alt="" id="logo" />
+            <img src="https://i.ibb.co/JKh5KX6/Logo.png" alt="" id="logo" />
           </Link>
           <div id="menu">
             <input
@@ -221,8 +231,8 @@ export default function Navbar() {
               onChange={handleChange}
             />
             <label htmlFor="click">
-              <MenuIcon sx={{fontSize:"35px"}} className="hb"/>
-            <p>Menu</p>
+              <MenuIcon sx={{ fontSize: "35px" }} className="hb" />
+              <p>Menu</p>
             </label>
           </div>
         </div>
@@ -244,7 +254,7 @@ export default function Navbar() {
           </IconButton>
         </Paper>
         <div id="part2">
-          <p>{user ? user.name : null}</p>
+          <p>{authData.isAuth ? authData.userData.name : null}</p>
           <FaUserAlt
             id="l1"
             style={{ cursor: "pointer" }}
@@ -255,14 +265,14 @@ export default function Navbar() {
             style={{ cursor: "pointer", display: "none" }}
             onClick={logout}
           />
-          <div id="cl">
-            <BsCartFill
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                nav("/cart");
-              }}
-            />
-            <button>{user ? user.cart.length : 0}</button>
+          <div
+            id="cl"
+            onClick={() => {
+              nav("/cart");
+            }}
+          >
+            <BsCartFill style={{ cursor: "pointer" }} />
+            <button>{authData.isAuth ? authData.userData.cart.length : 0}</button>
           </div>
         </div>
       </nav>
@@ -465,7 +475,9 @@ export default function Navbar() {
               Televisions & Accessories <ExpandMoreIcon />
             </summary>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <small onClick={() => to("TV")}>All Televisions & Accessories</small>
+              <small onClick={() => to("TV")}>
+                All Televisions & Accessories
+              </small>
               <small onClick={() => to("TV")}>LED TVs</small>
               <small onClick={() => to("TV")}>TV Accessories</small>
               <small onClick={() => to()}>Media Streaming Devices</small>
@@ -478,7 +490,9 @@ export default function Navbar() {
               <ExpandMoreIcon />
             </summary>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <small onClick={() => to("Washing Machine")}>Washing Machines</small>
+              <small onClick={() => to("Washing Machine")}>
+                Washing Machines
+              </small>
               <small onClick={() => to("AC")}>Air Conditioners</small>
               <small onClick={() => to("Refrigerator")}>Refrigerators</small>
               <small onClick={() => to("")}>Air Coolers</small>
@@ -493,7 +507,9 @@ export default function Navbar() {
             </summary>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <small onClick={() => to("Mobile")}>Mobiles Phones</small>
-              <small onClick={() => to("Headphone")}>Headphones & Earphones</small>
+              <small onClick={() => to("Headphone")}>
+                Headphones & Earphones
+              </small>
               <small onClick={() => to("Mobile")}>Telephone</small>
               <small onClick={() => to("Headphone")}>Wearables</small>
               <small onClick={() => to("Mobile")}>Screen Protectors</small>

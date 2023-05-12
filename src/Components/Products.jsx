@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../CSS/Products.css";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Checkbox, FormControlLabel } from "@mui/material";
@@ -7,6 +7,7 @@ import { ThreeDots } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../Redux/productReducer/action";
 export default function Products() {
+  const Nav = useNavigate();
   const location = useLocation();
   const [counter, setcounter] = useState(1);
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ export default function Products() {
   }, []);
   useEffect(() => {
     dispatch(getProducts(location, counter));
-  }, [location,counter]);
+  }, [location, counter]);
   return (
     <>
       {data.isLoading ? (
@@ -48,7 +49,13 @@ export default function Products() {
           </div>
           <div>
             {data.product?.map((e) => (
-              <div key={e.id} id="p">
+              <div
+                key={e.id}
+                onClick={() => {
+                  Nav(`/product/${location.state.end}/` + e.id);
+                }}
+                id="p"
+              >
                 <div id="pimg">
                   <img src={e.image} alt="" />
                   <FormControlLabel

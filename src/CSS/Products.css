@@ -28,6 +28,10 @@
   padding: 10px;
   justify-content: space-between;
   padding-top: 30px;
+  cursor: pointer;
+}
+#p:hover {
+  background-color: #292929;
 }
 #pimg {
   display: flex;
