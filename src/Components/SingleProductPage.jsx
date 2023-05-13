@@ -7,7 +7,17 @@ import { getSProducts } from "../Redux/singleProductReducer/action";
 import { ThreeDots } from "react-loader-spinner";
 import GppGoodOutlinedIcon from "@mui/icons-material/GppGoodOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import StarIcon from "@mui/icons-material/Star";
+import { Divider } from "@mui/material";
+import {
+  Magnifier,
+  GlassMagnifier,
+  SideBySideMagnifier,
+  PictureInPictureMagnifier,
+  MOUSE_ACTIVATION,
+  TOUCH_ACTIVATION
+} from "react-image-magnifiers";
 export default function SingleProductPage() {
   const param = useParams();
   const dispatch = useDispatch();
@@ -82,7 +92,32 @@ export default function SingleProductPage() {
       ) : (
         <>
           <DIV>
-            <div style={{ width: "45%", margin: "50px" }}>
+            <div style={{ width: "45%", margin: "50px" }} id="div1">
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  marginLeft: "90%",
+                  gap: "10px",
+                }}
+              >
+                <FavoriteBorderIcon
+                  sx={{
+                    "&:hover": {
+                      color: "#12daa8",
+                      cursor: "pointer",
+                    },
+                  }}
+                />
+                <ShareOutlinedIcon
+                  sx={{
+                    "&:hover": {
+                      color: "#12daa8",
+                      cursor: "pointer",
+                    },
+                  }}
+                />
+              </div>
               <Slider {...settings}>
                 {data.product.image?.map((e) => (
                   <div key={e}>
@@ -179,15 +214,45 @@ export default function SingleProductPage() {
                 </h3>
                 <br />
                 <hr />
+                <br />
+                <h4>ZipCare - Extended Warranty</h4>
+                <br />
+                <div id="coop">
+                  <div>
+                    <p>1 year</p>
+                    <p>₹ 2354</p>
+                    <Divider
+                      variant="middle"
+                      sx={{ backgroundColor: "#606160", width: "100%" }}
+                    />
+                    <p>₹ 232/mo</p>
+                  </div>
+                  <div>
+                    <p>2 year</p>
+                    <p>₹ 4354</p>
+                    <Divider
+                      variant="middle"
+                      sx={{ backgroundColor: "#606160", width: "100%" }}
+                    />
+                    <p>₹ 432/mo</p>
+                  </div>
+                  <div>None</div>
+                </div>
               </div>
+              <br />
+              <br />
+              <br />
+              <br />
             </div>
           </DIV>
           <BTMBAR id="btmBar">
             <div id="sob">
               <div>
-                <img src={data.product.image[0]} alt="" />
+                {data.product.image ? (
+                  <img src={data.product.image[0]} alt="" />
+                ) : null}
                 <h1>
-                  {data.product.title}{" "}
+                  {data.product.title}
                   <p>
                     ₹
                     {new Intl.NumberFormat("en-IN", {
@@ -413,5 +478,24 @@ const DIV = styled.div`
     position: absolute;
     bottom: 0;
     width: 100%;
+  }
+  #coop {
+    display: flex;
+    gap: 20px;
+    div {
+      border: 1px solid #606160;
+      padding: 10px;
+      border-radius: 5px;
+      width: 20%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      :hover {
+        border: 1px solid #01e9be;
+      }
+    }
   }
 `;
