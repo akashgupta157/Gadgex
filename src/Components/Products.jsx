@@ -57,7 +57,7 @@ export default function Products() {
                 id="p"
               >
                 <div id="pimg">
-                  <img src={e.image} alt="" />
+                  <img src={e.image[0]} alt="" />
                   <FormControlLabel
                     control={
                       <Checkbox

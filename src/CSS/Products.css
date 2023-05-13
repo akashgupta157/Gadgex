@@ -87,24 +87,25 @@
 #pheart:hover {
   color: #00e8be;
 }
-#bn{
+#bn {
   padding-top: 20px;
 }
-#bn button{
+#bn button {
   margin-right: 20px;
   padding: 10px;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
   font-size: 20px;
   font-weight: 700;
-  border: 0;
+  border: 1px solid white;
   border-radius: 5px;
-  background-color: white;
-  color: #121212;
-}
-#bn :first-child{
-  background-color: #00e8be;
+  background-color: #353434;
   color: white;
+}
+#bn :first-child {
+  border: 0;
+  background-color: #12daa8;
+  color: #191919;
 }
 @media screen and (max-width: 480px) /* Mobile */ {
   #mainbody {
@@ -165,12 +166,12 @@
     border-radius: 5px;
     font-weight: 600;
     text-align: center;
-    width:70px;
+    width: 70px;
   }
   #pheart {
     position: relative;
   }
-  #bn{
+  #bn {
     display: none;
   }
 }

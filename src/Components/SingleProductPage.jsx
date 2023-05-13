@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { getSProducts } from "../Redux/singleProductReducer/action";
 import { ThreeDots } from "react-loader-spinner";
+import GppGoodOutlinedIcon from "@mui/icons-material/GppGoodOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import StarIcon from "@mui/icons-material/Star";
 export default function SingleProductPage() {
@@ -29,7 +30,7 @@ export default function SingleProductPage() {
     dots: true,
     dotsClass: "slick-dots slick-thumb",
     infinite: true,
-    speed: 500,
+    speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
     prevArrow: false,
@@ -42,6 +43,19 @@ export default function SingleProductPage() {
   }
   const randomInt = getRandomInt(20, 100);
   const randomInt1 = getRandomInt(20, 100);
+  const side = document.getElementById("description");
+  if (side) {
+    side.onscroll = () => {
+      if (side.scrollTop >= 0) {
+        const btmBar = document.getElementById("btmBar");
+        btmBar.style.display = "flex";
+      }
+      if (side.scrollTop < 1) {
+        const btmBar = document.getElementById("btmBar");
+        btmBar.style.display = "none";
+      }
+    };
+  }
   return (
     <>
       {data.isLoading ? (
@@ -66,76 +80,182 @@ export default function SingleProductPage() {
           />
         </div>
       ) : (
-        <DIV>
-          <div style={{ width: "45%", margin: "50px" }}>
-            <Slider {...settings}>
-              {data.product.image?.map((e) => (
-                <div key={e}>
-                  <img
-                    src={e}
-                    id="mainImage"
-                    style={{ display: "block", margin: "auto" }}
-                    alt=""
-                  />
+        <>
+          <DIV>
+            <div style={{ width: "45%", margin: "50px" }}>
+              <Slider {...settings}>
+                {data.product.image?.map((e) => (
+                  <div key={e}>
+                    <img
+                      src={e}
+                      id="mainImage"
+                      style={{ display: "block", margin: "auto" }}
+                      alt=""
+                    />
+                  </div>
+                ))}
+              </Slider>
+            </div>
+            <div id="description">
+              <h1>{data.product.title}</h1>
+              <p id="rate">
+                {roundedNumber} <StarIcon style={{ fontSize: "14px" }} /> (
+                {randomInt} Ratings & {randomInt1} Reviews)
+              </p>
+              <div id="SPprice">
+                <div id="fly">
+                  <span>
+                    {" "}
+                    ₹
+                    {new Intl.NumberFormat("en-IN", {
+                      maximumSignificantDigits: 3,
+                    }).format(data.product.offer_price)}
+                    .00
+                  </span>
+                  <br />
+                  <span>(Incl. all Taxes)</span>
                 </div>
-              ))}
-            </Slider>
-          </div>
-          <div>
-            <h1>{data.product.title}</h1>
-            <p id="rate">
-              {roundedNumber} <StarIcon style={{ fontSize: "14px" }} /> (
-              {randomInt} Ratings & {randomInt1} Reviews)
-            </p>
-            <div id="SPprice">
-              <div id="fly">
-                <span>
-                  {" "}
-                  ₹
+                {data.product.offer_price > 5000 ? (
+                  <>
+                    <div id="mud">
+                      —<div>OR</div>—
+                    </div>
+                    <div id="muff">
+                      <span>
+                        ₹
+                        {new Intl.NumberFormat("en-IN", {
+                          maximumSignificantDigits: 3,
+                        }).format(data.product.offer_price / 12)}
+                        /mo*
+                      </span>
+                      <br />
+                      <span>EMI Option</span>
+                    </div>
+                  </>
+                ) : null}
+              </div>
+              <div id="gut">
+                <strike>
+                  MRP: ₹
                   {new Intl.NumberFormat("en-IN", {
                     maximumSignificantDigits: 3,
-                  }).format(data.product.offer_price)}
+                  }).format(data.product.price)}
                   .00
+                </strike>
+                <span>
+                  (Save ₹
+                  {new Intl.NumberFormat("en-IN", {
+                    maximumSignificantDigits: 3,
+                  }).format(data.product.price - data.product.offer_price)}{" "}
+                  , {data.product.discount}% off)
                 </span>
-                <br />
-                <span>(Incl. all Taxes)</span>
               </div>
-              {data.product.offer_price > 5000 ? (
-                <>
-                  <div id="mud">
-                    --
-                    <div>OR</div>
-                    --
-                  </div>
-                  <div id="muff">
-                    <span>
-                      ₹
-                      {new Intl.NumberFormat("en-IN", {
-                        maximumSignificantDigits: 3,
-                      }).format(data.product.offer_price / 12)}
-                      /mo*
-                    </span>
-                    <br />
-                    <span>EMI Option</span>
-                  </div>
-                </>
-              ) : null}
+              <div id="kf">
+                <h3>Key Features</h3>
+                <ul>
+                  {data.product.kf?.map((e) => (
+                    <li key={e}>{e}</li>
+                  ))}
+                </ul>
+              </div>
+              <br />
+              <hr />
+              <br />
+              <div id="try">
+                <h2>
+                  <GppGoodOutlinedIcon />
+                  ZipCare Protection Plan{" "}
+                  <p>Add extra protection to your products.</p>
+                </h2>
+                <br />
+                <hr />
+                <br />
+                <h3>
+                  Extended Warranty
+                  <p>
+                    Extended protection for your device beyond the manufacturer
+                    warranty with coverage against all manufacturing defects.
+                  </p>
+                </h3>
+                <br />
+                <hr />
+              </div>
             </div>
-            <div>
-              <strike>
-                MRP: ₹
-                {new Intl.NumberFormat("en-IN", {
-                  maximumSignificantDigits: 3,
-                }).format(data.product.price)}
-                .00
-              </strike>
+          </DIV>
+          <BTMBAR id="btmBar">
+            <div id="sob">
+              <div>
+                <img src={data.product.image[0]} alt="" />
+                <h1>
+                  {data.product.title}{" "}
+                  <p>
+                    ₹
+                    {new Intl.NumberFormat("en-IN", {
+                      maximumSignificantDigits: 3,
+                    }).format(data.product.offer_price)}
+                    .00
+                  </p>
+                </h1>
+              </div>
+              <div>
+                <button>Buy Now</button>
+                <button>Add to Cart</button>
+              </div>
             </div>
-          </div>
-        </DIV>
+          </BTMBAR>
+        </>
       )}
     </>
   );
 }
+const BTMBAR = styled.div`
+  height: 10vh;
+  background-color: #121212;
+  -webkit-box-shadow: 3px 6px 39px -18px rgba(255, 255, 255, 1);
+  -moz-box-shadow: 3px 6px 39px -18px rgba(255, 255, 255, 1);
+  box-shadow: 3px 6px 39px -18px rgba(255, 255, 255, 1);
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  color: white;
+  display: none;
+  #sob {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-evenly;
+  }
+  div div {
+    display: flex;
+    align-items: center;
+    img {
+      width: 50px;
+    }
+    h1 {
+      font-size: 14px;
+    }
+  }
+  button {
+    margin-right: 20px;
+    padding: 10px;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-size: 16px;
+    font-weight: 700;
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: #353434;
+    color: white;
+    height: 40px;
+    display: flex;
+    align-items: center;
+  }
+  button:first-child {
+    border: 0;
+    background-color: #12daa8;
+    color: #191919;
+  }
+`;
 const DIV = styled.div`
   display: flex;
   background-color: #121212;
@@ -238,5 +358,60 @@ const DIV = styled.div`
     font-size: 12px;
     text-decoration: underline;
     color: #01e9be;
+  }
+  #gut {
+    font-size: 14px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    strike {
+      color: #9a9a9a;
+      margin-right: 10px;
+    }
+  }
+  #kf {
+    font-size: 14px;
+    border: 1.5px solid #9a9a9a;
+    border-radius: 5px;
+    padding: 20px;
+    ul {
+      padding-top: 15px;
+      padding-left: 15px;
+    }
+    li {
+      padding: 5px;
+    }
+  }
+  #try {
+    h2 {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      p {
+        font-size: 12px;
+        margin-left: 20px;
+      }
+    }
+    h3 {
+      font-size: 18px;
+      p {
+        font-size: 12px;
+        margin-top: 10px;
+      }
+    }
+  }
+  #description {
+    height: 100%;
+    overflow-y: scroll;
+    width: 100%;
+    ::-webkit-scrollbar {
+      width: 0px;
+    }
+  }
+  #btmBar {
+    height: 10vh;
+    background-color: #191919;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
   }
 `;
