@@ -63,8 +63,7 @@ export default function Dashboard() {
     category: "",
     price: 0,
     brand: "",
-    image: "",
-    mimage: [],
+    image:'',
     kf: [],
   };
   const editData = {
@@ -98,6 +97,7 @@ export default function Dashboard() {
   const [product, setProduct] = useState(initialState);
   const [view, setView] = useState([]);
   const [data, setData] = useState([]);
+  const [img, setImg] = useState();
   const [edit, setEdit] = useState(editData);
   const [inputValues, setInputValues] = useState({});
   const [counter, setCounter] = useState(0);
@@ -112,8 +112,8 @@ export default function Dashboard() {
   };
   useEffect(() => {
     let x = Object.values(inputValues);
-    setProduct({ ...product, mimage: x });
-  }, [inputValues]);
+    setProduct({ ...product, image: [img, ...x] });
+  }, [inputValues,img]);
   const formSubmit = async (e) => {
     e.preventDefault();
     let obj = {
@@ -391,7 +391,7 @@ export default function Dashboard() {
                 label="Image"
                 variant="outlined"
                 onChange={(e) =>
-                  setProduct({ ...product, image: e.target.value })
+                  setImg(e.target.value)
                 }
               />
               {Array.from(Array(counter)).map((c, index) => {
@@ -668,7 +668,7 @@ export default function Dashboard() {
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <img src={view.image} width={200} alt="" />
+                    <img src={view?null:view.image[0]} width={200} alt="" />
 
                     <div>
                       <h4

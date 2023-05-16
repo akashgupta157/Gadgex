@@ -1,11 +1,59 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+#modal {
+  & button[aria-selected="true"] {
+    color: white;
+    border: 1px solid white;
+  }
+  & span {
+    background-color: transparent;
+  }
+  & #loginForm,
+  #ca {
+    display: flex;
+    flex-direction: column;
+    & label {
+      font-size: 18px;
+      color: white;
+      margin-top: 10px;
+    }
+    & p {
+      display: flex;
+      align-items: center;
+      color: red;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    & input {
+      height: 6vh;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 0;
+      padding-left: 10px;
+      font-size: 16px;
+    }
+    & input[type="submit"] {
+      background-color: #00e9bc;
+      color: black;
+      font-size: 16px;
+      font-weight: 600;
+      width: 50%;
+      margin: auto;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    & small {
+      margin: auto;
+      padding: 15px;
+      font-size: medium;
+      font-weight: 600;
+      color: #00e9bc;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
 }
-#drawer{
+#drawer {
   position: fixed;
-  background-color:#121313;
+  background-color: #121313;
   width: 30%;
   left: 10%;
   color: white;
@@ -13,8 +61,8 @@
   display: flex;
   flex-direction: column;
   z-index: 10;
-  overflow-y:scroll;
-  height: 100vh; 
+  overflow-y: scroll;
+  height: 100vh;
   padding-bottom: 100px;
   box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
 }
@@ -22,17 +70,17 @@
   width: 5px;
 }
 #drawer::-webkit-scrollbar-track {
-  background: #121313; 
+  background: #121313;
 }
 #drawer::-webkit-scrollbar-thumb {
-  background: #00e8be; 
+  background: #00e8be;
   cursor: pointer;
 }
-#drawer p{
+#drawer p {
   font-size: 20px;
   font-weight: 700;
 }
-#drawer summary{
+#drawer summary {
   padding-top: 12px;
   padding-bottom: 12px;
   font-size: 18px;
@@ -41,306 +89,30 @@
   display: flex;
   justify-content: space-between;
 }
-#drawer summary:hover,#drawer small:hover{
+#drawer summary:hover,
+#drawer small:hover {
   background-color: #00e8be;
 }
-#drawer small{
-  padding:5px;
+#drawer small {
+  padding: 5px;
   font-size: 16px;
   font-weight: 100;
   cursor: pointer;
   padding-left: 20px;
 }
-button {
-  cursor: pointer;
-}
-nav {
-  background-color: black;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  color: white;
-  justify-content: space-around;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  height: 12vh;
-}
-#part1 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#logo {
-  width: 160px;
-}
-.hb {
-  width: 40px;
-  cursor: pointer;
-}
-#menu {
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  justify-content: flex-start;
-  padding-left: 20px;
-  cursor: pointer;
-}
-#menu label{
-  display: flex;
-  align-items: center;
-}
-#part2 {
-  width: 200px;
-  /* border: 1px solid; */
-  display: flex;
-  justify-content: end;
-  font-size: 20px;
-  gap: 25px;
-  align-items: center;
-}
-#search1 {
-  display: none;
-}
-#box {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 35%;
-  box-shadow: 24;
-  padding: 20px;
-}
-#modal1 {
-  margin: auto;
-  width: 75%;
-  border: 0.2px solid white;
-  text-align: center;
-  border-radius: 5px;
-}
-#modal1 button {
-  padding: 15px;
-  width: 50%;
-  font-size: 16px;
-  background: transparent;
-  color: white;
-  border: 0;
-}
-#modal1 button:first-child {
-  border-right: 1px solid white;
-}
-#ca,
-#loginform,
-#admin {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  width: 80%;
-  padding: 10px;
-}
-#loginform,
-#admin {
-  display: none;
-}
-#ca input,
-#loginform input,
-#admin input {
-  font-size: 16px;
-  margin: auto;
-  width: 80%;
-  height: 40px;
-  padding-left: 5px;
-  border: 1px solid white;
-  background-color: transparent;
-  color: white;
-}
-#ca input[type="submit"],
-#loginform input[type="submit"],
-#admin input[type="submit"] {
-  background-color: #00e8be;
-  color: black;
-  font-weight: bolder;
-  border: 0;
-  border-radius: 5px;
-  margin-top: 15px;
-  cursor: pointer;
-}
-#ca p,
-#loginform p {
-  color: red;
-  padding-left: 10%;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  display: flex;
-  align-items: center;
-}
-#ca label,
-#loginform label,
-#admin label {
-  color: white;
-  padding-left: 10%;
-  margin-top: 10px;
-  margin-bottom: 5px;
-}
-#modal1 .clrbtn {
-  background-color: #00e8be;
-  color: black;
-  font-weight: bolder;
-}
-#cl {
-  display: flex;
-}
-#cl button {
-  position: relative;
-  bottom: 5px;
-  right: 10px;
-  background-color: #00e8be;
-  color: black;
-  font-size: 15px;
-  border-radius: 15px;
-  width: 15px;
-  height: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-}
-#loginform small {
-  color: #00e8be;
-  font-weight: 700;
-  text-decoration: underline;
-  margin: auto;
-  padding-top: 10px;
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-}
-#admin p {
-  color: #00e8be;
-  font-weight: 700;
-  font-size: 20px;
-  text-align: center;
-}
 @media screen and (min-width: 866px) and (max-width: 1024px) /* Laptop */ {
-  #menu p {
-    display: none;
-  }
-  #part1 {
-    flex-direction: row-reverse;
-    gap: 10px;
-  }
-  .hb {
-    margin-left: 10px;
-    margin-bottom: 5px;
-  }
-  #box {
-    width: 50%;
-  }
-  #drawer{
+  #drawer {
     width: 40%;
   }
 }
 @media screen and (min-width: 481px) and (max-width: 865px) /* Tablet */ {
-  #search {
-    display: none;
-  }
-  #menu p {
-    display: none;
-  }
-  nav {
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 40px;
-    padding-right: 40px;
-    padding-bottom: 0;
-  }
-  #nav1 {
-    background-color: black;
-    padding-left: 40px;
-    padding-bottom: 10px;
-    position: sticky;
-    top: 69px;
-    width: 100%;
-    z-index: 100;
-  }
-  #search1 {
-    display: flex;
-    width: 70%;
-  }
-  .hb {
-    margin-left: 0px;
-    margin-bottom: 5px;
-  }
-  #part2 {
-    margin-bottom: 5px;
-  }
-  #box {
-    width: 60%;
-  }
-  #drawer{
+  #drawer {
     width: 70%;
   }
 }
 @media screen and (max-width: 480px) /* Mobile */ {
-  #search {
-    display: none;
-  }
-  #menu {
-    padding-left: 0px;
-  }
-  #menu p {
-    display: none;
-  }
-  nav {
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 0;
-    height:min-content;
-  }
-  #part1 {
-    flex-direction: row-reverse;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .hb {
-    margin-left: 0px;
-    margin-bottom: 5px;
-  }
-  #logo {
-    width: 100px;
-  }
-  #nav1 {
-    background-color: black;
-    padding-bottom: 10px;
-    padding-left: 5px;
-    padding-right: 5px;
-    position: sticky;
-    top: 50px;
-    width: 100%;
-    z-index: 100;
-  }
-  #search1 {
-    display: flex;
-    width: 100%;
-    height: 35px;
-    align-items: center;
-  }
-  #part2 {
-    width: 130px;
-    display: flex;
-    justify-content: end;
-    gap: 15px;
-    font-size: 20px;
-    margin-bottom: 5px;
-  }
-  #box {
+  #drawer {
     width: 90%;
-  }
-  #drawer{
-    width: 100%;
     left: 0;
   }
 }

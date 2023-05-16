@@ -1,3 +1,6 @@
+#logo{
+  width: 150px;
+}
 #addproduct {
   width: 80%;
 }
@@ -42,6 +45,9 @@ button[aria-selected="false"] {
 button[aria-selected="true"] {
   font-weight: 700;
   color: #00e8be;
+}
+span {
+  background-color: transparent !important;
 }
 td {
   text-align: center;

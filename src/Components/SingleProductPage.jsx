@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Slider from "react-slick";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -10,14 +10,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import StarIcon from "@mui/icons-material/Star";
 import { Divider } from "@mui/material";
-import {
-  Magnifier,
-  GlassMagnifier,
-  SideBySideMagnifier,
-  PictureInPictureMagnifier,
-  MOUSE_ACTIVATION,
-  TOUCH_ACTIVATION
-} from "react-image-magnifiers";
+import { toast } from "react-toastify";
 export default function SingleProductPage() {
   const param = useParams();
   const dispatch = useDispatch();
@@ -263,8 +256,8 @@ export default function SingleProductPage() {
                 </h1>
               </div>
               <div>
-                <button>Buy Now</button>
-                <button>Add to Cart</button>
+                {/* <button onClick={atc}>Buy Now</button>
+                <button onClick={atc}>Add to Cart</button> */}
               </div>
             </div>
           </BTMBAR>
