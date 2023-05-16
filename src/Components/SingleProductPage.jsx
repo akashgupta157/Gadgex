@@ -11,17 +11,20 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import StarIcon from "@mui/icons-material/Star";
 import { Divider } from "@mui/material";
 import { toast } from "react-toastify";
+import { login, logout } from "../Redux/authReducer/action";
+import axios from "axios";
 export default function SingleProductPage() {
   const param = useParams();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.SProductReducer);
+  const authData = useSelector((state) => state.authReducer);
+  console.log(authData);
   useEffect(() => {
     dispatch(getSProducts(param));
   }, []);
   useEffect(() => {
     dispatch(getSProducts(param));
   }, [param]);
-  console.log();
   const settings = {
     customPaging: function (i) {
       return (
@@ -59,6 +62,41 @@ export default function SingleProductPage() {
       }
     };
   }
+  const atc = async () => {
+    if (authData.isAuthenticated) {
+      let arr = [];
+      await axios
+        .get(
+          `https://incandescent-nettle-pirate.glitch.me/profile/${authData.user.id}`
+        )
+        .then((res) => {
+          arr = res.data.cart;
+          arr.push(data.product);
+        });
+      axios
+        .patch(
+          `https://incandescent-nettle-pirate.glitch.me/profile/${authData.user.id}`,
+          {
+            cart: arr,
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+          login(res.data);
+        });
+    } else {
+      toast.error("Please Login First", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
   return (
     <>
       {data.isLoading ? (
@@ -256,8 +294,8 @@ export default function SingleProductPage() {
                 </h1>
               </div>
               <div>
-                {/* <button onClick={atc}>Buy Now</button>
-                <button onClick={atc}>Add to Cart</button> */}
+                <button onClick={atc}>Buy Now</button>
+                <button onClick={atc}>Add to Cart</button>
               </div>
             </div>
           </BTMBAR>
