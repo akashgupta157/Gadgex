@@ -82,16 +82,16 @@ export default function SingleProductPage() {
         .then((res) => {
           dispatch(login(res.data));
         });
-        toast.success("Product Added to Cart", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+      toast.success("Product Added to Cart", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     } else {
       toast.error("Please Login First", {
         position: "top-center",
@@ -318,11 +318,12 @@ const BTMBAR = styled.div`
   -webkit-box-shadow: 3px 6px 39px -18px rgba(255, 255, 255, 1);
   -moz-box-shadow: 3px 6px 39px -18px rgba(255, 255, 255, 1);
   box-shadow: 3px 6px 39px -18px rgba(255, 255, 255, 1);
-  position: absolute;
+  position: fixed;
   width: 100%;
-  bottom: 0;
+  bottom: 0px;
   color: white;
   display: none;
+  z-index: 100;
   #sob {
     display: flex;
     align-items: center;
