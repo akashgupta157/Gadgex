@@ -186,6 +186,7 @@ export default function Navbar() {
       });
   };
   const handleLogout = () => {
+    nav('/')
     dispatch(logout());
     toast.success("Logout Successfull!", {
       position: "top-center",

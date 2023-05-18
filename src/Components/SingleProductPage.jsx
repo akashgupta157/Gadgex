@@ -11,14 +11,13 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import StarIcon from "@mui/icons-material/Star";
 import { Divider } from "@mui/material";
 import { toast } from "react-toastify";
-import { login, logout } from "../Redux/authReducer/action";
+import { login } from "../Redux/authReducer/action";
 import axios from "axios";
 export default function SingleProductPage() {
   const param = useParams();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.SProductReducer);
   const authData = useSelector((state) => state.authReducer);
-  console.log(authData);
   useEffect(() => {
     dispatch(getSProducts(param));
   }, []);
@@ -81,8 +80,17 @@ export default function SingleProductPage() {
           }
         )
         .then((res) => {
-          console.log(res.data);
-          login(res.data);
+          dispatch(login(res.data));
+        });
+        toast.success("Product Added to Cart", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
         });
     } else {
       toast.error("Please Login First", {
