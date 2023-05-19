@@ -10,7 +10,14 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import "../CSS/Dashboard.css";
-import { Button, TextField, TextareaAutosize } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  InputBase,
+  Paper,
+  TextField,
+  TextareaAutosize,
+} from "@mui/material";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
@@ -23,6 +30,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
+import { ThreeDots } from "react-loader-spinner";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
   return (
@@ -63,7 +73,7 @@ export default function Dashboard() {
     category: "",
     price: 0,
     brand: "",
-    image:'',
+    image: "",
     kf: [],
   };
   const editData = {
@@ -96,6 +106,8 @@ export default function Dashboard() {
   const url = `https://incandescent-nettle-pirate.glitch.me/products`;
   const [product, setProduct] = useState(initialState);
   const [view, setView] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [img, setImg] = useState();
   const [edit, setEdit] = useState(editData);
@@ -113,7 +125,7 @@ export default function Dashboard() {
   useEffect(() => {
     let x = Object.values(inputValues);
     setProduct({ ...product, image: [img, ...x] });
-  }, [inputValues,img]);
+  }, [inputValues, img]);
   const formSubmit = async (e) => {
     e.preventDefault();
     let obj = {
@@ -145,7 +157,10 @@ export default function Dashboard() {
   useEffect(() => {
     const getAll = async () => {
       const allProducts = await fetchProduct();
-      if (allProducts) setData(allProducts.reverse());
+      if (allProducts) {
+        setData(allProducts.reverse());
+        setLoading(false);
+      }
     };
     getAll();
   }, []);
@@ -224,7 +239,41 @@ export default function Dashboard() {
       theme: "colored",
     });
   };
-
+  const handleSearchValue = () => {
+    const clearIcon = document.getElementById("clearIcon");
+    const searchForm = document.getElementById("searchForm");
+    if (searchValue.length === 1) {
+      clearIcon.style.display = "none";
+    } else {
+      clearIcon.style.display = "flex";
+      searchForm.style.borderColor = "black";
+    }
+    clearIcon.onclick = () => {
+      searchForm.style.borderColor = "black";
+      setSearchValue("");
+      clearIcon.style.display = "none";
+      const getAll = async () => {
+        const allProducts = await fetchProduct();
+        if (allProducts) {
+          setData(allProducts.reverse());
+          setLoading(false);
+        }
+      };
+      getAll();
+    };
+  };
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    const searchForm = document.getElementById("searchForm");
+    if (searchValue === "") {
+      searchForm.style.borderColor = "red";
+    } else {
+      searchForm.style.borderColor = "black";
+      return await axios
+        .get(`${url}?q=${searchValue}`)
+        .then((res) => setData(res.data));
+    }
+  };
   return (
     <>
       <div
@@ -390,9 +439,7 @@ export default function Dashboard() {
                 autoComplete="off"
                 label="Image"
                 variant="outlined"
-                onChange={(e) =>
-                  setImg(e.target.value)
-                }
+                onChange={(e) => setImg(e.target.value)}
               />
               {Array.from(Array(counter)).map((c, index) => {
                 return (
@@ -437,74 +484,147 @@ export default function Dashboard() {
           </div>
         </TabPanel>
         <TabPanel value={value} index={2} className="right">
-          <table>
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Image</th>
-                <th>Brand</th>
-                <th>Category</th>
-                <th>View</th>
-                <th>Edit</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.map((e) => (
-                <tr key={e.id}>
-                  <td>{e.title}</td>
-                  <td>
-                    ₹
-                    {new Intl.NumberFormat("en-IN", {
-                      maximumSignificantDigits: 3,
-                    }).format(e.price)}
-                    .00
-                  </td>
-                  <td>
-                    <img src={e.image} width={100} alt="" />
-                  </td>
-                  <td>{e.brand}</td>
-                  <td>{e.category}</td>
-                  <td>
-                    <button
-                      id="view"
-                      onClick={() => {
-                        handleClickOpenView();
-                        setid(e.id);
-                        Bb(e.id);
-                      }}
-                    >
-                      View
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      id="edit"
-                      onClick={() => {
-                        handleClickOpenEdit();
-                        setid(e.id);
-                        Aa(e.id);
-                      }}
-                    >
-                      Edit
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      id="delete"
-                      onClick={() => {
-                        handleClickOpen();
-                        setid(e.id);
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {loading ? (
+            <div
+              style={{
+                position: "absolute",
+                top: "30%",
+                left: "60%",
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              <ThreeDots
+                height="80"
+                width="80"
+                radius="10"
+                color="#0c76d2"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                wrapperClassName=""
+                visible={true}
+              />
+            </div>
+          ) : (
+            <>
+              <Paper
+                component="form"
+                id="searchForm"
+                sx={{
+                  p: "2px 4px",
+                  display: "flex",
+                  alignItems: "center",
+                  width: 450,
+                  border: "1px solid black",
+                }}
+              >
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  placeholder="Search by Title, Brand, Category"
+                  onChange={(e) => {
+                    handleSearchValue();
+                    setSearchValue(e.target.value);
+                  }}
+                  value={searchValue}
+                />
+                <IconButton
+                  type="button"
+                  sx={{ p: "10px", display: "none" }}
+                  id="clearIcon"
+                >
+                  <ClearIcon />
+                </IconButton>
+                <IconButton
+                  type="button"
+                  sx={{ p: "10px" }}
+                  aria-label="search"
+                  onClick={handleSearch}
+                >
+                  <SearchIcon />
+                </IconButton>
+              </Paper>
+              {data.length === 0 ? (
+                <h1>Data Not Found</h1>
+              ) : (
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Price</th>
+                      <th>Image</th>
+                      <th>Brand</th>
+                      <th>Category</th>
+                      <th>View</th>
+                      <th>Edit</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  {data?.map((e) => (
+                    <tbody>
+                      <tr key={e.id}>
+                        <td>{e.title}</td>
+                        <td>
+                          ₹
+                          {new Intl.NumberFormat("en-IN", {
+                            maximumSignificantDigits: 3,
+                          }).format(e.price)}
+                          .00
+                        </td>
+                        <td>
+                          <img
+                            src={
+                              e.image
+                                ? e.image[0]
+                                : "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                            }
+                            width={100}
+                            alt=""
+                          />
+                        </td>
+                        <td>{e.brand}</td>
+                        <td>{e.category}</td>
+                        <td>
+                          <button
+                            id="view"
+                            onClick={() => {
+                              handleClickOpenView();
+                              setid(e.id);
+                              Bb(e.id);
+                            }}
+                          >
+                            View
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                            id="edit"
+                            onClick={() => {
+                              handleClickOpenEdit();
+                              setid(e.id);
+                              Aa(e.id);
+                            }}
+                          >
+                            Edit
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                            id="delete"
+                            onClick={() => {
+                              handleClickOpen();
+                              setid(e.id);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  ))}
+                </table>
+              )}
+            </>
+          )}
+
           <Dialog
             open={open}
             onClose={handleClose}
@@ -668,7 +788,11 @@ export default function Dashboard() {
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <img src={view?null:view.image[0]} width={200} alt="" />
+                    <img
+                      src={view.image ? view.image[0] : null}
+                      width={200}
+                      alt=""
+                    />
 
                     <div>
                       <h4

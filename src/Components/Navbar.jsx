@@ -103,10 +103,18 @@ export default function Navbar() {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: "400px",
     bgcolor: "#121212",
     boxShadow: 24,
     p: 4,
+    "@media screen and (max-width:480px)": {
+      width: "90%",
+    },
+    "@media screen and (max-width:320px)": {
+      width: "95%",
+      p: 2,
+      pt: 4,
+    },
   };
   const detectDeviceType = () =>
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -186,7 +194,7 @@ export default function Navbar() {
       });
   };
   const handleLogout = () => {
-    nav('/')
+    nav("/");
     dispatch(logout());
     toast.success("Logout Successfull!", {
       position: "top-center",
