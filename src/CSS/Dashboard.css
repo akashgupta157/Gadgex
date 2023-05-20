@@ -1,4 +1,4 @@
-#logo{
+#logo {
   width: 150px;
 }
 #addproduct {
@@ -49,31 +49,36 @@ button[aria-selected="true"] {
 span {
   background-color: transparent !important;
 }
-/* td {
-  text-align: center;
+#searchBar {
+  margin-bottom: 10px;
 }
-td:first-child {
-  width: 40%;
+table {
+  border-collapse: collapse;
+  width: 100%;
 }
-table{
-  height: 80vh;
-  border: 1px solid red;
+table td,
+table th {
+  border: 0.5px solid #ddd;
+  padding: 8px;
 }
-tbody tr:hover {
-  background-color: rgb(206, 242, 245);
+table tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
-thead tr {
-  background-color: black;
+table tr:hover {
+  background-color: #b2e4ec;
+}
+table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #1976d2;
   color: white;
   position: sticky;
-  top: 100px;
+  top: 11.9vh;
+  z-index: 100;
 }
-th {
-  padding-top: 15px;
-  padding-bottom: 15px;
-} */
 #edit,
-#delete,#view {
+#delete,
+#view {
   background-color: red;
   border: 0;
   padding: 10px;
@@ -86,9 +91,31 @@ th {
 #edit {
   background-color: #1976d2;
 }
-#view{
+#view {
   background-color: #ffbd03;
 }
-.right{
+.right {
   margin-left: 300px;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.desc {
+  padding: 15px;
+  text-align: center;
 }

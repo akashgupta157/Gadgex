@@ -288,7 +288,7 @@ export default function Dashboard() {
           justifyContent: "space-between",
           position: "sticky",
           top: "0px",
-          zIndex: "1",
+          zIndex: "100",
           height: "12vh",
         }}
       >
@@ -506,46 +506,48 @@ export default function Dashboard() {
             </div>
           ) : (
             <>
-              <Paper
-                component="form"
-                id="searchForm"
-                sx={{
-                  p: "2px 4px",
-                  display: "flex",
-                  alignItems: "center",
-                  width: 450,
-                  border: "1px solid black",
-                }}
-              >
-                <InputBase
-                  sx={{ ml: 1, flex: 1 }}
-                  placeholder="Search by Title, Brand, Category"
-                  onChange={(e) => {
-                    handleSearchValue();
-                    setSearchValue(e.target.value);
+              <div id="searchBar">
+                <Paper
+                  component="form"
+                  id="searchForm"
+                  sx={{
+                    p: "2px 4px",
+                    display: "flex",
+                    alignItems: "center",
+                    width: 450,
+                    border: "1px solid black",
                   }}
-                  value={searchValue}
-                />
-                <IconButton
-                  type="button"
-                  sx={{ p: "10px", display: "none" }}
-                  id="clearIcon"
                 >
-                  <ClearIcon />
-                </IconButton>
-                <IconButton
-                  type="button"
-                  sx={{ p: "10px" }}
-                  aria-label="search"
-                  onClick={handleSearch}
-                >
-                  <SearchIcon />
-                </IconButton>
-              </Paper>
+                  <InputBase
+                    sx={{ ml: 1, flex: 1 }}
+                    placeholder="Search by Title, Brand, Category"
+                    onChange={(e) => {
+                      handleSearchValue();
+                      setSearchValue(e.target.value);
+                    }}
+                    value={searchValue}
+                  />
+                  <IconButton
+                    type="button"
+                    sx={{ p: "10px", display: "none" }}
+                    id="clearIcon"
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                  <IconButton
+                    type="button"
+                    sx={{ p: "10px" }}
+                    aria-label="search"
+                    onClick={handleSearch}
+                  >
+                    <SearchIcon />
+                  </IconButton>
+                </Paper>
+              </div>
               {data.length === 0 ? (
                 <h1>Data Not Found</h1>
               ) : (
-                <table>
+                <table key={"p"}>
                   <thead>
                     <tr>
                       <th>Title</th>
@@ -570,15 +572,28 @@ export default function Dashboard() {
                           .00
                         </td>
                         <td>
-                          <img
-                            src={
-                              e.image
-                                ? e.image[0]
-                                : "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
-                            }
-                            width={100}
-                            alt=""
-                          />
+                          <div class="dropdown">
+                            <img
+                              src={
+                                e.image
+                                  ? e.image[0]
+                                  : "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                              }
+                              alt="Cinque Terre"
+                              width="100"
+                            />
+                            <div class="dropdown-content">
+                              <img
+                                src={
+                                  e.image
+                                    ? e.image[0]
+                                    : "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                                }
+                                alt="Cinque Terre"
+                                width="300"
+                              />
+                            </div>
+                          </div>
                         </td>
                         <td>{e.brand}</td>
                         <td>{e.category}</td>
