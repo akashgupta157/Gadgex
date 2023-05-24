@@ -96,7 +96,7 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const to = (e) => {
     document.getElementById("drawer").style.display = "none";
-    nav(`/product/${e}`, { state: { end: e } });
+    nav(`/product/${e}`, { state:e});
   };
   const style = {
     position: "absolute",

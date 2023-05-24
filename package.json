@@ -10,7 +10,6 @@
     "server": "json-server --watch db.json --port 8080"
   },
   "dependencies": {
-    "@chakra-ui/react": "^2.6.1",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.11",
@@ -20,7 +19,6 @@
     "framer-motion": "^10.12.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-dropdown": "^1.11.0",
     "react-hook-form": "^7.43.9",
     "react-icons": "^4.8.0",
     "react-image-magnifiers": "^1.4.0",
