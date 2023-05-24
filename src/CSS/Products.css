@@ -100,6 +100,17 @@
 #bn {
   padding-top: 20px;
 }
+#list {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+#list ul li {
+  list-style: none;
+  font-size: 14px;
+}
+#list ul li.selected {
+  color: #00e8be;
+}
 #bn button {
   margin-right: 20px;
   padding: 5px;
