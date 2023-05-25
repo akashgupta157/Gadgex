@@ -96,7 +96,7 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const to = (e) => {
     document.getElementById("drawer").style.display = "none";
-    nav(`/product/${e}`, { state:e});
+    nav(`/product/${e}`, { state: e });
   };
   const style = {
     position: "absolute",
@@ -177,7 +177,7 @@ export default function Navbar() {
               theme: "colored",
             });
           } else {
-            toast.success("Sign In Successfull!", {
+            toast.success("Sign In Successful!", {
               position: "top-center",
               autoClose: 1000,
               hideProgressBar: true,
@@ -196,7 +196,7 @@ export default function Navbar() {
   const handleLogout = () => {
     nav("/");
     dispatch(logout());
-    toast.success("Logout Successfull!", {
+    toast.success("Logout Successful!", {
       position: "top-center",
       autoClose: 1000,
       hideProgressBar: true,
@@ -291,58 +291,60 @@ export default function Navbar() {
                 </Tabs>
               </Box>
               <TabPanel value={value} index={0}>
-                <form action="" id="loginForm" onSubmit={hS1(onLoginSubmit)}>
-                  <label>Enter your Email</label>
-                  <input
-                    autoComplete="off"
-                    {...register1("Email", {
-                      required: true,
-                      pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-                    })}
-                  />
-                  {errors1?.Email?.type === "required" && (
-                    <p>
-                      <ErrorIcon /> This field is required
-                    </p>
-                  )}
-                  {errors1?.Email?.type === "pattern" && (
-                    <p>
-                      <ErrorIcon /> Invalid email address
-                    </p>
-                  )}
+                {authData.isLoading ? null : (
+                  <form action="" id="loginForm" onSubmit={hS1(onLoginSubmit)}>
+                    <label>Enter your Email</label>
+                    <input
+                      autoComplete="off"
+                      {...register1("Email", {
+                        required: true,
+                        pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                      })}
+                    />
+                    {errors1?.Email?.type === "required" && (
+                      <p>
+                        <ErrorIcon /> This field is required
+                      </p>
+                    )}
+                    {errors1?.Email?.type === "pattern" && (
+                      <p>
+                        <ErrorIcon /> Invalid email address
+                      </p>
+                    )}
 
-                  <label>Enter your Password</label>
-                  <input
-                    type="password"
-                    autoComplete="off"
-                    {...register1("Password", {
-                      required: true,
-                      minLength: 6,
-                      maxLength: 6,
-                    })}
-                  />
-                  {errors1?.Password?.type === "required" && (
-                    <p>
-                      <ErrorIcon /> This field is required
-                    </p>
-                  )}
-                  {errors1?.Password?.type === "minLength" && (
-                    <p>
-                      <ErrorIcon /> Password must be 6 characters
-                    </p>
-                  )}
-                  {errors1?.Password?.type === "maxLength" && (
-                    <p>
-                      <ErrorIcon /> Password must be 6 characters
-                    </p>
-                  )}
-                  {detectDeviceType() === "Mobile" ? null : (
-                    <small onClick={() => nav("/adminDashboard")}>
-                      Login as Admin
-                    </small>
-                  )}
-                  <input type="submit" />
-                </form>
+                    <label>Enter your Password</label>
+                    <input
+                      type="password"
+                      autoComplete="off"
+                      {...register1("Password", {
+                        required: true,
+                        minLength: 6,
+                        maxLength: 6,
+                      })}
+                    />
+                    {errors1?.Password?.type === "required" && (
+                      <p>
+                        <ErrorIcon /> This field is required
+                      </p>
+                    )}
+                    {errors1?.Password?.type === "minLength" && (
+                      <p>
+                        <ErrorIcon /> Password must be 6 characters
+                      </p>
+                    )}
+                    {errors1?.Password?.type === "maxLength" && (
+                      <p>
+                        <ErrorIcon /> Password must be 6 characters
+                      </p>
+                    )}
+                    {detectDeviceType() === "Mobile" ? null : (
+                      <small onClick={() => nav("/adminDashboard")}>
+                        Login as Admin
+                      </small>
+                    )}
+                    <input type="submit" />
+                  </form>
+                )}
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <form id="ca" onSubmit={handleSubmit(onSubmit)}>
@@ -707,7 +709,7 @@ const NAV = styled.nav`
       right: 10px;
       background-color: #00e8be;
       color: black;
-      font-size: 15px;
+      font-size: 12px;
       border-radius: 15px;
       width: 15px;
       height: 15px;

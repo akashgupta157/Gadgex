@@ -51,6 +51,9 @@ span {
 }
 #searchBar {
   margin-bottom: 10px;
+  display: flex;
+  justify-content:space-between;
+  gap: 10px;
 }
 table {
   border-collapse: collapse;
