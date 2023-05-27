@@ -58,6 +58,7 @@ export default function Sidebar() {
     brandArr.push(e.brand.trim());
   });
   let uniqueBrand = [...new Set(brandArr)];
+  uniqueBrand.pop();
   const style = {
     position: "absolute",
     top: "80%",

@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../CSS/Navbar.css";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import axios from "axios";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -122,30 +123,57 @@ export default function Navbar() {
     )
       ? "Mobile"
       : "Desktop";
+  const [emailArr, setEmailArr] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`https://incandescent-nettle-pirate.glitch.me/profile`)
+      .then((response) => {
+        setEmailArr(response.data);
+      });
+  }, []);
+  const arr = [];
+  emailArr.map((e) => {
+    arr.push(e.id);
+  });
   const onSubmit = (data) => {
-    let obj = {
-      name: data.Name,
-      id: data.Email,
-      password: data.Password,
-      cart: [],
-    };
-    fetch("https://incandescent-nettle-pirate.glitch.me/profile", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(obj),
-    });
-    toast.success("Account Created Successfully", {
-      position: "top-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
+    if (arr.includes(data.Email)) {
+      toast.error("Email already registered", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else {
+      let obj = {
+        name: data.Name,
+        id: data.Email,
+        password: data.Password,
+        cart: [],
+      };
+      fetch("https://incandescent-nettle-pirate.glitch.me/profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(obj),
+      });
+      toast.success("Account Created Successfully", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      document.getElementById("ca").reset();
+      handleClose();
+    }
   };
   const onLoginSubmit = (dat) => {
     const email = dat.Email;
@@ -188,6 +216,7 @@ export default function Navbar() {
               theme: "colored",
             });
             dispatch(login(data));
+            document.getElementById("loginForm").reset();
             handleClose();
           }
         }

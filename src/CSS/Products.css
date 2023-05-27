@@ -4,6 +4,10 @@
   padding-left: 100px;
   padding-top: 50px;
   gap: 10px;
+  min-height: 32.8vh;
+}
+#whole h1 {
+  color: white;
 }
 #mainbody {
   background-color: #121212;
@@ -164,6 +168,10 @@
     padding-left: 0px;
     padding-top: 10px;
     gap: 10px;
+    & h1{
+      text-align: center;
+      padding-left: 20px;
+    }
   }
   #mainbody {
     margin: auto;

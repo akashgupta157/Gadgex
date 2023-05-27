@@ -58,69 +58,79 @@ export default function Products() {
       ) : (
         <>
           <div id="whole">
-            <Sidebar />
-            <div id="mainbody">
-              <div id="name">
-                <p>{param.category === "TV" ? "Television" : param.category}</p>
-                <small>{data.product.length} Products found</small>
-              </div>
-              <div>
-                {data.product?.map((e) => (
-                  <div
-                    key={e.id}
-                    onClick={() => {
-                      Nav(`/product/${param.category}/` + e.id);
-                    }}
-                    id="p"
-                  >
-                    <div id="pimg">
-                      <img src={e.image[0]} alt="" />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            sx={{
-                              color: "grey",
-                              width: "40px",
-                              "&.Mui-checked": { color: "#00e8be" },
-                            }}
-                          />
-                        }
-                        label="Compare"
-                      />
-                    </div>
-                    <div id="pmain">
-                      <p id="ptitle">{e.title}</p>
-                      <small id="pof">
-                        ₹
-                        {new Intl.NumberFormat("en-IN", {
-                          maximumSignificantDigits: 3,
-                        }).format(e.offer_price)}
-                        .00
-                      </small>
-                      <span style={{ color: "white", fontSize: "12px" }}>
-                        (Incl. all Taxes)
-                      </span>
-                      <div id="pprice">
-                        <strike>
-                          MRP: ₹
-                          {new Intl.NumberFormat("en-IN", {
-                            maximumSignificantDigits: 3,
-                          }).format(e.price)}
-                          .00
-                        </strike>
-                        <small>(Save ₹{e.price - e.offer_price})</small>
-                        <p>{e.discount}% Off</p>
-                      </div>
-                      <div id="bn">
-                        <button>Buy Now</button>
-                        <button>Add to Cart</button>
-                      </div>
-                    </div>
-                    <FavoriteBorderIcon id="pheart" />
+            {data.product.length === 0 ? (
+              <>
+                <h1>Product Not Found</h1>
+              </>
+            ) : (
+              <>
+                <Sidebar />
+                <div id="mainbody">
+                  <div id="name">
+                    <p>
+                      {param.category === "TV" ? "Television" : param.category}
+                    </p>
+                    <small>{data.product.length} Products found</small>
                   </div>
-                ))}
-              </div>
-            </div>
+                  <div>
+                    {data.product?.map((e) => (
+                      <div
+                        key={e.id}
+                        onClick={() => {
+                          Nav(`/product/${param.category}/` + e.id);
+                        }}
+                        id="p"
+                      >
+                        <div id="pimg">
+                          <img src={e.image[0]} alt="" />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                sx={{
+                                  color: "grey",
+                                  width: "40px",
+                                  "&.Mui-checked": { color: "#00e8be" },
+                                }}
+                              />
+                            }
+                            label="Compare"
+                          />
+                        </div>
+                        <div id="pmain">
+                          <p id="ptitle">{e.title}</p>
+                          <small id="pof">
+                            ₹
+                            {new Intl.NumberFormat("en-IN", {
+                              maximumSignificantDigits: 3,
+                            }).format(e.offer_price)}
+                            .00
+                          </small>
+                          <span style={{ color: "white", fontSize: "12px" }}>
+                            (Incl. all Taxes)
+                          </span>
+                          <div id="pprice">
+                            <strike>
+                              MRP: ₹
+                              {new Intl.NumberFormat("en-IN", {
+                                maximumSignificantDigits: 3,
+                              }).format(e.price)}
+                              .00
+                            </strike>
+                            <small>(Save ₹{e.price - e.offer_price})</small>
+                            <p>{e.discount}% Off</p>
+                          </div>
+                          <div id="bn">
+                            <button>Buy Now</button>
+                            <button>Add to Cart</button>
+                          </div>
+                        </div>
+                        <FavoriteBorderIcon id="pheart" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </>
       )}

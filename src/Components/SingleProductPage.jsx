@@ -48,19 +48,6 @@ export default function SingleProductPage() {
   }
   const randomInt = getRandomInt(20, 100);
   const randomInt1 = getRandomInt(20, 100);
-  const side = document.getElementById("description");
-  if (side) {
-    side.onscroll = () => {
-      if (side.scrollTop >= 0) {
-        const btmBar = document.getElementById("btmBar");
-        btmBar.style.display = "flex";
-      }
-      if (side.scrollTop < 1) {
-        const btmBar = document.getElementById("btmBar");
-        btmBar.style.display = "none";
-      }
-    };
-  }
   const atc = async () => {
     if (authData.isAuthenticated) {
       let arr = [];
@@ -104,6 +91,13 @@ export default function SingleProductPage() {
         theme: "colored",
       });
     }
+  };
+  const settings1 = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
   };
   return (
     <>
@@ -163,6 +157,45 @@ export default function SingleProductPage() {
                     <img
                       src={e}
                       id="mainImage"
+                      style={{ display: "block", margin: "auto" }}
+                      alt=""
+                    />
+                  </div>
+                ))}
+              </Slider>
+            </div>
+            <div id="div2">
+            <div
+                style={{
+                  display: "flex",
+                  // width: "100%",
+                  marginLeft: "80%",
+                  gap: "10px",
+                }}
+              >
+                <FavoriteBorderIcon
+                  sx={{
+                    "&:hover": {
+                      color: "#12daa8",
+                      cursor: "pointer",
+                    },
+                  }}
+                />
+                <ShareOutlinedIcon
+                  sx={{
+                    "&:hover": {
+                      color: "#12daa8",
+                      cursor: "pointer",
+                    },
+                  }}
+                />
+              </div>
+              <Slider {...settings1}>
+                {data.product.image?.map((e) => (
+                  <div key={e}>
+                    <img
+                      src={e}
+                      width={300}
                       style={{ display: "block", margin: "auto" }}
                       alt=""
                     />
@@ -237,8 +270,10 @@ export default function SingleProductPage() {
               <br />
               <div id="try">
                 <h2>
-                  <GppGoodOutlinedIcon />
-                  ZipCare Protection Plan{" "}
+                  <h2>
+                    <GppGoodOutlinedIcon />
+                    ZipCare Protection Plan{" "}
+                  </h2>
                   <p>Add extra protection to your products.</p>
                 </h2>
                 <br />
@@ -322,8 +357,8 @@ const BTMBAR = styled.div`
   width: 100%;
   bottom: 0px;
   color: white;
-  display: none;
   z-index: 100;
+  padding-top: 10px;
   #sob {
     display: flex;
     align-items: center;
@@ -360,6 +395,60 @@ const BTMBAR = styled.div`
     background-color: #12daa8;
     color: #191919;
   }
+  @media screen and (max-width: 1024px) /* Laptop */ {
+    #sob {
+      margin: auto;
+      display: flex;
+      align-items: center;
+      width: 80%;
+      justify-content: space-evenly;
+    }
+    h1 {
+      width: 80%;
+      margin: 0;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: -webkit-box !important;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      white-space: normal;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      width: 150px;
+      display: flex;
+      justify-content: center;
+    }
+    button:first-child {
+      width: 100px;
+    }
+  }
+  @media screen and (max-width: 480px) /* Mobile */ {
+    padding: 0px;
+    #sob {
+      width: 100%;
+      padding: 0;
+    }
+    #sob div:first-child {
+      display: none;
+    }
+    #sob div:last-child {
+      width: 100%;
+    }
+    button {
+      padding: 0;
+      margin-right: 0;
+      width: 100%;
+      height:10vh;
+      border: 0;
+      border-radius: 0;
+    }
+    button:first-child {
+      width: 100%;
+    }
+  }
 `;
 const DIV = styled.div`
   display: flex;
@@ -368,6 +457,9 @@ const DIV = styled.div`
   height: 88vh;
   color: white;
   padding: 50px 80px 0 40px;
+  #div2 {
+    display: none;
+  }
   #mainImage {
     width: 450px;
     padding-left: 120px;
@@ -536,6 +628,87 @@ const DIV = styled.div`
       :hover {
         border: 1px solid #01e9be;
       }
+    }
+  }
+  @media screen and (max-width: 1024px) /* Laptop */ {
+    padding: 50px 50px 0 0px;
+    #div1 {
+      display: none;
+    }
+    #div2 {
+      display: initial;
+      width: 45%;
+    }
+    li.slick-active,
+    .slick-thumb li:hover {
+      border: none;
+      button::before {
+        color: #00e8be;
+        font-size: 10px;
+      }
+    }
+    li {
+      button::before {
+        color: #9a9a9a;
+        font-size: 10px;
+      }
+    }
+  }
+  @media screen and (max-width: 865px) /* Tablet */ {
+    padding: 20px;
+    flex-direction: column;
+    height: max-content;
+    #div2 {
+      margin: auto;
+      width: 100%;
+    }
+    #description {
+      padding-top: 50px;
+      overflow-y: hidden;
+    }
+  }
+  @media screen and (max-width: 480px) /* Mobile */ {
+    #fly :first-child {
+      font-size: 22px;
+    }
+    #fly :last-child {
+      font-size: 10px;
+    }
+    #muff :first-child {
+      font-size: 16px;
+    }
+    #muff :last-child {
+      font-size: 11px;
+    }
+    #gut {
+      font-size: 12px;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      strike {
+        color: #9a9a9a;
+        margin-right: 10px;
+      }
+    }
+    #coop div {
+      width: 100%;
+    }
+    #try {
+      h2 {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      h2 h2 {
+        flex-direction: row;
+      }
+    }
+    #SPprice {
+      gap: 10px;
+    }
+  }
+  @media screen and (max-width: 320px) /* Mobile */ {
+    #SPprice {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 `;
