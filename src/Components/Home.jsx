@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Slider1 from "./Slider1";
+import { Slider1 } from "./Slider1";
 import SliderMain from "./SliderMain";
 import "../CSS/Home.css";
 import Card from "./Card";
@@ -229,18 +229,16 @@ export default function Home() {
         </div>
       </div>
       <div className="sdiv">
-        <p>Computer Accessories</p>
-        <Slider {...settings} className="sde">
-          {ca.map((e) => (
-            <Card key={e} img={e.img} name={e.name} price={e.price} />
-          ))}
-        </Slider>
-      </div>
-      <div className="sdiv">
         <p>Air Conditioners</p>
         <Slider {...settings} className="sde">
           {ac.map((e) => (
-            <Card key={e} img={e.img} name={e.name} price={e.price} />
+            <Card
+              key={e}
+              img={e.img}
+              name={e.name}
+              price={e.price}
+              navigate={"AC"}
+            />
           ))}
         </Slider>
       </div>
@@ -248,6 +246,20 @@ export default function Home() {
         <p>Washing Machines</p>
         <Slider {...settings} className="sde">
           {wm.map((e) => (
+            <Card
+              key={e}
+              img={e.img}
+              name={e.name}
+              price={e.price}
+              navigate={"Washing Machine"}
+            />
+          ))}
+        </Slider>
+      </div>
+      <div className="sdiv">
+        <p>Computer Accessories</p>
+        <Slider {...settings} className="sde">
+          {ca.map((e) => (
             <Card key={e} img={e.img} name={e.name} price={e.price} />
           ))}
         </Slider>

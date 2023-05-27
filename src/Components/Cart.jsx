@@ -42,10 +42,17 @@ export default function Cart() {
       .catch((err) => console.log(err));
   };
   return (
-    <div style={{ background: "#121313", height: "100vh" }}>
+    <div style={{ background: "#121313", height: "max-height" }}>
       {cartData.isAuthenticated ? (
         cartData.user.cart.length === 0 ? (
-          <div style={{ margin: "auto", width: "240px", paddingTop: "50px" }}>
+          <div
+            style={{
+              margin: "auto",
+              width: "240px",
+              paddingTop: "50px",
+              paddingBottom: "50px",
+            }}
+          >
             <svg width="238px" height="120px" viewBox="0 0 238 120">
               <title>Cart</title>
               <g
@@ -169,10 +176,61 @@ export default function Cart() {
                       <img src={e.image[0]} alt="" />
                       <div>
                         <h3>{e.title}</h3>
-                        <button>Move to Wishlist</button>
-                        <button onClick={() => handledelete(e.id)}>
-                          Remove
-                        </button>
+                        <div id="snot">
+                          <span>
+                            ₹
+                            {new Intl.NumberFormat("en-IN", {
+                              maximumSignificantDigits: 3,
+                            }).format(e.offer_price)}
+                            .00
+                          </span>
+                          <br />
+                          <div>(Incl. all Taxes)</div>
+                          <Divider
+                            sx={{
+                              backgroundColor: "#606160",
+                              float: "right",
+                              width: "90%",
+                              mt: "10px",
+                              mb: "10px",
+                            }}
+                          />
+                          <strike>
+                            MRP: ₹
+                            {new Intl.NumberFormat("en-IN", {
+                              maximumSignificantDigits: 3,
+                            }).format(e.price)}
+                            .00
+                          </strike>
+                          <p>
+                            (Save ₹
+                            {new Intl.NumberFormat("en-IN", {
+                              maximumSignificantDigits: 3,
+                            }).format(e.price - e.offer_price)}
+                            .00)
+                          </p>
+                          <Divider
+                            sx={{
+                              backgroundColor: "#606160",
+                              float: "right",
+                              width: "90%",
+                              mt: "10px",
+                              mb: "10px",
+                            }}
+                          />
+                          {e.offer_price > 5000 ? (
+                            <h1>
+                              {Math.ceil(e.offer_price / 12)}/mo*{" "}
+                              <small>EMI Options</small>
+                            </h1>
+                          ) : null}
+                        </div>
+                        <div>
+                          <button>Move to Wishlist</button>
+                          <button onClick={() => handledelete(e.id)}>
+                            Remove
+                          </button>
+                        </div>
                       </div>
                       <div>
                         <span>
@@ -217,7 +275,8 @@ export default function Cart() {
                         />
                         {e.offer_price > 5000 ? (
                           <h1>
-                            {Math.ceil(e.offer_price / 12)}/mo* <small>EMI Options</small>
+                            {Math.ceil(e.offer_price / 12)}/mo*{" "}
+                            <small>EMI Options</small>
                           </h1>
                         ) : null}
                       </div>
@@ -261,7 +320,14 @@ export default function Cart() {
           </>
         )
       ) : (
-        <div style={{ margin: "auto", width: "240px", paddingTop: "50px" }}>
+        <div
+          style={{
+            margin: "auto",
+            width: "240px",
+            paddingTop: "50px",
+            paddingBottom: "50px",
+          }}
+        >
           <svg width="238px" height="120px" viewBox="0 0 238 120">
             <title>Cart</title>
             <g
@@ -380,6 +446,9 @@ export default function Cart() {
 }
 const DIV = styled.div`
   padding: 50px 100px 0 100px;
+  #snot {
+    display: none;
+  }
   #cart {
     display: flex;
     gap: 3%;
@@ -387,9 +456,11 @@ const DIV = styled.div`
   h2 {
     color: white;
     font-size: 20px;
+    padding-left: 10px;
   }
   #cartList {
     width: 65%;
+    padding-bottom: 50px;
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -494,6 +565,105 @@ const DIV = styled.div`
       border: 0;
       margin-top: 20px;
       cursor: pointer;
+    }
+  }
+  @media screen and (min-width: 866px) and (max-width: 1024px) /* Laptop */ {
+    padding: 50px 50px 0 50px;
+  }
+  @media screen and (max-width: 865px) /* Tablet */ {
+    padding: 50px 50px 0 50px;
+    #cart {
+      flex-direction: column;
+    }
+    #cartList {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      overflow-y: hidden;
+      height: max-content;
+      margin-bottom: 50px;
+    }
+    #cartPrice {
+      width: 50%;
+      margin: auto;
+      margin-bottom: 50px;
+    }
+  }
+  @media screen and (max-width: 480px) /* Mobile */ {
+    padding: 0;
+    padding-top: 20px;
+    #dos {
+    }
+    #cartList > div {
+      border-bottom: 1px solid #515151;
+      padding: 30px 0px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      img {
+        width: 50%;
+        object-fit: contain;
+      }
+      > div {
+        width: 60%;
+        color: white;
+        h3 {
+          font-size: 14px;
+          margin: 0;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          display: -webkit-box !important;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          white-space: normal;
+        }
+        div:last-child {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 20px;
+        }
+        button {
+          background: transparent;
+          font-size: 10px;
+          color: white;
+          padding: 11px 10px;
+          border: 1px solid white;
+          border-radius: 10px;
+          margin-right: 0px;
+          margin-top: 0px;
+          cursor: pointer;
+        }
+      }
+    }
+    #cartList > div > div:last-child {
+      display: none;
+    }
+    #snot {
+      display: initial;
+      width: 20%;
+      padding-top: 20px;
+      hr {
+        display: none;
+      }
+      span {
+        font-size: 14px;
+        font-weight: 900;
+      }
+      > div {
+        font-size: 8px;
+      }
+      strike,
+      p {
+        font-size: 10px;
+        color: #9a9a9a;
+      }
+      h1 {
+        display: none;
+      }
+    }
+    #cartPrice {
+      width: 90%;
     }
   }
 `;

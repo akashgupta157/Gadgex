@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Oxygen', sans-serif;
+  font-family: "Oxygen", sans-serif;
 }
 .sdiv {
   width: 85%;
@@ -14,12 +14,12 @@
   margin: 45px 10px 10px;
   font-weight: 600;
 }
-.sd{
+.sd {
   display: grid;
-  grid-template-columns: repeat(4,1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
-.sd img{
+.sd img {
   width: 100%;
   display: block;
   margin: auto;
@@ -37,18 +37,18 @@
     display: block;
     margin: auto;
     aspect-ratio: 16/6;
-    object-fit:cover;
+    object-fit: cover;
   }
-  #new img{
+  #new img {
     width: 90%;
     height: 20%;
   }
-  .sd{
+  .sd {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
-  .sd img{
+  .sd img {
     width: 100%;
     display: block;
     margin: auto;
