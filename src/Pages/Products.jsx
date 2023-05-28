@@ -11,7 +11,7 @@ import { Checkbox, FormControlLabel } from "@mui/material";
 import { ThreeDots } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../Redux/productReducer/action";
-import Sidebar from "./Sidebar";
+import Sidebar from "../Components/Sidebar";
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
   const Nav = useNavigate();
@@ -68,7 +68,11 @@ export default function Products() {
                 <div id="mainbody">
                   <div id="name">
                     <p>
-                      {param.category === "TV" ? "Television" : param.category}
+                      {param.category === "TV"
+                        ? "Television"
+                        : param.category === "AC"
+                        ? "Air Conditioners"
+                        : param.category}
                     </p>
                     <small>{data.product.length} Products found</small>
                   </div>

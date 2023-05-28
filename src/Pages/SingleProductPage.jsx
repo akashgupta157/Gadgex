@@ -165,7 +165,7 @@ export default function SingleProductPage() {
               </Slider>
             </div>
             <div id="div2">
-            <div
+              <div
                 style={{
                   display: "flex",
                   // width: "100%",
@@ -192,7 +192,7 @@ export default function SingleProductPage() {
               </div>
               <Slider {...settings1}>
                 {data.product.image?.map((e) => (
-                  <div key={e}>
+                  <div key={e} class="dropdown">
                     <img
                       src={e}
                       width={300}
@@ -264,6 +264,22 @@ export default function SingleProductPage() {
                     <li key={e}>{e}</li>
                   ))}
                 </ul>
+              </div>
+              <div id="pact">
+                <div>
+                  <img
+                    src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1662565586/Croma%20Assets/Categories/ServiceIcon/3_e3klv8.png/mxw_1440,f_auto"
+                    alt=""
+                  />
+                  <p>12 Months Warranty</p>
+                </div>
+                <div>
+                  <img
+                    src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1662565576/Croma%20Assets/Categories/ServiceIcon/2_u2h2gl.png/mxw_1440,f_auto"
+                    alt=""
+                  />
+                  <p>7 Days Easy Replace</p>
+                </div>
               </div>
               <br />
               <hr />
@@ -389,6 +405,7 @@ const BTMBAR = styled.div`
     height: 40px;
     display: flex;
     align-items: center;
+    cursor: pointer;
   }
   button:first-child {
     border: 0;
@@ -441,7 +458,7 @@ const BTMBAR = styled.div`
       padding: 0;
       margin-right: 0;
       width: 100%;
-      height:10vh;
+      height: 10vh;
       border: 0;
       border-radius: 0;
     }
@@ -457,6 +474,22 @@ const DIV = styled.div`
   height: 88vh;
   color: white;
   padding: 50px 80px 0 40px;
+  #pact {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 20px;
+    img {
+      width: 30%;
+      display: block;
+      margin: auto;
+    }
+    p {
+      padding-top: 10px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: bolder;
+    }
+  }
   #div2 {
     display: none;
   }

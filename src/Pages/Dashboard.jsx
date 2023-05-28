@@ -392,6 +392,7 @@ export default function Dashboard() {
                 list="category"
                 name="ecategory"
                 id="ecategory"
+                autoComplete="off"
                 placeholder="Select Category"
                 onChange={(e) =>
                   setProduct({ ...product, category: e.target.value })
@@ -399,6 +400,7 @@ export default function Dashboard() {
               />
               <datalist id="category">
                 <option value="TV" />
+                <option value="Laptops" />
                 <option value="Mobile" />
                 <option value="Refrigerator" />
                 <option value="AC" />

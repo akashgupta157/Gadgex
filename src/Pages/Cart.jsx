@@ -5,8 +5,9 @@ import styled from "styled-components";
 import { login } from "../Redux/authReducer/action";
 import axios from "axios";
 import { toast } from "react-toastify";
-
+import { useNavigate } from "react-router-dom";
 export default function Cart() {
+  const Nav = useNavigate();
   const dispatch = useDispatch();
   const cartData = useSelector((state) => state.authReducer);
   const [price, setprice] = useState(0);
@@ -51,6 +52,7 @@ export default function Cart() {
               width: "240px",
               paddingTop: "50px",
               paddingBottom: "50px",
+              height: "80vh",
             }}
           >
             <svg width="238px" height="120px" viewBox="0 0 238 120">
@@ -313,7 +315,7 @@ export default function Cart() {
                         }).format(price + 100)}.00`}
                     </p>
                   </div>
-                  <button>Checkout</button>
+                  <button onClick={() => Nav('/checkout')}>Checkout</button>
                 </div>
               </div>
             </DIV>
@@ -326,6 +328,7 @@ export default function Cart() {
             width: "240px",
             paddingTop: "50px",
             paddingBottom: "50px",
+            height: "80vh",
           }}
         >
           <svg width="238px" height="120px" viewBox="0 0 238 120">

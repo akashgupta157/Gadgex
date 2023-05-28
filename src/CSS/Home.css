@@ -25,11 +25,44 @@
   margin: auto;
   border-radius: 10px;
 }
+#foal {
+  color: white;
+  display: flex;
+  justify-content: space-evenly;
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 20%;
+    font-weight: bolder;
+    padding: 20px 0;
+  }
+  & img {
+    width: 20%;
+  }
+  & p {
+    font-size: 20px;
+  }
+  & span {
+    font-size: 12px;
+  }
+}
 @media screen and (min-width: 866px) and (max-width: 1024px) /* Laptop */ {
 }
 @media screen and (min-width: 481px) and (max-width: 865px) /* Tablet */ {
   #mainbanner {
     height: 35vh;
+  }
+  #foal {
+    > div {
+      flex-direction: column;
+      width: 30%;
+    }
+    & img {
+      width: 30%;
+      display: block;
+      margin-right: 50%;
+    }
   }
 }
 @media screen and (max-width: 480px) /* Mobile */ {
@@ -53,5 +86,41 @@
     display: block;
     margin: auto;
     border-radius: 10px;
+  }
+  #foal {
+    > div {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    & img {
+      width: 30%;
+    }
+  }
+  #foal {
+    > div {
+      flex-direction: column;
+      align-items: center;
+      width: 30%;
+      text-align: center;
+    }
+    & img {
+      width: 40%;
+    }
+    & p {
+      font-size: 12px;
+    }
+    & span {
+      font-size: 10px;
+    }
+  }
+}
+@media screen and (max-width: 320px) /* Mobile */ {
+  #foal {
+    > div {
+      flex-direction: column;
+      align-items: center;
+      width: 40%;
+      text-align: center;
+    }
   }
 }

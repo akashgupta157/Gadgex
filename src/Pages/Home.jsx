@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Slider1 } from "./Slider1";
-import SliderMain from "./SliderMain";
+import { Slider1 } from "../Components/Slider1";
+import SliderMain from "../Components/SliderMain";
 import "../CSS/Home.css";
-import Card from "./Card";
+import Card from "../Components/Card";
 import Slider from "react-slick";
 export default function Home() {
   const [no, setno] = useState(0);
@@ -141,6 +141,33 @@ export default function Home() {
       price: 48200,
     },
   ];
+  const laptop = [
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1683561746/Croma%20Assets/Computers%20Peripherals/Laptop/Images/256496_0_h1fl4x.png/mxw_240,f_auto",
+      name: "HP 15s-dr3506TU Intel Core i3 11th Gen (15.6 inch, 8GB, 1TB and 256GB, Windows 11 Home, Intel UHD, FHD Display, Natural Silver, 6N038PA#ACJ)",
+      price: 54051,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1668663171/Croma%20Assets/Gaming/Laptop/Images/259276_0_b5fwix.png/mxw_1440,f_auto",
+      name: "Lenovo IdeaPad Gaming 3 15ACH6 AMD Ryzen5 (15.6 inch, 8GB, 512GB, Windows 11 Home, MS Office 2021, NVIDIA GeForce GTX 1650 Graphics, Full HD IPS Display, Shadow Black, 82K201YCIN)",
+      price: 100690,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1666277581/Croma%20Assets/Computers%20Peripherals/Tablets%20and%20iPads/Images/257191_14_swffs3.png/mxw_1440,f_auto",
+      name: "HP Pavilion x360 14-dy0208TU Intel Core i3 11th Gen (14 inch, Touchscreen Convertible, 8GB, 512GB, Windows 11 Home, MS Office 2019, Intel UHD, IPS Display, Spruce Blue, 67G61PA#ACJ)",
+      price: 69267,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1664420326/Croma%20Assets/Computers%20Peripherals/Laptop/Images/248020_0_e52lla.png/mxw_1440,f_auto",
+      name: "HP 15s-eq2143AU AMD Ryzen 3 (15.6 inch, 8GB, 512GB, Windows 11, MS Office 2019, AMD Radeon Graphics, FHD IPS Display, Natural Silver, 50M62PA#ACJ)",
+      price: 51740,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1662553848/Croma%20Assets/Computers%20Peripherals/Laptop/Images/261170_u7tfva.png/mxw_240,f_auto",
+      name: "Acer Aspire 5 A515-57G Intel Core i5 12th Gen (15.6 inch, 16GB, 512GB, Windows 11, MS Office 2021, NVIDIA RTX 2050, FHD IPS Display, Steel Gray, UN.K9TSI.003)",
+      price: 88999,
+    },
+  ];
   return (
     <div style={{ backgroundColor: "#121313" }}>
       <img
@@ -229,6 +256,20 @@ export default function Home() {
         </div>
       </div>
       <div className="sdiv">
+        <p>Laptops</p>
+        <Slider {...settings} className="sde">
+          {laptop.map((e) => (
+            <Card
+              key={e}
+              img={e.img}
+              name={e.name}
+              price={e.price}
+              navigate={"Laptops"}
+            />
+          ))}
+        </Slider>
+      </div>
+      <div className="sdiv">
         <p>Air Conditioners</p>
         <Slider {...settings} className="sde">
           {ac.map((e) => (
@@ -265,6 +306,41 @@ export default function Home() {
         </Slider>
       </div>
       <br />
+      <h2 style={{ textAlign: "center", color: "white" }}>
+        Shop Safely with Gadgex
+      </h2>
+      <div id="foal">
+        <div>
+          <img
+            src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1637912096/Croma%20Assets/CMS/Shop%20Safely/Shop_with_Video_ioiaui.svg/mxw_1440,f_auto"
+            alt=""
+          />
+          <div>
+            <p>Store at Home</p>
+            <span>START A VIDEO CALL</span>
+          </div>
+        </div>
+        <div>
+          <img
+            src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1637912096/Croma%20Assets/CMS/Shop%20Safely/Zip_Delivery_l6o2gk.svg/mxw_1440,f_auto"
+            alt=""
+          />
+          <div>
+            <p>Express Delivery</p>
+            <span>ENTER PINCODE</span>
+          </div>
+        </div>
+        <div>
+          <img
+            src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1637912096/Croma%20Assets/CMS/Shop%20Safely/Connect_to_store_unfw5f.svg/mxw_1440,f_auto"
+            alt=""
+          />
+          <div>
+            <p>Connect to Store</p>
+            <span>REGISTER NOW</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

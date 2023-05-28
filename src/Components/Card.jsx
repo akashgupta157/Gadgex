@@ -7,6 +7,9 @@ export default function Card({ img, name, price, navigate }) {
   const to = (e) => {
     nav(`/product/${e}`, { state: e });
   };
+  function partialValue(percentage, totalValue) {
+    return totalValue - (percentage * totalValue) / 100;
+  }
   return (
     <div id="dept" onClick={() => to(navigate)}>
       <FavoriteBorderIcon id="heart" />
@@ -17,12 +20,7 @@ export default function Card({ img, name, price, navigate }) {
           ₹
           {new Intl.NumberFormat("en-IN", {
             maximumSignificantDigits: 3,
-          }).format(
-            Math.floor(
-              price -
-                ((Math.floor(Math.random() * (50 - 20)) + 20) / 100) * price
-            )
-          )}
+          }).format(partialValue(20, price))}
           .00
         </small>
         <strike>
