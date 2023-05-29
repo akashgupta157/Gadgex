@@ -6,10 +6,28 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { login } from "../Redux/authReducer/action";
+import axios from "axios";
 export default function Checkout() {
+  const dispatch = useDispatch();
+  const Nav = useNavigate();
+  function numberWithCommas(x) {
+    return x.toString().split(".")[0].length > 3
+      ? x
+          .toString()
+          .substring(0, x.toString().split(".")[0].length - 3)
+          .replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
+          "," +
+          x.toString().substring(x.toString().split(".")[0].length - 3)
+      : x.toString();
+  }
+  const cartData = useSelector((state) => state.authReducer);
+  const location = useLocation();
+  console.log(location.state.price);
   const [submittedAdd, setSubmittedAdd] = useState(false);
   const [submittedPay, setSubmittedPay] = useState(false);
-
   const [address, setAddress] = useState({
     name: "",
     street: "",
@@ -82,7 +100,7 @@ export default function Checkout() {
     }
     if (!cardInfo.expirationMonth) {
       errors.expirationMonth = "Expiration month is required";
-    } else if (!/^(0[1-9]|1[0-2])$/.test(cardInfo.expirationMonth)) {
+    } else if (!/^([1-9]|1[0-2])$/.test(cardInfo.expirationMonth)) {
       errors.expirationMonth = "Invalid expiration month";
     }
     if (!cardInfo.expirationYear) {
@@ -105,14 +123,27 @@ export default function Checkout() {
   };
   const handleSubmit1 = (e) => {
     e.preventDefault();
-    const validationErrors = validateCardInfo(cardInfo);
-    setErrors(validationErrors);
-    if (Object.keys(validationErrors).length === 0) {
-      setSubmittedPay(true);
+    if (submittedAdd) {
+      const validationErrors = validateCardInfo(cardInfo);
+      setErrors(validationErrors);
+      if (Object.keys(validationErrors).length === 0) {
+        setSubmittedPay(true);
+      }
+    } else {
+      toast.error("Please enter Shipping Address", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
   if (submittedAdd && submittedPay) {
-    toast.success("Order Conform", {
+    toast.success("Order Confirm", {
       position: "top-center",
       autoClose: 1000,
       hideProgressBar: true,
@@ -122,6 +153,17 @@ export default function Checkout() {
       progress: undefined,
       theme: "colored",
     });
+    axios
+      .patch(
+        `https://incandescent-nettle-pirate.glitch.me/profile/${cartData.user.id}`,
+        {
+          cart: [],
+        }
+      )
+      .then((res) => {
+        dispatch(login(res.data));
+      });
+      Nav('/')
   }
   return (
     <DIV>
@@ -299,17 +341,32 @@ export default function Checkout() {
           </AccordionDetails>
         </Accordion>
       </div>
-      <div>sdfvn</div>
+      <div>
+        <h3>Order Summary</h3>
+        {cartData.user.cart?.map((e) => (
+          <div>
+            <img src={e.image[0]} alt="" />
+            <p>{e.title}</p>
+            <span>₹{numberWithCommas(e.offer_price)}.00</span>
+          </div>
+        ))}
+        <br />
+        <div>
+          <h7>Amount Payable</h7>
+          <h7>₹{numberWithCommas(location.state.price)}.00</h7>
+        </div>
+      </div>
     </DIV>
   );
 }
 const DIV = styled.div`
   background-color: #121313;
-  min-height: 100vh;
+  min-height: 50vh;
   color: white;
   text-align: center;
   display: flex;
   padding: 50px;
+  justify-content: space-between;
   > div:first-child {
     width: 60%;
   }
@@ -369,6 +426,44 @@ const DIV = styled.div`
         font-size: 16px;
         font-weight: bolder;
         border-radius: 10px;
+      }
+    }
+  }
+  > div:last-child {
+    text-align: left;
+    width: 35%;
+    border: 1px solid white;
+    padding: 10px;
+    border-radius: 5px;
+    height: fit-content;
+    > div {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid gray;
+      justify-content: space-between;
+      padding: 10px;
+      img {
+        border: 1px solid white;
+        width: 20%;
+        border-radius: 5px;
+      }
+      p {
+        width: 60%;
+        font-size: 12px;
+        margin: 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        white-space: normal;
+      }
+      span {
+        font-size: 12px;
+      }
+      :last-child {
+        border: 0;
+        font-weight: bolder;
       }
     }
   }

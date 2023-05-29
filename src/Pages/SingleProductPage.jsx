@@ -24,6 +24,16 @@ export default function SingleProductPage() {
   useEffect(() => {
     dispatch(getSProducts(param));
   }, [param]);
+  function numberWithCommas(x) {
+    return x.toString().split(".")[0].length > 3
+      ? x
+          .toString()
+          .substring(0, x.toString().split(".")[0].length - 3)
+          .replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
+          "," +
+          x.toString().substring(x.toString().split(".")[0].length - 3)
+      : x.toString();
+  }
   const settings = {
     customPaging: function (i) {
       return (
@@ -214,9 +224,7 @@ export default function SingleProductPage() {
                   <span>
                     {" "}
                     ₹
-                    {new Intl.NumberFormat("en-IN", {
-                      maximumSignificantDigits: 3,
-                    }).format(data.product.offer_price)}
+                    {numberWithCommas(data.product.offer_price)}
                     .00
                   </span>
                   <br />
@@ -230,9 +238,7 @@ export default function SingleProductPage() {
                     <div id="muff">
                       <span>
                         ₹
-                        {new Intl.NumberFormat("en-IN", {
-                          maximumSignificantDigits: 3,
-                        }).format(data.product.offer_price / 12)}
+                        {numberWithCommas(Math.ceil(data.product.offer_price / 12))}
                         /mo*
                       </span>
                       <br />
@@ -244,16 +250,12 @@ export default function SingleProductPage() {
               <div id="gut">
                 <strike>
                   MRP: ₹
-                  {new Intl.NumberFormat("en-IN", {
-                    maximumSignificantDigits: 3,
-                  }).format(data.product.price)}
+                  {numberWithCommas(data.product.price)}
                   .00
                 </strike>
                 <span>
                   (Save ₹
-                  {new Intl.NumberFormat("en-IN", {
-                    maximumSignificantDigits: 3,
-                  }).format(data.product.price - data.product.offer_price)}{" "}
+                  {numberWithCommas(data.product.price - data.product.offer_price)}{" "}
                   , {data.product.discount}% off)
                 </span>
               </div>
@@ -345,9 +347,7 @@ export default function SingleProductPage() {
                   {data.product.title}
                   <p>
                     ₹
-                    {new Intl.NumberFormat("en-IN", {
-                      maximumSignificantDigits: 3,
-                    }).format(data.product.offer_price)}
+                    {numberWithCommas(data.product.offer_price)}
                     .00
                   </p>
                 </h1>

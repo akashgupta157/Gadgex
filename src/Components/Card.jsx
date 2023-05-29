@@ -10,6 +10,16 @@ export default function Card({ img, name, price, navigate }) {
   function partialValue(percentage, totalValue) {
     return totalValue - (percentage * totalValue) / 100;
   }
+  function numberWithCommas(x) {
+    return x.toString().split(".")[0].length > 3
+      ? x
+          .toString()
+          .substring(0, x.toString().split(".")[0].length - 3)
+          .replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
+          "," +
+          x.toString().substring(x.toString().split(".")[0].length - 3)
+      : x.toString();
+  }
   return (
     <div id="dept" onClick={() => to(navigate)}>
       <FavoriteBorderIcon id="heart" />
@@ -18,16 +28,12 @@ export default function Card({ img, name, price, navigate }) {
       <div id="price">
         <small>
           ₹
-          {new Intl.NumberFormat("en-IN", {
-            maximumSignificantDigits: 3,
-          }).format(partialValue(20, price))}
+          {numberWithCommas(partialValue(20, price))}
           .00
         </small>
         <strike>
           ₹
-          {new Intl.NumberFormat("en-IN", {
-            maximumSignificantDigits: 3,
-          }).format(price)}
+          {numberWithCommas(price)}
           .00
         </strike>
       </div>
