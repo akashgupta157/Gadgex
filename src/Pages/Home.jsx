@@ -168,6 +168,34 @@ export default function Home() {
       price: 88999,
     },
   ];
+  const tablet = [
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1667852849/Croma%20Assets/Computers%20Peripherals/Tablets%20and%20iPads/Images/260078_0_wmbjbi.png/mxw_240,f_auto",
+      name: "realme PAD X Wi-Fi + 5G Android Tablet (10.95 Inch, 4GB RAM, 64GB ROM, Glowing Grey)",
+      price: 39999,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1667854675/Croma%20Assets/Computers%20Peripherals/Tablets%20and%20iPads/Images/247592_0_hsftw6.png/mxw_240,f_auto",
+      name: "SAMSUNG Galaxy Tab A8 Wi-Fi + 4G Android Tablet (10.5 Inch, 3GB RAM, 32GB ROM, Pink Gold)",
+      price: 26399,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1667850943/Croma%20Assets/Computers%20Peripherals/Tablets%20and%20iPads/Images/249484_0_jyr8ll.png/mxw_240,f_auto",
+      name: "Lenovo Tab K10 Wi-Fi Android Tablet (10.3 Inch, 4GB RAM, 64GB ROM, Abyss Blue)",
+      price: 20000,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1684946516/Croma%20Assets/Computers%20Peripherals/Tablets%20and%20iPads/Images/264264_0_d4qi8d.png/mxw_240,f_auto",
+      name: "Apple iPad 10th Generation Wi-Fi (10.9 Inch, 256GB, Silver, 2022 model)",
+      price: 59951,
+    },
+    {
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1667849844/Croma%20Assets/Computers%20Peripherals/Tablets%20and%20iPads/Images/260616_0_ru7sr2.png/mxw_240,f_auto",
+      name: "WishTel IRA Duo+ Wi-Fi + 4G Android Tablet (10 Inch, 4GB RAM, 64GB ROM, Black)",
+      price: 22000,
+    },
+    
+  ];
   return (
     <div style={{ backgroundColor: "#121313" }}>
       <img
@@ -219,7 +247,7 @@ export default function Home() {
         />
       </div>
       <div className="sdiv">
-        <p>Summer Deals</p>
+        <p>Best Deals</p>
         <div className="sd">
           <img
             src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1681485074/Croma%20Assets/CMS/LP%20Page%20Banners/2023/01_HP_BUGS_LP_BUGS/HP%20Bugs/HP_4Split_AC_14April2023_z8e4gh.png/mxw_1440,f_auto"
@@ -284,6 +312,27 @@ export default function Home() {
         </Slider>
       </div>
       <div className="sdiv">
+        <p>Computer Peripheral Store</p>
+        <div className="sd">
+          <img
+            src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1683731740/Croma%20Assets/CMS/Homepage%20Banners/Updated%20Banners%20-%2010th%20May/Computer%20Peripheral%20Store/HP_4Split_CPS_printers_9may2023_fmymcm.png/mxw_1440,f_auto"
+            alt=""
+          />
+          <img
+            src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1684393476/Croma%20Assets/CMS/Homepage%20Banners/01_Homepage%20Bugs%20Daily/May2023/18-05-2023/HP_4Split_CPS_monitors_18may2023_ij648a.png/mxw_1440,f_auto"
+            alt=""
+          />
+          <img
+            src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1683731740/Croma%20Assets/CMS/Homepage%20Banners/Updated%20Banners%20-%2010th%20May/Computer%20Peripheral%20Store/HP_4Split_CPS_M_K_9may2023_de3lmk.png/mxw_1440,f_auto"
+            alt=""
+          />
+          <img
+            src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1685425042/Croma%20Assets/CMS/Homepage%20Banners/01_Homepage%20Bugs%20Daily/May2023/30-05-2023/HP_4Split_CPS_LB_30may2023_lxrirm.png/mxw_1440,f_auto"
+            alt=""
+          />
+        </div>
+      </div>
+      <div className="sdiv">
         <p>Washing Machines</p>
         <Slider {...settings} className="sde">
           {wm.map((e) => (
@@ -305,7 +354,28 @@ export default function Home() {
           ))}
         </Slider>
       </div>
-      <br />
+      <div className="sdiv">
+        <p>Kitchen Appliances</p>
+        <div className="sd">
+          <img
+            src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1683731302/Croma%20Assets/CMS/Homepage%20Banners/Updated%20Banners%20-%2010th%20May/KA/HP_4Split_KA_MW_9may2023_zfdqq2.png/mxw_1440,f_auto"
+            alt=""
+          />
+          <img
+            src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1685166637/Croma%20Assets/CMS/Homepage%20Banners/01_Homepage%20Bugs%20Daily/May2023/27-05-2023/HP_4Split_KA_mixer_27may2023_mmynid.png/mxw_1440,f_auto"
+            alt=""
+          />
+          <img
+            src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1685082123/Croma%20Assets/CMS/Homepage%20Banners/01_Homepage%20Bugs%20Daily/May2023/26-05-2023/HP_4Split_KA_chimney_26may2023_rk7dvs.png/mxw_1440,f_auto"
+            alt=""
+          />
+          <img
+            src="https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1684393476/Croma%20Assets/CMS/Homepage%20Banners/01_Homepage%20Bugs%20Daily/May2023/18-05-2023/HP_4Split_KA_coffeemaker_18may2023_j0wdp1.png/mxw_1440,f_auto"
+            alt=""
+          />
+        </div>
+      </div>
+      <br /><br />
       <h2 style={{ textAlign: "center", color: "white" }}>
         Shop Safely with Gadgex
       </h2>
@@ -341,6 +411,15 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <div className="sdiv">
+        <p>Tablets</p>
+        <Slider {...settings} className="sde">
+          {tablet.map((e) => (
+            <Card key={e} img={e.img} name={e.name} price={e.price} navigate={"Tablet"}/>
+          ))}
+        </Slider>
+      </div>
+      <br /><br />
     </div>
   );
 }

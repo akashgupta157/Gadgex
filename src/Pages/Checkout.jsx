@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -10,22 +10,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../Redux/authReducer/action";
 import axios from "axios";
+import { TailSpin } from "react-loader-spinner";
 export default function Checkout() {
   const dispatch = useDispatch();
   const Nav = useNavigate();
-  function numberWithCommas(x) {
-    return x.toString().split(".")[0].length > 3
-      ? x
-          .toString()
-          .substring(0, x.toString().split(".")[0].length - 3)
-          .replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
-          "," +
-          x.toString().substring(x.toString().split(".")[0].length - 3)
-      : x.toString();
-  }
   const cartData = useSelector((state) => state.authReducer);
   const location = useLocation();
-  console.log(location.state.price);
+  const [loading, setLoading] = useState(false);
   const [submittedAdd, setSubmittedAdd] = useState(false);
   const [submittedPay, setSubmittedPay] = useState(false);
   const [address, setAddress] = useState({
@@ -57,6 +48,16 @@ export default function Checkout() {
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
       setSubmittedAdd(true);
+      toast.success("Shipping Address Added", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
   const validateAddress = (address) => {
@@ -142,221 +143,242 @@ export default function Checkout() {
       });
     }
   };
-  if (submittedAdd && submittedPay) {
-    toast.success("Order Confirm", {
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-    axios
-      .patch(
-        `https://incandescent-nettle-pirate.glitch.me/profile/${cartData.user.id}`,
-        {
-          cart: [],
-        }
-      )
-      .then((res) => {
-        dispatch(login(res.data));
-      });
-      Nav('/')
-  }
+  useEffect(() => {
+    if (submittedAdd && submittedPay) {
+      setLoading(true);
+      axios
+        .patch(
+          `https://incandescent-nettle-pirate.glitch.me/profile/${cartData.user.id}`,
+          {
+            cart: [],
+          }
+        )
+        .then((res) => {
+          dispatch(login(res.data));
+        });
+      setTimeout(() => {
+        document.getElementById("oc").style.display = "block";
+        document.getElementById("oc").style.margin = "auto";
+        document.getElementById("loading").firstChild.style.display = "none";
+      }, 5000);
+      setTimeout(() => {
+        Nav("/");
+      }, 7000);
+    }
+  });
+
   return (
-    <DIV>
-      <div>
-        <Accordion className="con">
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography>Shipping</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              <form onSubmit={handleSubmit}>
-                <div className="bow">
-                  <label>
-                    Name*
-                    <input
-                      type="text"
-                      name="name"
-                      value={address.name}
-                      onChange={handleChange}
-                    />
-                    {errors.name && <span>{errors.name}</span>}
-                  </label>
-                  <label>
-                    Mobile*
-                    <input
-                      type="number"
-                      name="mobile"
-                      value={address.mobile}
-                      onChange={handleChange}
-                    />
-                    {errors.mobile && <span>{errors.mobile}</span>}
-                  </label>
+    <>
+      <DIV>
+        {loading ? (
+          <section id="loading">
+            <TailSpin
+              height="80"
+              width="80"
+              color="#00e8be"
+              ariaLabel="tail-spin-loading"
+              radius="1"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+            />
+            <img id="oc" src="./OrderConfirm.png" alt="" />
+          </section>
+        ) : (
+          <>
+            <div>
+              <Accordion className="con">
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography>Shipping</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>
+                    <form onSubmit={handleSubmit}>
+                      <div className="bow">
+                        <label>
+                          Name*
+                          <input
+                            type="text"
+                            name="name"
+                            value={address.name}
+                            onChange={handleChange}
+                          />
+                          {errors.name && <span>{errors.name}</span>}
+                        </label>
+                        <label>
+                          Mobile*
+                          <input
+                            type="number"
+                            name="mobile"
+                            value={address.mobile}
+                            onChange={handleChange}
+                          />
+                          {errors.mobile && <span>{errors.mobile}</span>}
+                        </label>
+                      </div>
+                      <br />
+                      <label>
+                        Street*
+                        <input
+                          type="text"
+                          name="street"
+                          value={address.street}
+                          onChange={handleChange}
+                        />
+                        {errors.street && <span>{errors.street}</span>}
+                      </label>
+                      <br />
+                      <div className="bow">
+                        <label>
+                          City*
+                          <input
+                            type="text"
+                            name="city"
+                            value={address.city}
+                            onChange={handleChange}
+                          />
+                          {errors.city && <span>{errors.city}</span>}
+                        </label>
+                        <label>
+                          State*
+                          <input
+                            type="text"
+                            name="state"
+                            value={address.state}
+                            onChange={handleChange}
+                          />
+                          {errors.state && <span>{errors.state}</span>}
+                        </label>
+                      </div>
+                      <br />
+                      <div className="bow">
+                        <label>
+                          Landmark*
+                          <input
+                            type="text"
+                            name="landmark"
+                            value={address.landmark}
+                            onChange={handleChange}
+                          />
+                          {errors.zip && <span>{errors.landmark}</span>}
+                        </label>
+                        <label>
+                          Zip*
+                          <input
+                            type="number"
+                            name="zip"
+                            value={address.zip}
+                            onChange={handleChange}
+                          />
+                          {errors.zip && <span>{errors.zip}</span>}
+                        </label>
+                      </div>
+                      <br />
+                      <button type="submit">Submit</button>
+                    </form>
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+              <br />
+              <Accordion className="con">
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+                  aria-controls="panel2a-content"
+                  id="panel2a-header"
+                >
+                  <Typography>Payment</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>
+                    <form onSubmit={handleSubmit1}>
+                      <label>
+                        Card Number:
+                        <input
+                          type="number"
+                          name="cardNumber"
+                          value={cardInfo.cardNumber}
+                          onChange={handleChange1}
+                        />
+                        {errors.cardNumber && <span>{errors.cardNumber}</span>}
+                      </label>
+                      <br />
+                      <label>
+                        Card Holder Name:
+                        <input
+                          type="text"
+                          name="cardHolder"
+                          value={cardInfo.cardHolder}
+                          onChange={handleChange1}
+                        />
+                        {errors.cardHolder && <span>{errors.cardHolder}</span>}
+                      </label>
+                      <br />
+                      <div className="bow1">
+                        <label>
+                          Expiration Month:
+                          <input
+                            type="number"
+                            name="expirationMonth"
+                            value={cardInfo.expirationMonth}
+                            onChange={handleChange1}
+                          />
+                          {errors.expirationMonth && (
+                            <span>{errors.expirationMonth}</span>
+                          )}
+                        </label>
+                        <label>
+                          Expiration Year:
+                          <input
+                            type="number"
+                            name="expirationYear"
+                            value={cardInfo.expirationYear}
+                            onChange={handleChange1}
+                          />
+                          {errors.expirationYear && (
+                            <span>{errors.expirationYear}</span>
+                          )}
+                        </label>
+                        <label>
+                          CVV:
+                          <input
+                            type="number"
+                            name="cvv"
+                            value={cardInfo.cvv}
+                            onChange={handleChange1}
+                          />
+                          {errors.cvv && <span>{errors.cvv}</span>}
+                        </label>
+                      </div>
+                      <br />
+                      <button type="submit">Submit</button>
+                    </form>
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+            <div>
+              <h3>Order Summary</h3>
+              {cartData.user.cart?.map((e) => (
+                <div>
+                  <img src={e.image[0]} alt="" />
+                  <p>{e.title}</p>
+                  <span>₹{e.offer_price}.00</span>
                 </div>
-                <br />
-                <label>
-                  Street*
-                  <input
-                    type="text"
-                    name="street"
-                    value={address.street}
-                    onChange={handleChange}
-                  />
-                  {errors.street && <span>{errors.street}</span>}
-                </label>
-                <br />
-                <div className="bow">
-                  <label>
-                    City*
-                    <input
-                      type="text"
-                      name="city"
-                      value={address.city}
-                      onChange={handleChange}
-                    />
-                    {errors.city && <span>{errors.city}</span>}
-                  </label>
-                  <label>
-                    State*
-                    <input
-                      type="text"
-                      name="state"
-                      value={address.state}
-                      onChange={handleChange}
-                    />
-                    {errors.state && <span>{errors.state}</span>}
-                  </label>
-                </div>
-                <br />
-                <div className="bow">
-                  <label>
-                    Landmark*
-                    <input
-                      type="text"
-                      name="landmark"
-                      value={address.landmark}
-                      onChange={handleChange}
-                    />
-                    {errors.zip && <span>{errors.landmark}</span>}
-                  </label>
-                  <label>
-                    Zip*
-                    <input
-                      type="number"
-                      name="zip"
-                      value={address.zip}
-                      onChange={handleChange}
-                    />
-                    {errors.zip && <span>{errors.zip}</span>}
-                  </label>
-                </div>
-                <br />
-                <button type="submit">Submit</button>
-              </form>
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-        <br />
-        <Accordion className="con">
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
-            aria-controls="panel2a-content"
-            id="panel2a-header"
-          >
-            <Typography>Payment</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              <form onSubmit={handleSubmit1}>
-                <label>
-                  Card Number:
-                  <input
-                    type="number"
-                    name="cardNumber"
-                    value={cardInfo.cardNumber}
-                    onChange={handleChange1}
-                  />
-                  {errors.cardNumber && <span>{errors.cardNumber}</span>}
-                </label>
-                <br />
-                <label>
-                  Card Holder Name:
-                  <input
-                    type="text"
-                    name="cardHolder"
-                    value={cardInfo.cardHolder}
-                    onChange={handleChange1}
-                  />
-                  {errors.cardHolder && <span>{errors.cardHolder}</span>}
-                </label>
-                <br />
-                <div className="bow">
-                  <label>
-                    Expiration Month:
-                    <input
-                      type="number"
-                      name="expirationMonth"
-                      value={cardInfo.expirationMonth}
-                      onChange={handleChange1}
-                    />
-                    {errors.expirationMonth && (
-                      <span>{errors.expirationMonth}</span>
-                    )}
-                  </label>
-                  <label>
-                    Expiration Year:
-                    <input
-                      type="number"
-                      name="expirationYear"
-                      value={cardInfo.expirationYear}
-                      onChange={handleChange1}
-                    />
-                    {errors.expirationYear && (
-                      <span>{errors.expirationYear}</span>
-                    )}
-                  </label>
-                  <label>
-                    CVV:
-                    <input
-                      type="number"
-                      name="cvv"
-                      value={cardInfo.cvv}
-                      onChange={handleChange1}
-                    />
-                    {errors.cvv && <span>{errors.cvv}</span>}
-                  </label>
-                </div>
-                <br />
-                <button type="submit">Submit</button>
-              </form>
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-      </div>
-      <div>
-        <h3>Order Summary</h3>
-        {cartData.user.cart?.map((e) => (
-          <div>
-            <img src={e.image[0]} alt="" />
-            <p>{e.title}</p>
-            <span>₹{numberWithCommas(e.offer_price)}.00</span>
-          </div>
-        ))}
-        <br />
-        <div>
-          <h7>Amount Payable</h7>
-          <h7>₹{numberWithCommas(location.state.price)}.00</h7>
-        </div>
-      </div>
-    </DIV>
+              ))}
+              <br />
+              <div>
+                <h7>Amount Payable</h7>
+                <h7>₹{location.state.price}.00</h7>
+              </div>
+            </div>
+          </>
+        )}
+      </DIV>
+    </>
   );
 }
 const DIV = styled.div`
@@ -367,6 +389,17 @@ const DIV = styled.div`
   display: flex;
   padding: 50px;
   justify-content: space-between;
+  #loading {
+    border: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: auto;
+    img {
+      width: 50%;
+      display: none;
+    }
+  }
   > div:first-child {
     width: 60%;
   }
@@ -386,6 +419,21 @@ const DIV = styled.div`
         gap: 20px;
         label {
           width: 50%;
+          input {
+            background-color: #121313;
+            border: 1px solid white;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            color: white;
+          }
+        }
+      }
+      .bow1 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2%;
+        label {
           input {
             background-color: #121313;
             border: 1px solid white;
@@ -465,6 +513,176 @@ const DIV = styled.div`
         border: 0;
         font-weight: bolder;
       }
+    }
+  }
+  @media screen and (max-width: 1024px) /* Laptop */ {
+    flex-direction: column;
+    > div:first-child {
+      width: 100%;
+    }
+    > div:last-child {
+      width: 70%;
+      margin: auto;
+      margin-top: 50px;
+    }
+  }
+  @media screen and (max-width: 865px) /* Tablet */ {
+    .con {
+      color: white;
+      background-color: transparent;
+      border: 1px solid white;
+      padding: 10px 20px;
+      p {
+        font-size: 20px;
+        font-weight: bolder;
+      }
+      form {
+        .bow {
+          display: flex;
+          justify-content: space-between;
+          gap: 20px;
+          label {
+            width: 50%;
+            input {
+              background-color: #121313;
+              border: 1px solid white;
+              border-radius: 10px;
+              padding: 15px;
+              font-size: 16px;
+              color: white;
+            }
+          }
+        }
+        .bow1 {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10%;
+          label {
+            input {
+              width: 100%;
+              background-color: #121313;
+              border: 1px solid white;
+              border-radius: 10px;
+              padding: 15px;
+              font-size: 16px;
+              color: white;
+              margin: auto;
+            }
+          }
+        }
+        label {
+          text-align: left;
+          display: flex;
+          flex-direction: column;
+          font-size: 14px;
+          font-weight: lighter;
+          input {
+            background-color: #121313;
+            border: 1px solid white;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            color: white;
+          }
+          input::-webkit-outer-spin-button,
+          input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+          span {
+            color: red;
+          }
+        }
+        button {
+          background-color: #00e8be;
+          border: 0;
+          padding: 10px 50px;
+          font-size: 16px;
+          font-weight: bolder;
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 480px) /* Mobile */ {
+    .con {
+      color: white;
+      background-color: transparent;
+      border: 1px solid white;
+      padding: 10px 20px;
+      p {
+        font-size: 20px;
+        font-weight: bolder;
+      }
+      form {
+        .bow {
+          flex-direction: column;
+          justify-content: space-between;
+          label {
+            width: 100%;
+            input {
+              background-color: #121313;
+              border: 1px solid white;
+              border-radius: 10px;
+              padding: 15px;
+              font-size: 16px;
+              color: white;
+            }
+          }
+        }
+        .bow1 {
+          display: grid;
+          grid-template-columns: repeat(1, 1fr);
+          gap: 10%;
+          margin-bottom: 50px;
+          label {
+            input {
+              width: 100%;
+              background-color: #121313;
+              border: 1px solid white;
+              border-radius: 10px;
+              padding: 15px;
+              font-size: 16px;
+              color: white;
+              margin: auto;
+            }
+          }
+        }
+        label {
+          text-align: left;
+          display: flex;
+          flex-direction: column;
+          font-size: 14px;
+          font-weight: lighter;
+          input {
+            background-color: #121313;
+            border: 1px solid white;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            color: white;
+          }
+          input::-webkit-outer-spin-button,
+          input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+          span {
+            color: red;
+          }
+        }
+        button {
+          background-color: #00e8be;
+          border: 0;
+          padding: 10px 50px;
+          font-size: 16px;
+          font-weight: bolder;
+          border-radius: 10px;
+        }
+      }
+    }
+    > div:last-child {
+      width: 100%;
     }
   }
 `;

@@ -32,16 +32,6 @@ export default function Products() {
   useEffect(() => {
     dispatch(getProducts(param.category, obj));
   }, [param.category, location.search]);
-  function numberWithCommas(x) {
-    return x.toString().split(".")[0].length > 3
-      ? x
-          .toString()
-          .substring(0, x.toString().split(".")[0].length - 3)
-          .replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
-          "," +
-          x.toString().substring(x.toString().split(".")[0].length - 3)
-      : x.toString();
-  }
   return (
     <>
       {data.isLoading ? (
@@ -113,7 +103,7 @@ export default function Products() {
                         <div id="pmain">
                           <p id="ptitle">{e.title}</p>
                           <small id="pof">
-                            ₹{numberWithCommas(e.offer_price)}
+                            ₹{(e.offer_price)}
                             .00
                           </small>
                           <span style={{ color: "white", fontSize: "12px" }}>
@@ -121,11 +111,11 @@ export default function Products() {
                           </span>
                           <div id="pprice">
                             <strike>
-                              MRP: ₹{numberWithCommas(e.price)}
+                              MRP: ₹{(e.price)}
                               .00
                             </strike>
                             <small>
-                              (Save ₹{numberWithCommas(e.price - e.offer_price)}
+                              (Save ₹{(e.price - e.offer_price)}
                               )
                             </small>
                             <p>{e.discount}% Off</p>

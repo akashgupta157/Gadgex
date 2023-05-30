@@ -274,16 +274,6 @@ export default function Dashboard() {
         .then((res) => setData(res.data));
     }
   };
-  function numberWithCommas(x) {
-    return x.toString().split(".")[0].length > 3
-      ? x
-          .toString()
-          .substring(0, x.toString().split(".")[0].length - 3)
-          .replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
-          "," +
-          x.toString().substring(x.toString().split(".")[0].length - 3)
-      : x.toString();
-  }
   return (
     <>
       <div
@@ -577,7 +567,7 @@ export default function Dashboard() {
                       <tr key={e.id}>
                         <td>{e.title}</td>
                         <td>
-                          ₹{numberWithCommas(e.price)}
+                          ₹{(e.price)}
                           .00
                         </td>
                         <td>
@@ -836,7 +826,7 @@ export default function Dashboard() {
                           gap: "5px",
                         }}
                       >
-                        <h3>Price: </h3>₹{numberWithCommas(view.price)}
+                        <h3>Price: </h3>₹{(view.price)}
                         .00
                       </h4>
                       <h4
@@ -857,7 +847,7 @@ export default function Dashboard() {
                         }}
                       >
                         <h3>Offer Price: </h3>₹
-                        {numberWithCommas(view.offer_price)}
+                        {(view.offer_price)}
                         .00
                       </h4>
                       <h4

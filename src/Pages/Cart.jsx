@@ -42,16 +42,6 @@ export default function Cart() {
       })
       .catch((err) => console.log(err));
   };
-  function numberWithCommas(x) {
-    return x.toString().split(".")[0].length > 3
-      ? x
-          .toString()
-          .substring(0, x.toString().split(".")[0].length - 3)
-          .replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
-          "," +
-          x.toString().substring(x.toString().split(".")[0].length - 3)
-      : x.toString();
-  }
   return (
     <div style={{ background: "#121313", height: "max-height" }}>
       {cartData.isAuthenticated ? (
@@ -190,7 +180,7 @@ export default function Cart() {
                         <h3>{e.title}</h3>
                         <div id="snot">
                           <span>
-                            ₹{numberWithCommas(e.offer_price)}
+                            ₹{(e.offer_price)}
                             .00
                           </span>
                           <br />
@@ -209,7 +199,7 @@ export default function Cart() {
                             .00
                           </strike>
                           <p>
-                            (Save ₹{numberWithCommas(e.price - e.offer_price)}
+                            (Save ₹{(e.price - e.offer_price)}
                             .00)
                           </p>
                           <Divider
@@ -223,7 +213,7 @@ export default function Cart() {
                           />
                           {e.offer_price > 5000 ? (
                             <h1>
-                              {numberWithCommas(Math.ceil(e.offer_price / 12))}
+                              {(Math.ceil(e.offer_price / 12))}
                               /mo* <small>EMI Options</small>
                             </h1>
                           ) : null}
@@ -237,7 +227,7 @@ export default function Cart() {
                       </div>
                       <div>
                         <span>
-                          ₹{numberWithCommas(e.offer_price)}
+                          ₹{(e.offer_price)}
                           .00
                         </span>
                         <div>(Incl. all Taxes)</div>
@@ -251,11 +241,11 @@ export default function Cart() {
                           }}
                         />
                         <strike>
-                          MRP: ₹{numberWithCommas(e.price)}
+                          MRP: ₹{(e.price)}
                           .00
                         </strike>
                         <p>
-                          (Save ₹{numberWithCommas(e.price - e.offer_price)}
+                          (Save ₹{(e.price - e.offer_price)}
                           .00)
                         </p>
                         <Divider
@@ -269,7 +259,7 @@ export default function Cart() {
                         />
                         {e.offer_price > 5000 ? (
                           <h1>
-                            {numberWithCommas(Math.ceil(e.offer_price / 12))}
+                            {(Math.ceil(e.offer_price / 12))}
                             /mo* <small>EMI Options</small>
                           </h1>
                         ) : null}
@@ -282,7 +272,7 @@ export default function Cart() {
                   <div>
                     <p>Original Price</p>
                     <p>
-                      ₹{numberWithCommas(price)}
+                      ₹{(price)}
                       .00
                     </p>
                   </div>
@@ -295,9 +285,9 @@ export default function Cart() {
                     <p>
                       {price > 5000
                         ? ` ₹
-                      ${numberWithCommas(price)}.00`
+                      ${(price)}.00`
                         : ` ₹
-                        ${numberWithCommas(price + 100)}.00`}
+                        ${(price + 100)}.00`}
                     </p>
                   </div>
                   <button

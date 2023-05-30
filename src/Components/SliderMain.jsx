@@ -4,7 +4,7 @@ export default function SliderMain(props) {
   var settings = {
     infinite: true,
     speed: 500,
-    slidesToShow: +props.no,
+    slidesToShow: 4,
     slidesToScroll: 1,
     initialSlide: 0,
     responsive: [
@@ -17,7 +17,7 @@ export default function SliderMain(props) {
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 768,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,

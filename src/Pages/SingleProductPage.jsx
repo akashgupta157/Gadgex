@@ -24,16 +24,6 @@ export default function SingleProductPage() {
   useEffect(() => {
     dispatch(getSProducts(param));
   }, [param]);
-  function numberWithCommas(x) {
-    return x.toString().split(".")[0].length > 3
-      ? x
-          .toString()
-          .substring(0, x.toString().split(".")[0].length - 3)
-          .replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
-          "," +
-          x.toString().substring(x.toString().split(".")[0].length - 3)
-      : x.toString();
-  }
   const settings = {
     customPaging: function (i) {
       return (
@@ -223,8 +213,7 @@ export default function SingleProductPage() {
                 <div id="fly">
                   <span>
                     {" "}
-                    ₹
-                    {numberWithCommas(data.product.offer_price)}
+                    ₹{(data.product.offer_price)}
                     .00
                   </span>
                   <br />
@@ -238,7 +227,9 @@ export default function SingleProductPage() {
                     <div id="muff">
                       <span>
                         ₹
-                        {numberWithCommas(Math.ceil(data.product.offer_price / 12))}
+                        {(
+                          Math.ceil(data.product.offer_price / 12)
+                        )}
                         /mo*
                       </span>
                       <br />
@@ -249,13 +240,14 @@ export default function SingleProductPage() {
               </div>
               <div id="gut">
                 <strike>
-                  MRP: ₹
-                  {numberWithCommas(data.product.price)}
+                  MRP: ₹{(data.product.price)}
                   .00
                 </strike>
                 <span>
                   (Save ₹
-                  {numberWithCommas(data.product.price - data.product.offer_price)}{" "}
+                  {(
+                    data.product.price - data.product.offer_price
+                  )}{" "}
                   , {data.product.discount}% off)
                 </span>
               </div>
@@ -346,8 +338,7 @@ export default function SingleProductPage() {
                 <h1>
                   {data.product.title}
                   <p>
-                    ₹
-                    {numberWithCommas(data.product.offer_price)}
+                    ₹{(data.product.offer_price)}
                     .00
                   </p>
                 </h1>

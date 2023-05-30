@@ -53,6 +53,11 @@ export default function Sidebar() {
         `https://incandescent-nettle-pirate.glitch.me/products?category=${param.category}`
       )
       .then((res) => setData(res.data));
+    axios
+      .get(
+        `https://incandescent-nettle-pirate.glitch.me/products?q=${param.category}`
+      )
+      .then((res) => setData(res.data));
   }, [brand, param]);
   data?.map((e) => {
     brandArr.push(e.brand.trim());
