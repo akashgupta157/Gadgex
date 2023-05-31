@@ -20,6 +20,13 @@ export default function Cart() {
       setprice(total_price);
     }
   });
+  const toIndianCurrency = (num) => {
+    const curr = num.toLocaleString("en-IN", {
+      style: "currency",
+      currency: "INR",
+    });
+    return curr;
+  };
   const handledelete = (id) => {
     const filterdata = cartData.user.cart?.filter((el) => el.id != id);
     toast.error("Item Removed", {
@@ -180,8 +187,8 @@ export default function Cart() {
                         <h3>{e.title}</h3>
                         <div id="snot">
                           <span>
-                            ₹{(e.offer_price)}
-                            .00
+                            {toIndianCurrency(e.offer_price)}
+                            
                           </span>
                           <br />
                           <div>(Incl. all Taxes)</div>
@@ -195,12 +202,12 @@ export default function Cart() {
                             }}
                           />
                           <strike>
-                            MRP: ₹{e.price}
-                            .00
+                            MRP: {toIndianCurrency(e.price)}
+                            
                           </strike>
                           <p>
-                            (Save ₹{(e.price - e.offer_price)}
-                            .00)
+                            (Save {toIndianCurrency(e.price - e.offer_price)}
+                            )
                           </p>
                           <Divider
                             sx={{
@@ -213,7 +220,7 @@ export default function Cart() {
                           />
                           {e.offer_price > 5000 ? (
                             <h1>
-                              {(Math.ceil(e.offer_price / 12))}
+                              {toIndianCurrency(Math.ceil(e.offer_price / 12))}
                               /mo* <small>EMI Options</small>
                             </h1>
                           ) : null}
@@ -227,8 +234,8 @@ export default function Cart() {
                       </div>
                       <div>
                         <span>
-                          ₹{(e.offer_price)}
-                          .00
+                          {toIndianCurrency(e.offer_price)}
+                          
                         </span>
                         <div>(Incl. all Taxes)</div>
                         <Divider
@@ -241,12 +248,12 @@ export default function Cart() {
                           }}
                         />
                         <strike>
-                          MRP: ₹{(e.price)}
-                          .00
+                          MRP: {toIndianCurrency(e.price)}
+                          
                         </strike>
                         <p>
-                          (Save ₹{(e.price - e.offer_price)}
-                          .00)
+                          (Save {toIndianCurrency(e.price - e.offer_price)}
+                          )
                         </p>
                         <Divider
                           sx={{
@@ -259,7 +266,7 @@ export default function Cart() {
                         />
                         {e.offer_price > 5000 ? (
                           <h1>
-                            {(Math.ceil(e.offer_price / 12))}
+                            {toIndianCurrency(Math.ceil(e.offer_price / 12))}
                             /mo* <small>EMI Options</small>
                           </h1>
                         ) : null}
@@ -272,8 +279,8 @@ export default function Cart() {
                   <div>
                     <p>Original Price</p>
                     <p>
-                      ₹{(price)}
-                      .00
+                      {toIndianCurrency(price)}
+                      
                     </p>
                   </div>
                   <div>
@@ -284,10 +291,10 @@ export default function Cart() {
                     <p>Total</p>
                     <p>
                       {price > 5000
-                        ? ` ₹
-                      ${(price)}.00`
+                        ? `
+                      ${toIndianCurrency(price)}`
                         : ` ₹
-                        ${(price + 100)}.00`}
+                        ${toIndianCurrency(price + 100)}.00`}
                     </p>
                   </div>
                   <button

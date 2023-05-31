@@ -5,6 +5,7 @@
   padding-top: 50px;
   gap: 10px;
   min-height: 32.8vh;
+  padding-bottom: 50px;
 }
 #whole h1 {
   color: white;
@@ -12,7 +13,7 @@
 #mainbody {
   background-color: #121212;
   padding-right: 100px;
-  width: 100%;
+  width: 90%;
   min-height: 60vh;
   padding-bottom: 100px;
 }
@@ -148,6 +149,39 @@
   }
 }
 @media screen and (min-width: 481px) and (max-width: 865px) /* Tablet */ {
+  #priceFilter {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+    & input {
+      width: 35%;
+      font-size: 16px;
+      padding: 10px;
+      padding-left: 5px;
+      background-color: transparent;
+      border: 1px solid white;
+      border-radius: 5px;
+      outline: none;
+      color: white;
+    }
+    & input::-webkit-outer-spin-button,
+    & input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    & button {
+      height: 50%;
+      background-color: #00e8be;
+      border: 0;
+      outline: none;
+      display: flex;
+    }
+  }
+  #brand {
+    display: flex;
+    flex-direction: column;
+  }
   #whole {
     display: flex;
     background-color: #121212;
@@ -163,12 +197,49 @@
   }
 }
 @media screen and (max-width: 480px) /* Mobile */ {
+  #priceFilter {
+    display: grid;
+    margin: auto;
+    gap: 10px;
+    align-items: center;
+    height: 200px;
+    & input {
+      width: 100%;
+      font-size: 16px;
+      padding: 10px;
+      padding-left: 5px;
+      background-color: transparent;
+      border: 1px solid white;
+      border-radius: 5px;
+      outline: none;
+      color: white;
+    }
+    & input::-webkit-outer-spin-button,
+    & input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    & button {
+      height: 50%;
+      background-color: #00e8be;
+      border: 0;
+      outline: none;
+      display: flex;
+      width: 50%;
+      margin: auto;
+      justify-content: center;
+    }
+  }
+  #brand {
+    display: flex;
+    flex-direction: column;
+  }
   #whole {
     background-color: #121212;
     padding-left: 0px;
     padding-top: 10px;
     gap: 10px;
-    & h1{
+    & h1 {
       text-align: center;
       padding-left: 20px;
     }

@@ -5,6 +5,10 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -19,13 +23,20 @@ export default function Sidebar() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [open1, setOpen1] = useState(false);
+  const handleOpen1 = () => setOpen1(true);
+  const handleClose1 = () => setOpen1(false);
   const param = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialBrand = searchParams.getAll("brand");
   const initialOrder = searchParams.getAll("order");
+  const initiallte = searchParams.get("lte");
+  const initialgte = searchParams.get("gte");
   const [order, setOrder] = useState(initialOrder || "");
   const [brand, setBrand] = useState(initialBrand || []);
   const [data, setData] = useState();
+  const [gteValue, setGteValue] = useState(initialgte || "");
+  const [lteValue, setLteValue] = useState(initiallte || "");
   const handleChangeSort = (event) => {
     setOrder(event.target.value);
   };
@@ -44,6 +55,8 @@ export default function Sidebar() {
       brand,
     };
     order && (params.order = order);
+    lteValue && (params.lte = lteValue);
+    gteValue && (params.gte = gteValue);
     setSearchParams(params);
   }, [brand, order]);
   const brandArr = [];
@@ -51,11 +64,6 @@ export default function Sidebar() {
     axios
       .get(
         `https://incandescent-nettle-pirate.glitch.me/products?category=${param.category}`
-      )
-      .then((res) => setData(res.data));
-    axios
-      .get(
-        `https://incandescent-nettle-pirate.glitch.me/products?q=${param.category}`
       )
       .then((res) => setData(res.data));
   }, [brand, param]);
@@ -76,6 +84,19 @@ export default function Sidebar() {
     p: 2,
     pt: 4,
   };
+  const style1 = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "100%",
+    bgcolor: "#191818",
+    boxShadow: 24,
+    color: "white",
+    p: 2,
+    pt: 4,
+    height: "100%",
+  };
   function ListItem({ value, item, selected, handleClick }) {
     const className = selected ? "selected" : "";
     return (
@@ -88,6 +109,55 @@ export default function Sidebar() {
   const handleClick = (value) => {
     setSelectedItem(value);
     setOrder(value);
+  };
+  const fetchData = (e) => {
+    e.preventDefault();
+    let params = {
+      brand,
+    };
+    order && (params.order = order);
+    lteValue && (params.lte = lteValue);
+    gteValue && (params.gte = gteValue);
+    setSearchParams(params);
+  };
+  const handleReset = () => {
+    setBrand([]);
+    setOrder("");
+    setGteValue("");
+    setLteValue("");
+  };
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`vertical-tabpanel-${index}`}
+        aria-labelledby={`vertical-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
+  TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+  };
+  function a11yProps(index) {
+    return {
+      id: `vertical-tab-${index}`,
+      "aria-controls": `vertical-tabpanel-${index}`,
+    };
+  }
+  const [value, setValue] = useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
   return (
     <>
@@ -135,6 +205,47 @@ export default function Sidebar() {
             />
           ))}
         </div>
+        <h4>PRICE</h4>
+        <form id="priceFilter" onSubmit={fetchData}>
+          <input
+            type="number"
+            value={gteValue}
+            onChange={(e) => setGteValue(e.target.value)}
+            placeholder="Min Price"
+          />
+          <input
+            type="number"
+            value={lteValue}
+            onChange={(e) => setLteValue(e.target.value)}
+            placeholder="Max Price"
+            required
+          />
+          <button>
+            <ArrowForwardIcon />
+          </button>
+        </form>
+        {/* <h4>DISCOUNT</h4> */}
+        {/* <div id="discount">
+        <FormControlLabel
+              // key={e}
+              control={
+                <Checkbox
+                  sx={{
+                    color: "grey",
+                    width: "40px",
+                    "&.Mui-checked": { color: "#00e8be" },
+                  }}
+                />
+              }
+              // value={e}
+              onChange={handleChangeBrand}
+              label={'0% to 10%'}
+              // checked={brand.includes(e)}
+            />
+        </div> */}
+        <button id="reset" onClick={handleReset}>
+          Reset
+        </button>
       </DIV>
       <DIV2>
         <Modal open={open} onClose={handleClose}>
@@ -168,10 +279,119 @@ export default function Sidebar() {
           <ImportExportOutlinedIcon />
           SORT
         </button>
-        <button>
+        <button onClick={handleOpen1}>
           <FilterAltOutlinedIcon />
           FILTER
         </button>
+        <Modal
+          open={open1}
+          onClose={handleClose1}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style1}>
+            <Box
+              sx={{
+                flexGrow: 1,
+                bgcolor: "transparent",
+                display: "flex",
+                height: "90%",
+              }}
+            >
+              <Tabs
+                orientation="vertical"
+                variant="scrollable"
+                value={value}
+                onChange={handleChange}
+                aria-label="Vertical tabs example"
+                sx={{ borderRight: 1, borderColor: "gray", width: "30%" }}
+              >
+                <Tab label="BRAND" {...a11yProps(0)} />
+                <Tab label="PRICE" {...a11yProps(1)} />
+                <Tab label="DISCOUNT" {...a11yProps(2)} />
+              </Tabs>
+              <div style={{ width: "70%" }}>
+                <TabPanel value={value} index={0}>
+                  <div id="brand">
+                    {uniqueBrand?.map((e) => (
+                      <FormControlLabel
+                        key={e}
+                        control={
+                          <Checkbox
+                            sx={{
+                              color: "grey",
+                              width: "40px",
+                              "&.Mui-checked": { color: "#00e8be" },
+                            }}
+                          />
+                        }
+                        value={e}
+                        onChange={handleChangeBrand}
+                        label={e}
+                        checked={brand.includes(e)}
+                      />
+                    ))}
+                  </div>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  <form id="priceFilter" onSubmit={fetchData}>
+                    <input
+                      type="number"
+                      value={gteValue}
+                      onChange={(e) => setGteValue(e.target.value)}
+                      placeholder="Min Price"
+                    />
+                    <input
+                      type="number"
+                      value={lteValue}
+                      onChange={(e) => setLteValue(e.target.value)}
+                      placeholder="Max Price"
+                      required
+                    />
+                    <button>
+                      <ArrowForwardIcon />
+                    </button>
+                  </form>
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                  Item Three
+                </TabPanel>
+              </div>
+            </Box>
+            <div id="btmBtn" style={{ marginTop: "10px" }}>
+              <button
+                style={{
+                  width: "50%",
+                  padding: "15px",
+                  fontSize: "14px",
+                  border: "1px solid white",
+                  backgroundColor: "transparent",
+                  color: "white",
+                  fontWeight: "bolder",
+                  borderRadius: "5px",
+                }}
+                onClick={handleReset}
+              >
+                RESET
+              </button>
+              <button
+                style={{
+                  width: "50%",
+                  padding: "15px",
+                  fontSize: "14px",
+                  border: "1px solid white",
+                  backgroundColor: "transparent",
+                  color: "white",
+                  fontWeight: "bolder",
+                  borderRadius: "5px",
+                }}
+                onClick={handleClose1}
+              >
+                CLOSE
+              </button>
+            </div>
+          </Box>
+        </Modal>
       </DIV2>
     </>
   );
@@ -185,7 +405,41 @@ const DIV2 = styled.div`
     bottom: 0;
     width: 100%;
     left: 0;
-    z-index: 10;
+    z-index: 1;
+    #priceFilter {
+      border: 1px solid red;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+      input {
+        width: 35%;
+        font-size: 16px;
+        padding: 10px;
+        padding-left: 5px;
+        background-color: transparent;
+        border: 1px solid white;
+        border-radius: 5px;
+        outline: none;
+        color: white;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      button {
+        height: 50%;
+        background-color: #00e8be;
+        border: 0;
+        outline: none;
+        display: flex;
+      }
+    }
+    #brand {
+      display: flex;
+      flex-direction: column;
+    }
     #list {
       border: 1px solid red;
     }
@@ -212,10 +466,50 @@ const DIV2 = styled.div`
   }
 `;
 const DIV = styled.div`
-  width: 25%;
+  width: 30%;
   color: white;
   padding-bottom: 50px;
   border-right: 1px solid gray;
+  #reset {
+    background-color: #00e8be;
+    border: 0;
+    outline: none;
+    padding: 10px 20px;
+    margin-top: 5%;
+    font-size: 16px;
+    border-radius: 10px;
+    font-weight: bolder;
+  }
+  #priceFilter {
+    /* border: 1px solid red; */
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+    input {
+      width: 35%;
+      font-size: 16px;
+      padding: 10px;
+      padding-left: 5px;
+      background-color: transparent;
+      border: 1px solid white;
+      border-radius: 5px;
+      outline: none;
+      color: white;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    button {
+      height: 50%;
+      background-color: #00e8be;
+      border: 0;
+      outline: none;
+      display: flex;
+    }
+  }
   #brand {
     display: flex;
     flex-direction: column;

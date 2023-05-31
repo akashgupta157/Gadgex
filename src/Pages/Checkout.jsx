@@ -12,6 +12,13 @@ import { login } from "../Redux/authReducer/action";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
 export default function Checkout() {
+  const toIndianCurrency = (num) => {
+    const curr = num.toLocaleString("en-IN", {
+      style: "currency",
+      currency: "INR",
+    });
+    return curr;
+  };
   const dispatch = useDispatch();
   const Nav = useNavigate();
   const cartData = useSelector((state) => state.authReducer);
@@ -366,13 +373,13 @@ export default function Checkout() {
                 <div>
                   <img src={e.image[0]} alt="" />
                   <p>{e.title}</p>
-                  <span>₹{e.offer_price}.00</span>
+                  <span>{toIndianCurrency(e.offer_price)}</span>
                 </div>
               ))}
               <br />
               <div>
                 <h7>Amount Payable</h7>
-                <h7>₹{location.state.price}.00</h7>
+                <h7>{toIndianCurrency(location.state.price)}</h7>
               </div>
             </div>
           </>

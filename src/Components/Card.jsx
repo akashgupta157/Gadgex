@@ -7,8 +7,15 @@ export default function Card({ img, name, price, navigate }) {
   const to = (e) => {
     nav(`/product/${e}`, { state: e });
   };
+  const toIndianCurrency = (num) => {
+    const curr = num.toLocaleString("en-IN", {
+      style: "currency",
+      currency: "INR",
+    });
+    return curr;
+  };
   function partialValue(percentage, totalValue) {
-    return totalValue - (percentage * totalValue) / 100;
+    return toIndianCurrency(totalValue - (percentage * totalValue) / 100);
   }
   return (
     <div id="dept" onClick={() => to(navigate)}>
@@ -16,16 +23,8 @@ export default function Card({ img, name, price, navigate }) {
       <img src={img} alt="" />
       <p>{name}</p>
       <div id="price">
-        <small>
-          ₹
-          {(partialValue(20, price))}
-          .00
-        </small>
-        <strike>
-          ₹
-          {(price)}
-          .00
-        </strike>
+        <small>{partialValue(20, price)}</small>
+        <strike>{toIndianCurrency(price)}</strike>
       </div>
     </div>
   );

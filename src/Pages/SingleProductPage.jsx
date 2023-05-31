@@ -41,6 +41,13 @@ export default function SingleProductPage() {
     prevArrow: false,
     nextArrow: false,
   };
+  const toIndianCurrency = (num) => {
+    const curr = num.toLocaleString("en-IN", {
+      style: "currency",
+      currency: "INR",
+    });
+    return curr;
+  };
   const randomNumber = Math.random() * (5 - 3) + 3;
   const roundedNumber = Math.round(randomNumber * 10) / 10;
   function getRandomInt(min, max) {
@@ -211,11 +218,7 @@ export default function SingleProductPage() {
               </p>
               <div id="SPprice">
                 <div id="fly">
-                  <span>
-                    {" "}
-                    ₹{(data.product.offer_price)}
-                    .00
-                  </span>
+                  <span> {toIndianCurrency(data.product.offer_price)}</span>
                   <br />
                   <span>(Incl. all Taxes)</span>
                 </div>
@@ -226,8 +229,7 @@ export default function SingleProductPage() {
                     </div>
                     <div id="muff">
                       <span>
-                        ₹
-                        {(
+                        {toIndianCurrency(
                           Math.ceil(data.product.offer_price / 12)
                         )}
                         /mo*
@@ -239,13 +241,10 @@ export default function SingleProductPage() {
                 ) : null}
               </div>
               <div id="gut">
-                <strike>
-                  MRP: ₹{(data.product.price)}
-                  .00
-                </strike>
+                <strike>MRP: {toIndianCurrency(data.product.price)}</strike>
                 <span>
-                  (Save ₹
-                  {(
+                  (Save{" "}
+                  {toIndianCurrency(
                     data.product.price - data.product.offer_price
                   )}{" "}
                   , {data.product.discount}% off)
@@ -337,10 +336,7 @@ export default function SingleProductPage() {
                 ) : null}
                 <h1>
                   {data.product.title}
-                  <p>
-                    ₹{(data.product.offer_price)}
-                    .00
-                  </p>
+                  <p>{toIndianCurrency(data.product.offer_price)}</p>
                 </h1>
               </div>
               <div>
@@ -377,6 +373,7 @@ const BTMBAR = styled.div`
     align-items: center;
     img {
       width: 50px;
+      margin-right: 10px;
     }
     h1 {
       font-size: 14px;

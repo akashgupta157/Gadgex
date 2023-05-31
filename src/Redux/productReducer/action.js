@@ -9,5 +9,6 @@ export const getProducts = (param, obj) => (dispatch) => {
     )
     .then((response) => {
       dispatch({ type: "PRODUCT_SUCCESS", payload: response.data });
+
     });
 };

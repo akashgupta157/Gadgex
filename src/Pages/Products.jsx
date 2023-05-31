@@ -24,6 +24,8 @@ export default function Products() {
       brand: searchParams.getAll("brand"),
       _sort: searchParams.get("order") && "offer_price",
       _order: searchParams.get("order"),
+      offer_price_lte: searchParams.get("lte"),
+      offer_price_gte: searchParams.get("gte"),
     },
   };
   useEffect(() => {
@@ -32,6 +34,13 @@ export default function Products() {
   useEffect(() => {
     dispatch(getProducts(param.category, obj));
   }, [param.category, location.search]);
+  const toIndianCurrency = (num) => {
+    const curr = num.toLocaleString("en-IN", {
+      style: "currency",
+      currency: "INR",
+    });
+    return curr;
+  };
   return (
     <>
       {data.isLoading ? (
@@ -58,13 +67,13 @@ export default function Products() {
       ) : (
         <>
           <div id="whole">
+            <Sidebar />
             {data.product.length === 0 ? (
               <>
                 <h1>Product Not Found</h1>
               </>
             ) : (
               <>
-                <Sidebar />
                 <div id="mainbody">
                   <div id="name">
                     <p>
@@ -103,21 +112,17 @@ export default function Products() {
                         <div id="pmain">
                           <p id="ptitle">{e.title}</p>
                           <small id="pof">
-                            ₹{(e.offer_price)}
-                            .00
+                            {toIndianCurrency(e.offer_price)}
                           </small>
                           <span style={{ color: "white", fontSize: "12px" }}>
                             (Incl. all Taxes)
                           </span>
                           <div id="pprice">
                             <strike>
-                              MRP: ₹{(e.price)}
-                              .00
+                              MRP: {toIndianCurrency(e.price)}
+                              
                             </strike>
-                            <small>
-                              (Save ₹{(e.price - e.offer_price)}
-                              )
-                            </small>
+                            <small>(Save {toIndianCurrency(e.price - e.offer_price)})</small>
                             <p>{e.discount}% Off</p>
                           </div>
                           <div id="bn">

@@ -5,6 +5,9 @@
   width: 95%;
   margin: auto;
 }
+button {
+  cursor: pointer;
+}
 #dept img {
   margin: auto;
   display: block;
