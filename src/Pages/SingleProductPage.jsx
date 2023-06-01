@@ -13,6 +13,13 @@ import { Divider } from "@mui/material";
 import { toast } from "react-toastify";
 import { login } from "../Redux/authReducer/action";
 import axios from "axios";
+const toIndianCurrency = (num) => {
+  return num
+  // .toLocaleString("en-IN", {
+  //   style: "currency",
+  //   currency: "INR",
+  // });
+};
 export default function SingleProductPage() {
   const param = useParams();
   const dispatch = useDispatch();
@@ -41,13 +48,7 @@ export default function SingleProductPage() {
     prevArrow: false,
     nextArrow: false,
   };
-  const toIndianCurrency = (num) => {
-    const curr = num.toLocaleString("en-IN", {
-      style: "currency",
-      currency: "INR",
-    });
-    return curr;
-  };
+
   const randomNumber = Math.random() * (5 - 3) + 3;
   const roundedNumber = Math.round(randomNumber * 10) / 10;
   function getRandomInt(min, max) {
@@ -218,7 +219,7 @@ export default function SingleProductPage() {
               </p>
               <div id="SPprice">
                 <div id="fly">
-                  <span> {toIndianCurrency(data.product.offer_price)}</span>
+                  <span> {toIndianCurrency(+data.product.offer_price)}</span>
                   <br />
                   <span>(Incl. all Taxes)</span>
                 </div>

@@ -1,8 +1,8 @@
 import { ToastContainer } from "react-toastify";
 import Navbar from "./Components/Navbar";
 import { useLocation } from "react-router-dom";
-import AllRoute from "./AllRoute";
 import Footer from "./Components/Footer";
+import AllRoute from "./Allroute";
 function App() {
   const location = useLocation();
   return (
