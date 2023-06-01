@@ -178,7 +178,8 @@
       display: flex;
     }
   }
-  #brand {
+  #brand,
+  #discount {
     display: flex;
     flex-direction: column;
   }
@@ -230,7 +231,8 @@
       justify-content: center;
     }
   }
-  #brand {
+  #brand,
+  #discount {
     display: flex;
     flex-direction: column;
   }

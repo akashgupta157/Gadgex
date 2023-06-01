@@ -26,6 +26,8 @@ export default function Products() {
       _order: searchParams.get("order"),
       offer_price_lte: searchParams.get("lte"),
       offer_price_gte: searchParams.get("gte"),
+      discount_lte: searchParams.getAll("discount"),
+      discount_gte: searchParams.getAll("discountGte"),
     },
   };
   useEffect(() => {

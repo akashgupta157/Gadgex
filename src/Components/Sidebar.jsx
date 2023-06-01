@@ -29,6 +29,8 @@ export default function Sidebar() {
   const param = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialBrand = searchParams.getAll("brand");
+  const initialDiscount = searchParams.getAll("discount");
+  const initialDiscountGte = searchParams.getAll("discountGte");
   const initialOrder = searchParams.getAll("order");
   const initiallte = searchParams.get("lte");
   const initialgte = searchParams.get("gte");
@@ -37,6 +39,8 @@ export default function Sidebar() {
   const [data, setData] = useState();
   const [gteValue, setGteValue] = useState(initialgte || "");
   const [lteValue, setLteValue] = useState(initiallte || "");
+  const [discount, setDiscount] = useState(initialDiscount || []);
+  const [discountGte, setDiscountGte] = useState(initialDiscountGte || []);
   const handleChangeSort = (event) => {
     setOrder(event.target.value);
   };
@@ -50,15 +54,34 @@ export default function Sidebar() {
     }
     setBrand(newBrand);
   };
+  const handleChangeDiscount = (event) => {
+    let newDiscount = [...discount];
+    let newDiscountGte = [...discountGte];
+    if (newDiscount.includes(event.target.value)) {
+      newDiscount = newDiscount.filter((e) => e !== event.target.value);
+    }
+    if (newDiscountGte.includes(`${event.target.value - 10}`)) {
+      newDiscountGte = newDiscountGte.filter(
+        (e) => e !== `${event.target.value - 10}`
+      );
+    } else {
+      newDiscount.push(event.target.value);
+      newDiscountGte.push(event.target.value - 10);
+    }
+    setDiscount(newDiscount);
+    setDiscountGte(newDiscountGte);
+  };
   useEffect(() => {
     let params = {
       brand,
+      discount,
+      discountGte,
     };
     order && (params.order = order);
     lteValue && (params.lte = lteValue);
     gteValue && (params.gte = gteValue);
     setSearchParams(params);
-  }, [brand, order]);
+  }, [brand, order, discount, discountGte]);
   const brandArr = [];
   useEffect(() => {
     axios
@@ -113,7 +136,9 @@ export default function Sidebar() {
   const fetchData = (e) => {
     e.preventDefault();
     let params = {
+      discount,
       brand,
+      discountGte,
     };
     order && (params.order = order);
     lteValue && (params.lte = lteValue);
@@ -125,6 +150,8 @@ export default function Sidebar() {
     setOrder("");
     setGteValue("");
     setLteValue("");
+    setDiscount([]);
+    setDiscountGte([]);
   };
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -224,25 +251,84 @@ export default function Sidebar() {
             <ArrowForwardIcon />
           </button>
         </form>
-        {/* <h4>DISCOUNT</h4> */}
-        {/* <div id="discount">
-        <FormControlLabel
-              // key={e}
-              control={
-                <Checkbox
-                  sx={{
-                    color: "grey",
-                    width: "40px",
-                    "&.Mui-checked": { color: "#00e8be" },
-                  }}
-                />
-              }
-              // value={e}
-              onChange={handleChangeBrand}
-              label={'0% to 10%'}
-              // checked={brand.includes(e)}
-            />
-        </div> */}
+        <h4>DISCOUNT</h4>
+        <div id="discount">
+          <FormControlLabel
+            control={
+              <Checkbox
+                sx={{
+                  color: "grey",
+                  width: "40px",
+                  "&.Mui-checked": { color: "#00e8be" },
+                }}
+              />
+            }
+            value={10}
+            onChange={handleChangeDiscount}
+            label={"0% to 10%"}
+            checked={discount.includes("10")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                sx={{
+                  color: "grey",
+                  width: "40px",
+                  "&.Mui-checked": { color: "#00e8be" },
+                }}
+              />
+            }
+            value={20}
+            onChange={handleChangeDiscount}
+            label={"10% to 20%"}
+            checked={discount.includes("20")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                sx={{
+                  color: "grey",
+                  width: "40px",
+                  "&.Mui-checked": { color: "#00e8be" },
+                }}
+              />
+            }
+            value={"30"}
+            onChange={handleChangeDiscount}
+            label={"20% to 30%"}
+            checked={discount.includes("30")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                sx={{
+                  color: "grey",
+                  width: "40px",
+                  "&.Mui-checked": { color: "#00e8be" },
+                }}
+              />
+            }
+            value={"40"}
+            onChange={handleChangeDiscount}
+            label={"30% to 40%"}
+            checked={discount.includes("40")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                sx={{
+                  color: "grey",
+                  width: "40px",
+                  "&.Mui-checked": { color: "#00e8be" },
+                }}
+              />
+            }
+            value={"50"}
+            onChange={handleChangeDiscount}
+            label={"40% to 50%"}
+            checked={discount.includes("50")}
+          />
+        </div>
         <button id="reset" onClick={handleReset}>
           Reset
         </button>
@@ -354,7 +440,83 @@ export default function Sidebar() {
                   </form>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                  Item Three
+                  <div id="discount">
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          sx={{
+                            color: "grey",
+                            width: "40px",
+                            "&.Mui-checked": { color: "#00e8be" },
+                          }}
+                        />
+                      }
+                      value={10}
+                      onChange={handleChangeDiscount}
+                      label={"0% to 10%"}
+                      checked={discount.includes("10")}
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          sx={{
+                            color: "grey",
+                            width: "40px",
+                            "&.Mui-checked": { color: "#00e8be" },
+                          }}
+                        />
+                      }
+                      value={20}
+                      onChange={handleChangeDiscount}
+                      label={"10% to 20%"}
+                      checked={discount.includes("20")}
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          sx={{
+                            color: "grey",
+                            width: "40px",
+                            "&.Mui-checked": { color: "#00e8be" },
+                          }}
+                        />
+                      }
+                      value={"30"}
+                      onChange={handleChangeDiscount}
+                      label={"20% to 30%"}
+                      checked={discount.includes("30")}
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          sx={{
+                            color: "grey",
+                            width: "40px",
+                            "&.Mui-checked": { color: "#00e8be" },
+                          }}
+                        />
+                      }
+                      value={"40"}
+                      onChange={handleChangeDiscount}
+                      label={"30% to 40%"}
+                      checked={discount.includes("40")}
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          sx={{
+                            color: "grey",
+                            width: "40px",
+                            "&.Mui-checked": { color: "#00e8be" },
+                          }}
+                        />
+                      }
+                      value={"50"}
+                      onChange={handleChangeDiscount}
+                      label={"40% to 50%"}
+                      checked={discount.includes("50")}
+                    />
+                  </div>
                 </TabPanel>
               </div>
             </Box>
@@ -436,7 +598,8 @@ const DIV2 = styled.div`
         display: flex;
       }
     }
-    #brand {
+    #brand,
+    #discount {
       display: flex;
       flex-direction: column;
     }
@@ -510,7 +673,8 @@ const DIV = styled.div`
       display: flex;
     }
   }
-  #brand {
+  #brand,
+  #discount {
     display: flex;
     flex-direction: column;
   }

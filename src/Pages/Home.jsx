@@ -4,7 +4,12 @@ import SliderMain from "../Components/SliderMain";
 import "../CSS/Home.css";
 import Card from "../Components/Card";
 import Slider from "react-slick";
+import { useNavigate } from "react-router-dom";
 export default function Home() {
+  const nav = useNavigate()
+  const to = (e) => {
+    nav(`/product/${e}`, { state: e });
+  };
   const [no, setno] = useState(0);
   let items = [
     "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1680200926/Croma%20Assets/CMS/LP%20Page%20Banners/2023/PAY%20DAY%20APRIL/HP%20Rotating%20Banners/HP_Income-ingPayDay_29March2023_gqvr3i.jpg/mxw_1440,f_auto",

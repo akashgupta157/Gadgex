@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import PageNotFound from "./Pages/PageNotFound";
 export default function AllRoute() {
   const auth = useSelector((state) => state.authReducer.isAuthenticated);
-  console.log(auth);
   return (
     <>
       <Routes>
