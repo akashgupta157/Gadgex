@@ -255,7 +255,7 @@ export default function Navbar() {
             />
             <label htmlFor="click">
               <MenuIcon sx={{ fontSize: "35px" }} />
-              <p>Menua</p>
+              <p>Menu</p>
             </label>
           </div>
         </div>
