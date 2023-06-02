@@ -293,7 +293,7 @@ export default function Dashboard() {
         }}
       >
         <Link to={"/"}>
-          <img src="../Logo-removebg-preview.png" alt="" id="logo" />
+          <img src="https://i.ibb.co/JKh5KX6/Logo.png" alt="" id="logo" />
         </Link>
         <div
           style={{
