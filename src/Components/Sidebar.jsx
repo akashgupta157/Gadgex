@@ -91,10 +91,10 @@ export default function Sidebar() {
       .then((res) => setData(res.data));
   }, [brand, param]);
   data?.map((e) => {
-    brandArr.push(e.brand.trim());
+    brandArr.push(e.brand);
   });
   let uniqueBrand = [...new Set(brandArr)];
-  uniqueBrand.pop();
+  // uniqueBrand.pop();
   const style = {
     position: "absolute",
     top: "80%",
