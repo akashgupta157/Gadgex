@@ -171,7 +171,7 @@ export default function Navbar() {
         progress: undefined,
         theme: "colored",
       });
-      document.getElementById("ca").reset();
+      dispatch(login(obj));
       handleClose();
     }
   };
@@ -215,9 +215,10 @@ export default function Navbar() {
               progress: undefined,
               theme: "colored",
             });
+            console.log(data)
             dispatch(login(data));
-            document.getElementById("loginForm").reset();
             handleClose();
+            document.getElementById("loginForm").reset();
           }
         }
       });

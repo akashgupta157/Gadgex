@@ -72,7 +72,7 @@ export default function Home() {
       price: 15000,
     },
     {
-      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1676636530/Croma%20Assets/Large%20Appliances/Washers%20and%20Dryers/Images/269579_bnblfs.png/mxw_1440,f_auto",
+      img: "https://d2d22nphq0yz8t.cloudfront.net/88e6cc4b-eaa1-4053-af65-563d88ba8b26/https://media.croma.com/image/upload/v1670592866/Croma%20Assets/Large%20Appliances/Washers%20and%20Dryers/Images/250626_0_oi38ze.png/mxw_1440,f_auto",
       name: "SAMSUNG 8.5 kg 5 Star Semi Automatic Washing Machine with Air Turbo Drying System",
       price: 18900,
     },
