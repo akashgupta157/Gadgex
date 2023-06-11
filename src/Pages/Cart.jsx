@@ -49,6 +49,9 @@ export default function Cart() {
       })
       .catch((err) => console.log(err));
   };
+  const handleSP = (id, category) => {
+    Nav(`/product/${category}/` + id);
+  };
   return (
     <div style={{ background: "#121313", height: "max-height" }}>
       {cartData.isAuthenticated ? (
@@ -182,14 +185,20 @@ export default function Cart() {
                 <div id="cartList">
                   {cartData.user.cart.reverse()?.map((e) => (
                     <div key={e.id}>
-                      <img src={e.image[0]} alt="" />
+                      <img
+                        src={e.image[0]}
+                        alt=""
+                        onClick={() => handleSP(e.id, e.category)}
+                      />
                       <div>
-                        <h3>{e.title}</h3>
-                        <div id="snot">
-                          <span>
-                            {toIndianCurrency(e.offer_price)}
-                            
-                          </span>
+                        <h3 onClick={() => handleSP(e.id, e.category)}>
+                          {e.title}
+                        </h3>
+                        <div
+                          id="snot"
+                          onClick={() => handleSP(e.id, e.category)}
+                        >
+                          <span>{toIndianCurrency(e.offer_price)}</span>
                           <br />
                           <div>(Incl. all Taxes)</div>
                           <Divider
@@ -201,13 +210,9 @@ export default function Cart() {
                               mb: "10px",
                             }}
                           />
-                          <strike>
-                            MRP: {toIndianCurrency(e.price)}
-                            
-                          </strike>
+                          <strike>MRP: {toIndianCurrency(e.price)}</strike>
                           <p>
-                            (Save {toIndianCurrency(e.price - e.offer_price)}
-                            )
+                            (Save {toIndianCurrency(e.price - e.offer_price)})
                           </p>
                           <Divider
                             sx={{
@@ -233,10 +238,7 @@ export default function Cart() {
                         </div>
                       </div>
                       <div>
-                        <span>
-                          {toIndianCurrency(e.offer_price)}
-                          
-                        </span>
+                        <span>{toIndianCurrency(e.offer_price)}</span>
                         <div>(Incl. all Taxes)</div>
                         <Divider
                           sx={{
@@ -247,13 +249,9 @@ export default function Cart() {
                             mb: "10px",
                           }}
                         />
-                        <strike>
-                          MRP: {toIndianCurrency(e.price)}
-                          
-                        </strike>
+                        <strike>MRP: {toIndianCurrency(e.price)}</strike>
                         <p>
-                          (Save {toIndianCurrency(e.price - e.offer_price)}
-                          )
+                          (Save {toIndianCurrency(e.price - e.offer_price)})
                         </p>
                         <Divider
                           sx={{
@@ -278,10 +276,7 @@ export default function Cart() {
                   <h4>Order Summary ({cartData.user.cart.length} items)</h4>
                   <div>
                     <p>Original Price</p>
-                    <p>
-                      {toIndianCurrency(price)}
-                      
-                    </p>
+                    <p>{toIndianCurrency(price)}</p>
                   </div>
                   <div>
                     <p>Delivery</p>
