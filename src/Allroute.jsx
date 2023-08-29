@@ -17,6 +17,7 @@ export default function AllRoute() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/adminDashboard" element={<Dashboard />} />
         <Route path="/product/:category" element={<Products />} />
+        <Route path="/product/search" element={<Products />} />
         <Route path="/product/:category/:id" element={<SingleProductPage />} />
         {auth ? <Route path="/checkout" element={<Checkout />} /> : null}
         <Route path="*" element={<PageNotFound />} />

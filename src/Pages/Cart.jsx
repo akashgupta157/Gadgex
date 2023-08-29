@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { login } from "../Redux/authReducer/action";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 export default function Cart() {
   const Nav = useNavigate();
   const dispatch = useDispatch();

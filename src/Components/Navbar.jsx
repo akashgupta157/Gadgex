@@ -97,7 +97,7 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const to = (e) => {
     document.getElementById("drawer").style.display = "none";
-    nav(`/product/${e}`, { state: e });
+    nav(`/product/${e}`);
   };
   const style = {
     position: "absolute",
@@ -215,7 +215,7 @@ export default function Navbar() {
               progress: undefined,
               theme: "colored",
             });
-            console.log(data)
+            console.log(data);
             dispatch(login(data));
             handleClose();
             document.getElementById("loginForm").reset();
@@ -238,6 +238,11 @@ export default function Navbar() {
     });
   };
   const authData = useSelector((state) => state.authReducer);
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearch = (e) => {
+    e.preventDefault();
+    nav(`/product/search`, { state: searchQuery });
+  };
   return (
     <>
       <NAV>
@@ -268,12 +273,15 @@ export default function Navbar() {
             alignItems: "center",
             width: "40%",
           }}
+          onSubmit={handleSearch}
         >
           <InputBase
             sx={{ ml: 3, flex: 1 }}
             placeholder="What are you looking for ?"
+            required
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+          <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
             <SearchIcon />
           </IconButton>
         </Paper>
@@ -471,12 +479,15 @@ export default function Navbar() {
               alignItems: "center",
               // width: "40%",
             }}
+            onSubmit={handleSearch}
           >
             <InputBase
               sx={{ ml: 2, flex: 1 }}
               placeholder="What are you looking for ?"
+              onChange={(e) => setSearchQuery(e.target.value)}
+              required
             />
-            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+            <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
               <SearchIcon />
             </IconButton>
           </Paper>
@@ -664,7 +675,7 @@ const NAV1 = styled.nav`
     display: flex;
     background-color: black;
     position: sticky;
-    top: 10vh;
+    top: 8vh;
     z-index: 100;
     width: 100%;
     padding-left: 40px;
@@ -766,7 +777,7 @@ const NAV = styled.nav`
   @media screen and (max-width: 865px) /* Tablet */ {
     justify-content: space-between;
     align-items: center;
-    height: max-content;
+    height: 8vh;
     padding-left: 40px;
     padding-bottom: 0px;
     #navPart2 {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   useLocation,
   useNavigate,
@@ -17,7 +17,7 @@ export default function Products() {
   const Nav = useNavigate();
   const param = useParams();
   const dispatch = useDispatch();
-  const location = useLocation();
+  const { state, search } = useLocation();
   const data = useSelector((store) => store.productReducer);
   let obj = {
     params: {
@@ -35,7 +35,7 @@ export default function Products() {
   }, []);
   useEffect(() => {
     dispatch(getProducts(param.category, obj));
-  }, [param.category, location.search]);
+  }, [param.category, search]);
   const toIndianCurrency = (num) => {
     const curr = num.toLocaleString("en-IN", {
       style: "currency",
@@ -120,11 +120,10 @@ export default function Products() {
                             (Incl. all Taxes)
                           </span>
                           <div id="pprice">
-                            <strike>
-                              MRP: {toIndianCurrency(e.price)}
-                              
-                            </strike>
-                            <small>(Save {toIndianCurrency(e.price - e.offer_price)})</small>
+                            <strike>MRP: {toIndianCurrency(e.price)}</strike>
+                            <small>
+                              (Save {toIndianCurrency(e.price - e.offer_price)})
+                            </small>
                             <p>{e.discount}% Off</p>
                           </div>
                           <div id="bn">

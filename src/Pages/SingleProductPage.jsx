@@ -14,11 +14,10 @@ import { toast } from "react-toastify";
 import { login } from "../Redux/authReducer/action";
 import axios from "axios";
 const toIndianCurrency = (num) => {
-  return num
-  // .toLocaleString("en-IN", {
-  //   style: "currency",
-  //   currency: "INR",
-  // });
+  return num.toLocaleString("en-IN", {
+    style: "currency",
+    currency: "INR",
+  });
 };
 export default function SingleProductPage() {
   const param = useParams();
