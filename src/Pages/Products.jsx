@@ -17,10 +17,11 @@ export default function Products() {
   const Nav = useNavigate();
   const param = useParams();
   const dispatch = useDispatch();
-  const { state, search } = useLocation();
+  const { search } = useLocation();
   const data = useSelector((store) => store.productReducer);
   let obj = {
     params: {
+      q: param.category,
       brand: searchParams.getAll("brand"),
       _sort: searchParams.get("order") && "offer_price",
       _order: searchParams.get("order"),
@@ -31,11 +32,11 @@ export default function Products() {
     },
   };
   useEffect(() => {
-    dispatch(getProducts(param.category, obj));
+    dispatch(getProducts(obj));
   }, []);
   useEffect(() => {
-    dispatch(getProducts(param.category, obj));
-  }, [param.category, search]);
+    dispatch(getProducts(obj));
+  }, [search]);
   const toIndianCurrency = (num) => {
     const curr = num.toLocaleString("en-IN", {
       style: "currency",

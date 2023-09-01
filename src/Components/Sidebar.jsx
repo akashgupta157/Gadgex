@@ -86,7 +86,7 @@ export default function Sidebar() {
   useEffect(() => {
     axios
       .get(
-        `https://incandescent-nettle-pirate.glitch.me/products?category=${param.category}`
+        `https://incandescent-nettle-pirate.glitch.me/products?q=${param.category}`
       )
       .then((res) => setData(res.data));
   }, [brand, param]);

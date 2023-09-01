@@ -1,10 +1,11 @@
 import axios from "axios";
 
-export const getProducts = (param, obj) => (dispatch) => {
+export const getProducts = (obj) => (dispatch) => {
+  console.log(obj)
   dispatch({ type: "PRODUCT_REQUEST" });
   axios
     .get(
-      `https://incandescent-nettle-pirate.glitch.me/products?category=${param}`,
+      `https://incandescent-nettle-pirate.glitch.me/products`,
       obj
     )
     .then((response) => {

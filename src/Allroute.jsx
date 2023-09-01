@@ -8,6 +8,7 @@ import SingleProductPage from "./Pages/SingleProductPage";
 import Checkout from "./Pages/Checkout";
 import { useSelector } from "react-redux";
 import PageNotFound from "./Pages/PageNotFound";
+import SearchPage from "./Pages/SearchPage";
 export default function AllRoute() {
   const auth = useSelector((state) => state.authReducer.isAuthenticated);
   return (
@@ -17,7 +18,7 @@ export default function AllRoute() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/adminDashboard" element={<Dashboard />} />
         <Route path="/product/:category" element={<Products />} />
-        <Route path="/product/search" element={<Products />} />
+        <Route path="/product/search" element={<SearchPage />} />
         <Route path="/product/:category/:id" element={<SingleProductPage />} />
         {auth ? <Route path="/checkout" element={<Checkout />} /> : null}
         <Route path="*" element={<PageNotFound />} />

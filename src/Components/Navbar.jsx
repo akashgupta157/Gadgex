@@ -279,6 +279,7 @@ export default function Navbar() {
             sx={{ ml: 3, flex: 1 }}
             placeholder="What are you looking for ?"
             required
+            value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
@@ -484,6 +485,7 @@ export default function Navbar() {
             <InputBase
               sx={{ ml: 2, flex: 1 }}
               placeholder="What are you looking for ?"
+              value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               required
             />
