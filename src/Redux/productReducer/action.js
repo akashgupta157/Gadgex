@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const getProducts = (obj) => (dispatch) => {
-  console.log(obj)
   dispatch({ type: "PRODUCT_REQUEST" });
   axios
     .get(

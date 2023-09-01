@@ -1,16 +1,9 @@
-import {
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  MenuItem,
-  Select,
-} from "@mui/material";
+import { Checkbox, FormControlLabel } from "@mui/material";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
