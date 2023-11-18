@@ -23,6 +23,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../CSS/Navbar.css";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
+import logo from '../Logo.png'
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -248,7 +249,7 @@ export default function Navbar() {
       <NAV>
         <div id="navPart1">
           <Link to={"/"}>
-            <img src="https://i.ibb.co/JKh5KX6/Logo.png" alt="" />
+            <img src={logo} alt="" />
           </Link>
           <div id="menu">
             <input
