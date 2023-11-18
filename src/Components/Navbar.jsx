@@ -23,7 +23,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../CSS/Navbar.css";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
-import logo from '../Logo.png'
+import logo from '../assets/Logo.png'
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
