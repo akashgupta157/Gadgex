@@ -17,7 +17,7 @@ The e-commerce website for electronics is a comprehensive online platform design
 - Secure user registration and login functionality.
 - Ensuring the website functions well on various devices (desktops, tablets, smartphones).
 
-## Screenshots
+## Screenshots 📷 
 
 ### Landing Page
 
