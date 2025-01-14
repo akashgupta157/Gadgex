@@ -1,703 +1,682 @@
-import { Checkbox, FormControlLabel } from "@mui/material";
-import PropTypes from "prop-types";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import ImportExportOutlinedIcon from "@mui/icons-material/ImportExportOutlined";
+"use client";
+import qs from "qs";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
-import styled from "styled-components";
+import { debounce } from "lodash";
+import { Input } from "@/components/ui/input";
+import { MoveRight, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useDispatch, useSelector } from "react-redux";
+import { clearProducts, fetchProducts } from "@/redux/slices/productSlice";
+import React, { useCallback, useEffect, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+
 export default function Sidebar() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [open1, setOpen1] = useState(false);
-  const handleOpen1 = () => setOpen1(true);
-  const handleClose1 = () => setOpen1(false);
-  const param = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const initialBrand = searchParams.getAll("brand");
-  const initialDiscount = searchParams.getAll("discount");
-  const initialDiscountGte = searchParams.getAll("discountGte");
-  const initialOrder = searchParams.getAll("order");
-  const initiallte = searchParams.get("lte");
-  const initialgte = searchParams.get("gte");
-  const [order, setOrder] = useState(initialOrder || "");
-  const [brand, setBrand] = useState(initialBrand || []);
-  const [data, setData] = useState();
-  const [gteValue, setGteValue] = useState(initialgte || "");
-  const [lteValue, setLteValue] = useState(initiallte || "");
-  const [discount, setDiscount] = useState(initialDiscount || []);
-  const [discountGte, setDiscountGte] = useState(initialDiscountGte || []);
-  const handleChangeSort = (event) => {
-    setOrder(event.target.value);
-  };
-  const handleChangeBrand = (event) => {
-    const { value } = event.target;
-    let newBrand = [...brand];
-    if (newBrand.includes(value)) {
-      newBrand = newBrand.filter((e) => e !== value);
-    } else {
-      newBrand.push(value);
-    }
-    setBrand(newBrand);
-  };
-  const handleChangeDiscount = (event) => {
-    let newDiscount = [...discount];
-    let newDiscountGte = [...discountGte];
-    if (newDiscount.includes(event.target.value)) {
-      newDiscount = newDiscount.filter((e) => e !== event.target.value);
-    }
-    if (newDiscountGte.includes(`${event.target.value - 10}`)) {
-      newDiscountGte = newDiscountGte.filter(
-        (e) => e !== `${event.target.value - 10}`
-      );
-    } else {
-      newDiscount.push(event.target.value);
-      newDiscountGte.push(event.target.value - 10);
-    }
-    setDiscount(newDiscount);
-    setDiscountGte(newDiscountGte);
-  };
-  useEffect(() => {
-    let params = {
-      brand,
-      discount,
-      discountGte,
-    };
-    order && (params.order = order);
-    lteValue && (params.lte = lteValue);
-    gteValue && (params.gte = gteValue);
-    setSearchParams(params);
-  }, [brand, order, discount, discountGte]);
-  const brandArr = [];
-  useEffect(() => {
-    axios
-      .get(
-        `https://incandescent-nettle-pirate.glitch.me/products?q=${param.category}`
-      )
-      .then((res) => setData(res.data));
-  }, [brand, param]);
-  data?.map((e) => {
-    brandArr.push(e.brand);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const category = useParams().category.slice(0, -1).split("%20").join("_");
+  const [brandList, setBrandList] = useState([]);
+  const [brandCount, setBrandCount] = useState(5);
+  const { isDark } = useSelector((state) => state.theme);
+  const [selected, setSelected] = useState({
+    brands: searchParams.getAll("brand") || [],
+    ratings: searchParams.getAll("rating") || [],
+    minPrice: Number(searchParams.get("minPrice")) || "",
+    maxPrice: Number(searchParams.get("maxPrice")) || "",
+    sort: searchParams.get("sort") || "",
+    minDiscount: Number(searchParams.get("minDiscount")) || "",
+    maxDiscount: Number(searchParams.get("maxDiscount")) || "",
   });
-  let uniqueBrand = [...new Set(brandArr)];
-  // uniqueBrand.pop();
-  const style = {
-    position: "absolute",
-    top: "80%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "100%",
-    bgcolor: "#191818",
-    boxShadow: 24,
-    color: "white",
-    p: 2,
-    pt: 4,
+  const createQueryString = useCallback(
+    (name, value) => {
+      const params = new URLSearchParams(searchParams);
+
+      if (Array.isArray(value)) {
+        params.delete(name);
+        value.forEach((val) => params.append(name, val));
+      } else {
+        params.set(name, value);
+      }
+      return params.toString();
+    },
+    [searchParams]
+  );
+  const fetchBrandList = async () => {
+    try {
+      const {
+        data: { brands },
+      } = await axios.get(`/api/brand/${category}`);
+      setBrandList(brands);
+    } catch (error) {
+      console.error("Error fetching brands:", error);
+    }
   };
-  const style1 = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "100%",
-    bgcolor: "#191818",
-    boxShadow: 24,
-    color: "white",
-    p: 2,
-    pt: 4,
-    height: "100%",
-  };
-  function ListItem({ value, item, selected, handleClick }) {
-    const className = selected ? "selected" : "";
-    return (
-      <li className={className} onClick={() => handleClick(value)}>
-        {item}
-      </li>
-    );
-  }
-  const [selectedItem, setSelectedItem] = useState(null);
-  const handleClick = (value) => {
-    setSelectedItem(value);
-    setOrder(value);
-  };
-  const fetchData = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    fetchBrandList();
+  }, []);
+  const handleFilter_Sort = debounce(() => {
     let params = {
-      discount,
-      brand,
-      discountGte,
+      category,
     };
-    order && (params.order = order);
-    lteValue && (params.lte = lteValue);
-    gteValue && (params.gte = gteValue);
-    setSearchParams(params);
-  };
-  const handleReset = () => {
-    setBrand([]);
-    setOrder("");
-    setGteValue("");
-    setLteValue("");
-    setDiscount([]);
-    setDiscountGte([]);
-  };
-  function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`vertical-tabpanel-${index}`}
-        aria-labelledby={`vertical-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box sx={{ p: 3 }}>
-            <Typography>{children}</Typography>
-          </Box>
-        )}
-      </div>
+    selected.brands.length > 0 && (params.brand = selected.brands);
+    selected.ratings.length > 0 && (params.rating = selected.ratings);
+    selected.minPrice && (params.minPrice = selected.minPrice);
+    selected.maxPrice && (params.maxPrice = selected.maxPrice);
+    selected.sort && (params.sort = selected.sort);
+    selected.minDiscount && (params.minDiscount = selected.minDiscount);
+    selected.maxDiscount && (params.maxDiscount = selected.maxDiscount);
+    dispatch(
+      fetchProducts({
+        params,
+        paramsSerializer: (params) => {
+          return qs.stringify(params, { arrayFormat: "repeat" });
+        },
+      })
     );
-  }
-  TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
+  }, 300);
+  useEffect(() => {
+    dispatch(clearProducts());
+    handleFilter_Sort();
+  }, [searchParams]);
+  const handleViewMore = () => {
+    if (brandCount < brandList.length) {
+      setBrandCount(brandList.length);
+    } else {
+      setBrandCount(5);
+    }
   };
-  function a11yProps(index) {
-    return {
-      id: `vertical-tab-${index}`,
-      "aria-controls": `vertical-tabpanel-${index}`,
-    };
-  }
-  const [value, setValue] = useState(0);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleSortChange = (value) => {
+    setSelected({ ...selected, sort: value });
+    router.push(`${pathname}?${createQueryString("sort", value)}`);
   };
+  const handleBrandChange = (brand) => {
+    const updatedBrands = selected.brands.includes(brand)
+      ? selected.brands.filter((b) => b !== brand)
+      : [...selected.brands, brand];
+    setSelected({ ...selected, brands: updatedBrands });
+    router.push(`${pathname}?${createQueryString("brand", updatedBrands)}`);
+  };
+  const handleRatingChange = (rating) => {
+    const updatedRatings = selected.ratings.includes(rating)
+      ? selected.ratings.filter((r) => r !== rating)
+      : [...selected.ratings, rating];
+    setSelected({ ...selected, ratings: updatedRatings });
+    router.push(`${pathname}?${createQueryString("rating", updatedRatings)}`);
+  };
+  const handlePriceChange = ({ name, value }) => {
+    setSelected({ ...selected, [name]: Number(value) });
+  };
+  const handlePriceRangeFilter = () => {
+    const { minPrice, maxPrice } = selected;
+    if (!minPrice && !maxPrice) {
+      alert("Please provide at least one price value.");
+      return;
+    }
+    if (minPrice && maxPrice && minPrice > maxPrice) {
+      alert("Minimum price should not exceed maximum price.");
+      return;
+    }
+    const params = new URLSearchParams(searchParams);
+    if (minPrice) {
+      params.set("minPrice", minPrice);
+    } else {
+      params.delete("minPrice");
+    }
+    if (maxPrice) {
+      params.set("maxPrice", maxPrice);
+    } else {
+      params.delete("maxPrice");
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
+  const handleDiscountRangeFilter = (minDiscount, maxDiscount) => {
+    if (
+      selected.minDiscount === minDiscount &&
+      selected.maxDiscount === maxDiscount
+    ) {
+      setSelected({ ...selected, minDiscount: null, maxDiscount: null });
+      const params = new URLSearchParams(searchParams);
+      params.delete("minDiscount");
+      params.delete("maxDiscount");
+      router.push(`${pathname}?${params.toString()}`);
+    } else {
+      setSelected({ ...selected, minDiscount, maxDiscount });
+      const params = new URLSearchParams(searchParams);
+      params.set("minDiscount", minDiscount);
+      params.set("maxDiscount", maxDiscount);
+      router.push(`${pathname}?${params.toString()}`);
+    }
+  };
+
   return (
     <>
-      <DIV>
-        <h4>SORT BY</h4>
-        <select
-          value={order}
-          onChange={handleChangeSort}
-          style={{
-            border: "1px solid white",
-            marginTop: "5px",
-            width: "200px",
-            color: "white",
-            backgroundColor: "transparent",
-          }}
+      {brandList.length > 0 && (
+        <div
+          className={`hidden lg:block lg:w-[25%] lg:min-w-[25%] lg:pr-5 lg:space-y-5 ${
+            isDark ? "text-zinc-50" : "text-zinc-950"
+          }`}
         >
-          <option value="" defaultChecked={order === ""}>
-            FEATURED
-          </option>
-          <option value="desc" defaultChecked={order === "desc"}>
-            PRICE (HIGHEST FIRST)
-          </option>
-          <option value="asc" defaultChecked={order === "asc"}>
-            PRICE (LOWEST FIRST)
-          </option>
-        </select>
-        <h4>BRAND</h4>
-        <div id="brand">
-          {uniqueBrand?.map((e) => (
-            <FormControlLabel
-              key={e}
-              control={
-                <Checkbox
-                  sx={{
-                    color: "grey",
-                    width: "40px",
-                    "&.Mui-checked": { color: "#00e8be" },
-                  }}
-                />
-              }
-              value={e}
-              onChange={handleChangeBrand}
-              label={e}
-              checked={brand.includes(e)}
-            />
-          ))}
-        </div>
-        <h4>PRICE</h4>
-        <form id="priceFilter" onSubmit={fetchData}>
-          <input
-            type="number"
-            value={gteValue}
-            onChange={(e) => setGteValue(e.target.value)}
-            placeholder="Min Price"
-          />
-          <input
-            type="number"
-            value={lteValue}
-            onChange={(e) => setLteValue(e.target.value)}
-            placeholder="Max Price"
-            required
-          />
-          <button>
-            <ArrowForwardIcon />
-          </button>
-        </form>
-        <h4>DISCOUNT</h4>
-        <div id="discount">
-          <FormControlLabel
-            control={
-              <Checkbox
-                sx={{
-                  color: "grey",
-                  width: "40px",
-                  "&.Mui-checked": { color: "#00e8be" },
-                }}
-              />
-            }
-            value={10}
-            onChange={handleChangeDiscount}
-            label={"0% to 10%"}
-            checked={discount.includes("10")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                sx={{
-                  color: "grey",
-                  width: "40px",
-                  "&.Mui-checked": { color: "#00e8be" },
-                }}
-              />
-            }
-            value={20}
-            onChange={handleChangeDiscount}
-            label={"10% to 20%"}
-            checked={discount.includes("20")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                sx={{
-                  color: "grey",
-                  width: "40px",
-                  "&.Mui-checked": { color: "#00e8be" },
-                }}
-              />
-            }
-            value={"30"}
-            onChange={handleChangeDiscount}
-            label={"20% to 30%"}
-            checked={discount.includes("30")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                sx={{
-                  color: "grey",
-                  width: "40px",
-                  "&.Mui-checked": { color: "#00e8be" },
-                }}
-              />
-            }
-            value={"40"}
-            onChange={handleChangeDiscount}
-            label={"30% to 40%"}
-            checked={discount.includes("40")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                sx={{
-                  color: "grey",
-                  width: "40px",
-                  "&.Mui-checked": { color: "#00e8be" },
-                }}
-              />
-            }
-            value={"50"}
-            onChange={handleChangeDiscount}
-            label={"40% to 50%"}
-            checked={discount.includes("50")}
-          />
-        </div>
-        <button id="reset" onClick={handleReset}>
-          Reset
-        </button>
-      </DIV>
-      <DIV2>
-        <Modal open={open} onClose={handleClose}>
-          <Box sx={style} id="list">
-            <h7>SORT BY</h7>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              <ul>
-                <ListItem
-                  value=""
-                  item="FEATURED"
-                  selected={selectedItem === ""}
-                  handleClick={handleClick}
-                />
-                <ListItem
-                  value="desc"
-                  item="PRICE (HIGHEST FIRST)"
-                  selected={selectedItem === "desc"}
-                  handleClick={handleClick}
-                />
-                <ListItem
-                  value="asc"
-                  item="PRICE (LOWEST FIRST)"
-                  selected={selectedItem === "asc"}
-                  handleClick={handleClick}
-                />
-              </ul>
-            </Typography>
-          </Box>
-        </Modal>
-        <button onClick={handleOpen}>
-          <ImportExportOutlinedIcon />
-          SORT
-        </button>
-        <button onClick={handleOpen1}>
-          <FilterAltOutlinedIcon />
-          FILTER
-        </button>
-        <Modal
-          open={open1}
-          onClose={handleClose1}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style1}>
-            <Box
-              sx={{
-                flexGrow: 1,
-                bgcolor: "transparent",
-                display: "flex",
-                height: "90%",
-              }}
-            >
-              <Tabs
-                orientation="vertical"
-                variant="scrollable"
-                value={value}
-                onChange={handleChange}
-                aria-label="Vertical tabs example"
-                sx={{ borderRight: 1, borderColor: "gray", width: "30%" }}
-              >
-                <Tab label="BRAND" {...a11yProps(0)} />
-                <Tab label="PRICE" {...a11yProps(1)} />
-                <Tab label="DISCOUNT" {...a11yProps(2)} />
-              </Tabs>
-              <div style={{ width: "70%" }}>
-                <TabPanel value={value} index={0}>
-                  <div id="brand">
-                    {uniqueBrand?.map((e) => (
-                      <FormControlLabel
-                        key={e}
-                        control={
-                          <Checkbox
-                            sx={{
-                              color: "grey",
-                              width: "40px",
-                              "&.Mui-checked": { color: "#00e8be" },
-                            }}
-                          />
-                        }
-                        value={e}
-                        onChange={handleChangeBrand}
-                        label={e}
-                        checked={brand.includes(e)}
+          <Select value={selected.sort} onValueChange={handleSortChange}>
+            <SelectTrigger className={`${isDark && "bg-zinc-950"}`}>
+              <SelectValue placeholder="Sort by Price" />
+            </SelectTrigger>
+            <SelectContent className={`${isDark && "bg-zinc-950"}`}>
+              <SelectGroup>
+                <SelectItem
+                  className={`${
+                    isDark &&
+                    "text-zinc-50 focus:bg-zinc-800/50 focus:text-zinc-50"
+                  }`}
+                  value="lth"
+                >
+                  Low to High
+                </SelectItem>
+                <SelectItem
+                  className={`${
+                    isDark &&
+                    "text-zinc-50 focus:bg-zinc-800/50 focus:text-zinc-50"
+                  }`}
+                  value="htl"
+                >
+                  High to Low
+                </SelectItem>
+                <SelectItem
+                  className={`${
+                    isDark &&
+                    "text-zinc-50 focus:bg-zinc-800/50 focus:text-zinc-50"
+                  }`}
+                  value="relevance"
+                >
+                  Relevance
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <div className="space-y-4">
+            <h1 className="font-semibold text-lg">Brands</h1>
+            <div className="space-y-2">
+              {brandList.slice(0, brandCount).map((brand, id) => (
+                <div className="flex items-center gap-2" key={id}>
+                  <Checkbox
+                    id={`brand-${id}`}
+                    className={`data-[state=checked]:bg-[#FFC501] data-[state=checked]:border-[#FFC501] ${
+                      isDark && "border-white"
+                    }`}
+                    checked={selected.brands.includes(brand)}
+                    onCheckedChange={() => handleBrandChange(brand)}
+                  />
+                  <label htmlFor={`brand-${id}`}>{brand}</label>
+                </div>
+              ))}
+            </div>
+            <div className="w-full flex justify-center">
+              {brandList.length > 5 && (
+                <Button
+                  onClick={handleViewMore}
+                  className={`rounded-full bg-transparent border text-xs ${
+                    isDark ? "text-zinc-50" : "text-zinc-950 hover:bg-zinc-100"
+                  }`}
+                >
+                  {brandCount < brandList.length ? "View More" : "View Less"}
+                </Button>
+              )}
+            </div>
+          </div>
+          <div className="space-y-4">
+            <h1 className="font-semibold text-lg">Rating</h1>
+            <div className="space-y-2">
+              {[5, 4, 3, 2, 1].map((rating, id) => (
+                <div className="flex items-center gap-2" key={id}>
+                  <Checkbox
+                    className={`data-[state=checked]:bg-[#FFC501] data-[state=checked]:border-[#FFC501] ${
+                      isDark && "border-white"
+                    }`}
+                    checked={selected.ratings.includes(String(rating))}
+                    onCheckedChange={() => handleRatingChange(String(rating))}
+                  />
+                  <div className="flex gap-1 items-center">
+                    {[...Array(5)].map((_, index) => (
+                      <Star
+                        key={index}
+                        color="#FFC501"
+                        fill={index < rating ? "#FFC501" : "none"}
+                        size={16}
                       />
                     ))}
                   </div>
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                  <form id="priceFilter" onSubmit={fetchData}>
-                    <input
-                      type="number"
-                      value={gteValue}
-                      onChange={(e) => setGteValue(e.target.value)}
-                      placeholder="Min Price"
-                    />
-                    <input
-                      type="number"
-                      value={lteValue}
-                      onChange={(e) => setLteValue(e.target.value)}
-                      placeholder="Max Price"
-                      required
-                    />
-                    <button>
-                      <ArrowForwardIcon />
-                    </button>
-                  </form>
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                  <div id="discount">
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: "grey",
-                            width: "40px",
-                            "&.Mui-checked": { color: "#00e8be" },
-                          }}
-                        />
-                      }
-                      value={10}
-                      onChange={handleChangeDiscount}
-                      label={"0% to 10%"}
-                      checked={discount.includes("10")}
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: "grey",
-                            width: "40px",
-                            "&.Mui-checked": { color: "#00e8be" },
-                          }}
-                        />
-                      }
-                      value={20}
-                      onChange={handleChangeDiscount}
-                      label={"10% to 20%"}
-                      checked={discount.includes("20")}
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: "grey",
-                            width: "40px",
-                            "&.Mui-checked": { color: "#00e8be" },
-                          }}
-                        />
-                      }
-                      value={"30"}
-                      onChange={handleChangeDiscount}
-                      label={"20% to 30%"}
-                      checked={discount.includes("30")}
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: "grey",
-                            width: "40px",
-                            "&.Mui-checked": { color: "#00e8be" },
-                          }}
-                        />
-                      }
-                      value={"40"}
-                      onChange={handleChangeDiscount}
-                      label={"30% to 40%"}
-                      checked={discount.includes("40")}
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: "grey",
-                            width: "40px",
-                            "&.Mui-checked": { color: "#00e8be" },
-                          }}
-                        />
-                      }
-                      value={"50"}
-                      onChange={handleChangeDiscount}
-                      label={"40% to 50%"}
-                      checked={discount.includes("50")}
-                    />
-                  </div>
-                </TabPanel>
-              </div>
-            </Box>
-            <div id="btmBtn" style={{ marginTop: "10px" }}>
-              <button
-                style={{
-                  width: "50%",
-                  padding: "15px",
-                  fontSize: "14px",
-                  border: "1px solid white",
-                  backgroundColor: "transparent",
-                  color: "white",
-                  fontWeight: "bolder",
-                  borderRadius: "5px",
-                }}
-                onClick={handleReset}
-              >
-                RESET
-              </button>
-              <button
-                style={{
-                  width: "50%",
-                  padding: "15px",
-                  fontSize: "14px",
-                  border: "1px solid white",
-                  backgroundColor: "transparent",
-                  color: "white",
-                  fontWeight: "bolder",
-                  borderRadius: "5px",
-                }}
-                onClick={handleClose1}
-              >
-                CLOSE
-              </button>
+                  <p className="text-sm">({rating})</p>
+                </div>
+              ))}
             </div>
-          </Box>
-        </Modal>
-      </DIV2>
+          </div>
+          <div className="space-y-4">
+            <h1 className="font-semibold text-lg">Price Range</h1>
+            <div className="flex items-center gap-2">
+              <Input
+                placeholder="Min Price"
+                type="number"
+                value={selected.minPrice}
+                onChange={(e) =>
+                  handlePriceChange({
+                    name: "minPrice",
+                    value: e.target.value,
+                  })
+                }
+                className={`border-0 ${isDark ? "bg-zinc-800" : "bg-zinc-200"}`}
+              />
+              <Input
+                placeholder="Max Price"
+                type="number"
+                value={selected.maxPrice}
+                onChange={(e) =>
+                  handlePriceChange({
+                    name: "maxPrice",
+                    value: e.target.value,
+                  })
+                }
+                className={`border-0 ${isDark ? "bg-zinc-800" : "bg-zinc-200"}`}
+              />
+              <Button
+                className={`${
+                  isDark ? "bg-zinc-800" : "bg-zinc-200 hover:bg-zinc-300"
+                }`}
+                onClick={handlePriceRangeFilter}
+              >
+                <MoveRight
+                  className={`${isDark ? "text-zinc-50" : "text-zinc-950"}`}
+                />
+              </Button>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <h1 className="font-semibold text-lg">Discount</h1>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="discount"
+                  className={`data-[state=checked]:bg-[#FFC501] data-[state=checked]:border-[#FFC501] ${
+                    isDark && "border-white"
+                  }`}
+                  checked={
+                    selected.minDiscount === 10 && selected.maxDiscount === 15
+                  }
+                  onCheckedChange={() => {
+                    handleDiscountRangeFilter(10, 15);
+                  }}
+                />
+                <label htmlFor="discount">10% to 15%</label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="discount"
+                  className={`data-[state=checked]:bg-[#FFC501] data-[state=checked]:border-[#FFC501] ${
+                    isDark && "border-white"
+                  }`}
+                  checked={
+                    selected.minDiscount === 15 && selected.maxDiscount === 20
+                  }
+                  onCheckedChange={() => {
+                    handleDiscountRangeFilter(15, 20);
+                  }}
+                />
+                <label htmlFor="discount">15% to 20%</label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="discount"
+                  className={`data-[state=checked]:bg-[#FFC501] data-[state=checked]:border-[#FFC501] ${
+                    isDark && "border-white"
+                  }`}
+                  checked={
+                    selected.minDiscount === 20 && selected.maxDiscount === 25
+                  }
+                  onCheckedChange={() => {
+                    handleDiscountRangeFilter(20, 25);
+                  }}
+                />
+                <label htmlFor="discount">20% to 25%</label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="discount"
+                  className={`data-[state=checked]:bg-[#FFC501] data-[state=checked]:border-[#FFC501] ${
+                    isDark && "border-white"
+                  }`}
+                  checked={
+                    selected.minDiscount === 25 && selected.maxDiscount === 30
+                  }
+                  onCheckedChange={() => {
+                    handleDiscountRangeFilter(25, 30);
+                  }}
+                />
+                <label htmlFor="discount">25% to 30%</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="lg:hidden fixed left-0 bottom-0 w-full z-10 border-t">
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button className={`w-1/2 py-7 md:text-lg rounded-none border-r `}>
+              Filter
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent
+            className={`${
+              isDark ? "bg-zinc-800 text-zinc-50" : "bg-zinc-50"
+            } h-[60%] md:h-[40%]`}
+          >
+            <DrawerHeader className="flex justify-between items-center border-b">
+              <DrawerTitle>Filter</DrawerTitle>
+            </DrawerHeader>
+            <Tabs defaultValue="brands" className="h-full flex">
+              <TabsList
+                className={`w-1/2 flex flex-col h-full justify-start p-5 space-y-5 ${
+                  isDark && "bg-zinc-950 "
+                }`}
+              >
+                <TabsTrigger
+                  value="brands"
+                  className={`w-full md:text-lg ${
+                    isDark &&
+                    "data-[state=active]:text-zinc-50 data-[state=active]:bg-zinc-700"
+                  }`}
+                >
+                  Brands
+                </TabsTrigger>
+                <TabsTrigger
+                  value="ratings"
+                  className={`w-full md:text-lg ${
+                    isDark &&
+                    "data-[state=active]:text-zinc-50 data-[state=active]:bg-zinc-700"
+                  }`}
+                >
+                  Ratings
+                </TabsTrigger>
+                <TabsTrigger
+                  value="price"
+                  className={`w-full md:text-lg ${
+                    isDark &&
+                    "data-[state=active]:text-zinc-50 data-[state=active]:bg-zinc-700"
+                  }`}
+                >
+                  Price
+                </TabsTrigger>
+                <TabsTrigger
+                  value="discount"
+                  className={`w-full md:text-lg ${
+                    isDark &&
+                    "data-[state=active]:text-zinc-50 data-[state=active]:bg-zinc-700"
+                  }`}
+                >
+                  Discount
+                </TabsTrigger>
+              </TabsList>
+              <div className="w-1/2 px-5">
+                <TabsContent value="brands">
+                  <div className="space-y-4">
+                    <h1
+                      className={`font-semibold text-lg md:text-2xl ${
+                        isDark && "text-zinc-50"
+                      }`}
+                    >
+                      Brands
+                    </h1>
+                    <div className="space-y-2 h-[250px] md:h-[300px] overflow-y-scroll">
+                      {brandList.map((brand, id) => (
+                        <div className="flex items-center gap-2" key={id}>
+                          <Checkbox
+                            className={`data-[state=checked]:bg-[#FFC501] md:size-6 data-[state=checked]:border-[#FFC501] ${
+                              isDark && "border-white"
+                            }`}
+                            checked={selected.brands.includes(brand)}
+                            onCheckedChange={() => handleBrandChange(brand)}
+                          />
+                          <label
+                            htmlFor={`brand-${id}`}
+                            className={`${isDark && "text-zinc-50"}`}
+                          >
+                            {brand}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+                <TabsContent value="ratings">
+                  <div className="space-y-4">
+                    <h1
+                      className={`font-semibold text-lg md:text-2xl ${
+                        isDark && "text-zinc-50"
+                      }`}
+                    >
+                      Ratings
+                    </h1>
+                    <div className="space-y-2">
+                      {[5, 4, 3, 2, 1].map((rating, id) => (
+                        <div className="flex items-center gap-2" key={id}>
+                          <Checkbox
+                            className={`data-[state=checked]:bg-[#FFC501] md:size-6 data-[state=checked]:border-[#FFC501] ${
+                              isDark && "border-white"
+                            }`}
+                            checked={selected.ratings.includes(String(rating))}
+                            onCheckedChange={() =>
+                              handleRatingChange(String(rating))
+                            }
+                          />
+                          <div className="flex gap-1 items-center">
+                            {[...Array(5)].map((_, index) => (
+                              <Star
+                                key={index}
+                                color="#FFC501"
+                                fill={index < rating ? "#FFC501" : "none"}
+                                className="size-4 md:size-6"
+                              />
+                            ))}
+                          </div>
+                          <p
+                            className={`text-sm md:text-base ${
+                              isDark && "text-zinc-50"
+                            }`}
+                          >
+                            ({rating})
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+                <TabsContent value="price">
+                  <div className="space-y-4">
+                    <h1
+                      className={`font-semibold text-lg md:text-2xl ${
+                        isDark && "text-zinc-50"
+                      }`}
+                    >
+                      Price Range
+                    </h1>
+                    <div className="space-y-3">
+                      <Input
+                        placeholder="Min Price"
+                        type="number"
+                        value={selected.minPrice}
+                        onChange={(e) =>
+                          handlePriceChange({
+                            name: "minPrice",
+                            value: e.target.value,
+                          })
+                        }
+                        className={`border-0 md:text-lg ${
+                          isDark
+                            ? "bg-zinc-800 text-zinc-50 border"
+                            : "bg-zinc-200"
+                        }`}
+                      />
+                      <Input
+                        placeholder="Max Price"
+                        type="number"
+                        value={selected.maxPrice}
+                        onChange={(e) =>
+                          handlePriceChange({
+                            name: "maxPrice",
+                            value: e.target.value,
+                          })
+                        }
+                        className={`border-0 md:text-lg ${
+                          isDark
+                            ? "bg-zinc-800 text-zinc-50 border"
+                            : "bg-zinc-200"
+                        }`}
+                      />
+                      <Button
+                        className={`w-full md:text-lg`}
+                        onClick={handlePriceRangeFilter}
+                      >
+                        Apply
+                      </Button>
+                    </div>
+                  </div>
+                </TabsContent>
+                <TabsContent value="discount">
+                  <div className="space-y-4">
+                    <h1 className="font-semibold text-lg">Discount</h1>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Checkbox
+                          id="discount"
+                          className={`data-[state=checked]:bg-[#FFC501] md:size-6 data-[state=checked]:border-[#FFC501] ${
+                            isDark && "border-white"
+                          }`}
+                          checked={
+                            selected.minDiscount === 10 &&
+                            selected.maxDiscount === 15
+                          }
+                          onCheckedChange={() => {
+                            handleDiscountRangeFilter(10, 15);
+                          }}
+                        />
+                        <label htmlFor="discount">10% to 15%</label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Checkbox
+                          id="discount"
+                          className={`data-[state=checked]:bg-[#FFC501] md:size-6 data-[state=checked]:border-[#FFC501] ${
+                            isDark && "border-white"
+                          }`}
+                          checked={
+                            selected.minDiscount === 15 &&
+                            selected.maxDiscount === 20
+                          }
+                          onCheckedChange={() => {
+                            handleDiscountRangeFilter(15, 20);
+                          }}
+                        />
+                        <label htmlFor="discount">15% to 20%</label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Checkbox
+                          id="discount"
+                          className={`data-[state=checked]:bg-[#FFC501] md:size-6 data-[state=checked]:border-[#FFC501] ${
+                            isDark && "border-white"
+                          }`}
+                          checked={
+                            selected.minDiscount === 20 &&
+                            selected.maxDiscount === 25
+                          }
+                          onCheckedChange={() => {
+                            handleDiscountRangeFilter(20, 25);
+                          }}
+                        />
+                        <label htmlFor="discount">20% to 25%</label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Checkbox
+                          id="discount"
+                          className={`data-[state=checked]:bg-[#FFC501] md:size-6 data-[state=checked]:border-[#FFC501] ${
+                            isDark && "border-white"
+                          }`}
+                          checked={
+                            selected.minDiscount === 25 &&
+                            selected.maxDiscount === 30
+                          }
+                          onCheckedChange={() => {
+                            handleDiscountRangeFilter(25, 30);
+                          }}
+                        />
+                        <label htmlFor="discount">25% to 30%</label>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+              </div>
+            </Tabs>
+          </DrawerContent>
+        </Drawer>
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button className={`w-1/2 py-7 md:text-lg rounded-none`}>
+              Sort
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent
+            className={`${isDark ? "bg-zinc-800 text-zinc-50" : "bg-zinc-50"}`}
+          >
+            <DrawerHeader className="flex justify-between items-center border-b">
+              <DrawerTitle>Sort By Price</DrawerTitle>
+            </DrawerHeader>
+            <div className="space-y-5 px-5 py-5">
+              <p
+                onClick={() => handleSortChange("lth")}
+                className={`${
+                  selected.sort === "lth" && "text-[#38B854] font-bold"
+                }`}
+              >
+                Low to High
+              </p>
+              <p
+                onClick={() => handleSortChange("htl")}
+                className={`${
+                  selected.sort === "htl" && "text-[#38B854] font-bold"
+                }`}
+              >
+                High to Low
+              </p>
+              <p
+                onClick={() => handleSortChange("relevance")}
+                className={`${
+                  selected.sort === "relevance" && "text-[#38B854] font-bold"
+                }`}
+              >
+                Relevance
+              </p>
+            </div>
+          </DrawerContent>
+        </Drawer>
+      </div>
     </>
   );
 }
-const DIV2 = styled.div`
-  display: none;
-  @media screen and (max-width: 865px) /* Tablet */ {
-    display: flex;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    width: 100%;
-    left: 0;
-    z-index: 1;
-    #priceFilter {
-      border: 1px solid red;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-top: 10px;
-      input {
-        width: 35%;
-        font-size: 16px;
-        padding: 10px;
-        padding-left: 5px;
-        background-color: transparent;
-        border: 1px solid white;
-        border-radius: 5px;
-        outline: none;
-        color: white;
-      }
-      input::-webkit-outer-spin-button,
-      input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-      }
-      button {
-        height: 50%;
-        background-color: #00e8be;
-        border: 0;
-        outline: none;
-        display: flex;
-      }
-    }
-    #brand,
-    #discount {
-      display: flex;
-      flex-direction: column;
-    }
-    #list {
-      border: 1px solid red;
-    }
-    button {
-      width: 50%;
-      background-color: #343435;
-      font-size: 14px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      padding: 20px;
-      border: 0;
-      font-weight: 900;
-      :first-child {
-        border-right: 1px solid;
-      }
-      svg {
-        font-size: 25px;
-      }
-    }
-  }
-  @media screen and (max-width: 480px) /* Mobile */ {
-  }
-`;
-const DIV = styled.div`
-  width: 30%;
-  color: white;
-  padding-bottom: 50px;
-  border-right: 1px solid gray;
-  #reset {
-    background-color: #00e8be;
-    border: 0;
-    outline: none;
-    padding: 10px 20px;
-    margin-top: 5%;
-    font-size: 16px;
-    border-radius: 10px;
-    font-weight: bolder;
-  }
-  #priceFilter {
-    /* border: 1px solid red; */
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-top: 10px;
-    input {
-      width: 35%;
-      font-size: 16px;
-      padding: 10px;
-      padding-left: 5px;
-      background-color: transparent;
-      border: 1px solid white;
-      border-radius: 5px;
-      outline: none;
-      color: white;
-    }
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    button {
-      height: 50%;
-      background-color: #00e8be;
-      border: 0;
-      outline: none;
-      display: flex;
-    }
-  }
-  #brand,
-  #discount {
-    display: flex;
-    flex-direction: column;
-  }
-  h4 {
-    padding-top: 20px;
-  }
-  select {
-    font-size: 14px;
-    font-weight: bold;
-    padding: 15px 10px;
-    border-radius: 10px;
-    outline: none;
-    option:checked,
-    option:hover {
-      color: #00e8be;
-      background-color: #121212;
-    }
-    option {
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      background: #121212;
-    }
-  }
-  @media screen and (min-width: 866px) and (max-width: 1024px) /* Laptop */ {
-    width: 30%;
-  }
-  @media screen and (max-width: 865px) /* Tablet */ {
-    display: none;
-  }
-  @media screen and (max-width: 480px) /* Mobile */ {
-  }
-`;

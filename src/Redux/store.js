@@ -1,9 +1,19 @@
-import { applyMiddleware, combineReducers, legacy_createStore } from "redux";
-import { productReducer } from "./productReducer/reducer";
-import {SProductReducer} from './singleProductReducer/reducer'
-import {authReducer} from './authReducer/reducer'
-import thunk from "redux-thunk";
-const rootReducer = combineReducers({
-  productReducer,SProductReducer,authReducer
-});
-export const store = legacy_createStore(rootReducer, applyMiddleware(thunk));
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./slices/userSlice";
+import cartReducer from "./slices/cartSlice";
+import themeReducer from "./slices/themeSlice";
+import productReducer from "./slices/productSlice";
+import favoriteReducer from "./slices/favoriteSlice";
+export function makeStore() {
+  return configureStore({
+    reducer: {
+      user: userReducer,
+      theme: themeReducer,
+      products: productReducer,
+      cart: cartReducer,
+      favorites: favoriteReducer,
+    },
+  });
+}
+
+export const store = makeStore();

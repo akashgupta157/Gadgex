@@ -1,280 +1,140 @@
-import { Divider, IconButton, InputBase, Paper } from "@mui/material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import YouTubeIcon from "@mui/icons-material/YouTube";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import TwitterIcon from "@mui/icons-material/Twitter";
+"use client";
 import React from "react";
-import styled from "styled-components";
+import Image from "next/image";
+import x from "../../public/icons/x.svg";
+import { useSelector } from "react-redux";
+import facebook from "../../public/icons/facebook.svg";
+import linkedin from "../../public/icons/linkedin.svg";
+import instagram from "../../public/icons/instagram.svg";
 
 export default function Footer() {
+  const { isDark } = useSelector((state) => state.theme);
   return (
-    <FOOTER>
-      <div>
-        <h4>CONNECT WITH US</h4>
-        <Paper
-          id="search"
-          component="form"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <InputBase sx={{ ml: 3, flex: 1 }} placeholder="Enter Email ID" />
-          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-            <ArrowForwardIcon />
-          </IconButton>
-        </Paper>
-        <br />
-        <div>
-          <YouTubeIcon />
-          <FacebookIcon />
-          <InstagramIcon />
-          <LinkedInIcon />
-          <TwitterIcon />
+    <>
+      <section className="bg-[#4c4c4d] text-zinc-50 px-3 py-5 md:px-5 md:py-10 lg:px-10 lg:py-14 space-y-5 md:flex md:justify-between md:items-center">
+        <div className="space-y-1 md:space-y-3 text-center md:text-left">
+          <h1 className="text-lg lg:text-xl">Subscribe for newsletter!</h1>
+          <p className="text-xs lg:text-sm text-zinc-300">
+            Get e-mail updates about our latest shop and special offers.
+          </p>
         </div>
-        <p>© Copyright 2023 Gadgex. All rights reserved</p>
-      </div>
-      <Divider
-        orientation="vertical"
-        sx={{ mx: 1, bgcolor: "white" }}
-        flexItem
-      />
-      <div>
-        <h4>USEFUL LINKS</h4>
-        <div>
-          <p>About Gadgex</p>
-          <p>Help And Support</p>
-          <p>FAQs</p>
-          <p>Buying Guide</p>
-          <p>Return Policy</p>
-          <p>B2B Orders</p>
-          <p>Store Locator</p>
-          <p>E-Waste</p>
-          <p>Franchise Opportunity</p>
-          <p>Site Map</p>
-          <p>Careers At Gadgex</p>
-          <p>Terms Of Use</p>
-          <p>Disclaimer</p>
-          <p>Privacy Policy</p>
+        <form className="flex w-full text-zinc-950 text-sm md:w-auto lg:w-2/5">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            required
+            className="outline-none w-full p-2 rounded-l md:px-3 lg:px-5 lg:py-3"
+          />
+          <button className="bg-[#FFC501] rounded-r p-2 lg:px-5 lg:py-3">
+            Subscribe
+          </button>
+        </form>
+      </section>
+      <footer
+        className={`px-3 py-5 md:px-5 md:py-10 lg:px-10 lg:py-14 space-y-7 lg:flex lg:gap-36 ${
+          isDark ? "bg-zinc-950 text-zinc-50" : "bg-white"
+        }`}
+      >
+        <div className="text-center space-y-5 lg:w-1/3 lg:text-left">
+          <div className="relative w-fit mx-auto lg:mx-0">
+            <h1 className="logo text-4xl font-bold md:text-5xl cursor-pointer noSelect">
+              Gadgex
+            </h1>
+            <div>
+              <p className="w-1/2 h-1 bg-[#FFC501]"></p>
+              <p className="w-1/2 h-1 bg-[#38B854] absolute top-1 -right-1"></p>
+            </div>
+          </div>
+          <p className="text-xs md:text-sm ">
+            We are dedicated to providing the best electronic gadgets at the
+            most affordable prices and outstanding customer service.
+          </p>
+          <div
+            className={`flex w-fit mx-auto lg:mx-0 space-x-5 ${
+              isDark && "invert"
+            }`}
+          >
+            <Image
+              priority
+              src={facebook}
+              alt="facebook"
+              className="size-5 cursor-pointer"
+            />
+
+            <Image
+              src={instagram}
+              alt="instagram"
+              className="size-5 cursor-pointer"
+            />
+            <Image src={x} alt="x" className="size-5 cursor-pointer" />
+            <Image
+              src={linkedin}
+              alt="linkedin"
+              className="size-5 cursor-pointer"
+            />
+          </div>
+          <p className="hidden lg:block text-sm">
+            © 2025 Gadgex. All rights reserved.
+          </p>
         </div>
-      </div>
-      <Divider
-        orientation="vertical"
-        sx={{ mx: 1, bgcolor: "white" }}
-        flexItem
-      />
-      <div>
-        <h4>PRODUCTS</h4>
-        <div>
-          <p>Televisions & Accessories</p>
-          <p>Home Appliances</p>
-          <p>Phones & Wearables</p>
-          <p>Computers & Tablets</p>
-          <p>Kitchen Appliances</p>
-          <p>Audio & Video</p>
-          <p>Health & Fitness</p>
-          <p>Grooming & Personal Care</p>
-          <p>Cameras & Accessories</p>
-          <p>Smart Devices</p>
-          <p>Gaming</p>
-          <p>Accessories</p>
-          <p>Top Brands</p>
-        </div>
-      </div>
-      <div id="tabletDiv">
-        <div>
-          <h4>USEFUL LINKS</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:w-2/3 lg:flex lg:justify-evenly gap-5 md:gap-0 ">
           <div>
-            <p>About Gadgex</p>
-            <p>Help And Support</p>
-            <p>FAQs</p>
-            <p>Buying Guide</p>
-            <p>Return Policy</p>
-            <p>B2B Orders</p>
-            <p>Store Locator</p>
-            <p>E-Waste</p>
-            <p>Franchise Opportunity</p>
-            <p>Site Map</p>
-            <p>Careers At Gadgex</p>
-            <p>Terms Of Use</p>
-            <p>Disclaimer</p>
-            <p>Privacy Policy</p>
+            <h1 className="text-lg font-medium mb-2">Products</h1>
+            <ul className="grid grid-cols-2 text-sm gap-2">
+              <li className="cursor-pointer hover:text-[#38B854]">
+                Television
+              </li>
+              <li className="cursor-pointer hover:text-[#38B854]">
+                Smartphones
+              </li>
+              <li className="cursor-pointer hover:text-[#38B854]">Laptops</li>
+              <li className="cursor-pointer hover:text-[#38B854]">Tablets</li>
+              <li className="cursor-pointer hover:text-[#38B854]">Watches</li>
+              <li className="cursor-pointer hover:text-[#38B854]">Cameras</li>
+              <li className="cursor-pointer hover:text-[#38B854]">Speakers</li>
+              <li className="cursor-pointer hover:text-[#38B854]">
+                Headphones
+              </li>
+            </ul>
+          </div>
+          <div className="flex justify-between lg:w-2/3 lg:justify-evenly">
+            <div>
+              <h1 className="text-lg font-medium mb-2">Information</h1>
+              <ul className="text-sm space-y-2">
+                <li className="cursor-pointer hover:text-[#38B854]">
+                  Product Support
+                </li>
+                <li className="cursor-pointer hover:text-[#38B854]">
+                  Checkout
+                </li>
+                <li className="cursor-pointer hover:text-[#38B854]">
+                  License Policy
+                </li>
+                <li className="cursor-pointer hover:text-[#38B854]">
+                  Affiliate
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h1 className="text-lg font-medium mb-2">Customer Service</h1>
+              <ul className="text-sm space-y-2">
+                <li className="cursor-pointer hover:text-[#38B854]">
+                  Help Center
+                </li>
+                <li className="cursor-pointer hover:text-[#38B854]">
+                  Redeem Voucher
+                </li>
+                <li className="cursor-pointer hover:text-[#38B854]">
+                  Contact Us
+                </li>
+                <li className="cursor-pointer hover:text-[#38B854]">
+                  Policies & Rules
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-        <Divider
-          orientation="vertical"
-          sx={{ mx: 1, bgcolor: "white" }}
-          flexItem
-        />
-        <div>
-          <h4>PRODUCTS</h4>
-          <div>
-            <p>Televisions & Accessories</p>
-            <p>Home Appliances</p>
-            <p>Phones & Wearables</p>
-            <p>Computers & Tablets</p>
-            <p>Kitchen Appliances</p>
-            <p>Audio & Video</p>
-            <p>Health & Fitness</p>
-            <p>Grooming & Personal Care</p>
-            <p>Cameras & Accessories</p>
-            <p>Smart Devices</p>
-            <p>Gaming</p>
-            <p>Accessories</p>
-            <p>Top Brands</p>
-          </div>
-        </div>
-      </div>
-    </FOOTER>
+      </footer>
+    </>
   );
 }
-const FOOTER = styled.footer`
-  background-color: #1c1c1d;
-  color: white;
-  padding: 50px 100px;
-  display: flex;
-  justify-content: space-between;
-  #tabletDiv {
-    display: none;
-  }
-  > div:first-child {
-    p {
-      font-size: 14px;
-      padding-top: 50%;
-    }
-    div {
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      svg {
-        font-size: 25px;
-        cursor: pointer;
-        :nth-child(1) {
-          :hover {
-            color: red;
-          }
-        }
-        :nth-child(2) {
-          :hover {
-            color: #3b5998;
-          }
-        }
-        :nth-child(3) {
-          background-color: white;
-          color: #1c1c1d;
-          border-radius: 5px;
-          :hover {
-            color: white;
-            background: linear-gradient(
-              45deg,
-              #f09433 0%,
-              #e6683c 25%,
-              #dc2743 50%,
-              #cc2366 75%,
-              #bc1888 100%
-            );
-          }
-        }
-        :nth-child(4) {
-          :hover {
-            color: #0077b5;
-          }
-        }
-        :nth-child(5) {
-          :hover {
-            color: #00acee;
-          }
-        }
-      }
-    }
-  }
-  > div:nth-child(3),
-  div:nth-child(5) {
-    div {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      height: 100%;
-      column-gap: 30px;
-      p {
-        font-weight: bolder;
-        font-size: 14px;
-        cursor: pointer;
-        :hover {
-          color: #01e8bf;
-        }
-      }
-    }
-  }
-  @media screen and (max-width: 1024px) {
-    display: flex;
-    flex-direction: column;
-    padding: 50px 70px;
-    > div:first-child {
-      form {
-        margin: auto;
-        width:100%;
-      }
-      h4 {
-        text-align: center;
-      }
-      div {
-        width: 100%;
-        margin: auto;
-      }
-      width: 40%;
-      margin: auto;
-      p {
-        display: none;
-      }
-    }
-    > div:nth-child(3),
-    div:nth-child(5) {
-      display: none;
-    }
-    #tabletDiv {
-      display: flex;
-      margin: auto;
-      padding-top: 10px;
-      > div:nth-child(1),
-      div:nth-child(3) {
-        div {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          height: 100%;
-          column-gap: 30px;
-          p {
-            font-weight: bolder;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 10px;
-            :hover {
-              color: #01e8bf;
-            }
-          }
-        }
-      }
-    }
-  }
-  @media screen and (max-width: 480px) /* Mobile */ {
-    padding: 30px 50px;
-    #tabletDiv {
-      display: none;
-    }
-    > div:first-child {
-      width: 100%;
-    }
-    > div:nth-child(3),
-    div:nth-child(5) {
-      border-top: 1px solid white;
-      display: initial;
-      padding-top: 10px;
-      margin-top: 10px;
-      p{
-        margin-top: 10px;
-      }
-    }
-  }
-`;
