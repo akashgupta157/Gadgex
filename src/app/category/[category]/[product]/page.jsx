@@ -34,7 +34,6 @@ export default function ProductDetailPage() {
   const { cart } = useSelector((state) => state.cart);
   const product = JSON.parse(decodeURIComponent(searchParams.get("product")));
   const { user, isAuthenticated } = useSelector((state) => state.user);
-  const config = configure(user.token);
   const [nav1, setNav1] = useState(null);
   const [nav2, setNav2] = useState(null);
   let sliderRef1 = useRef(null);
@@ -70,6 +69,7 @@ export default function ProductDetailPage() {
   };
   const handleFavorite = debounce(() => {
     if (isAuthenticated) {
+      const config = configure(user.token);
       if (isFavorite) {
         setIsFavorite(false);
         dispatch(removeFromFavorites({ product, config })).catch(() =>
@@ -97,6 +97,7 @@ export default function ProductDetailPage() {
   }, 300);
   const handleAddToCart = debounce(() => {
     if (isAuthenticated) {
+      const config = configure(user.token);
       if (!isAddedToCart) {
         setIsAddedToCart(true);
         dispatch(addToCart({ product, config })).catch(() =>
