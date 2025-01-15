@@ -8,10 +8,10 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { setUser } from "@/redux/slices/userSlice";
-import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector, useDispatch } from "react-redux";
 import { clearCart, fetchCart } from "@/redux/slices/cartSlice";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { clearFavorites, fetchFavorites } from "@/redux/slices/favoriteSlice";
 import {
@@ -39,7 +39,6 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-
 export default function Navbar() {
   const router = useRouter();
   const { toast } = useToast();
@@ -60,6 +59,10 @@ export default function Navbar() {
       dispatch(clearCart());
     }
   }, [user]);
+  useLayoutEffect(() => {
+    if (localStorage.getItem("user"))
+      dispatch(setUser(JSON.parse(localStorage.getItem("user"))));
+  }, []);
   const showToast = (icon, message, variant) => {
     toast({
       title: (
@@ -160,7 +163,7 @@ export default function Navbar() {
             onClick={() => router.push(`/profile/${user._id}`)}
             className="size-8 rounded-full bg-[#38B854] text-white flex items-center justify-center text-lg lg:hidden noSelect"
           >
-            {user.name[0].toUpperCase()}
+            {user?.name[0].toUpperCase()}
           </p>
         ) : (
           <Login
@@ -181,9 +184,9 @@ export default function Navbar() {
               className="flex items-center gap-2 cursor-pointer"
             >
               <p className="size-9 rounded-full bg-[#38B854] text-white flex items-center justify-center text-xl">
-                {user.name[0].toUpperCase()}
+                {user?.name[0].toUpperCase()}
               </p>
-              <p>{user.name}</p>
+              <p>{user?.name}</p>
             </div>
           </div>
         ) : (
