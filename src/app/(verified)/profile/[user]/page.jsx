@@ -64,7 +64,10 @@ export default function Profile() {
           <TabsTrigger
             value="address"
             ref={tabsRefs.address}
-            onClick={() => scrollToCenter(tabsRefs.address)}
+            onClick={() => {
+              scrollToCenter(tabsRefs.address);
+              router.push(`/profile/${_id}?tab=address`);
+            }}
             className={`flex-shrink-0 w-auto md:w-full flex justify-between items-center data-[state=active]:shadow-none md:data-[state=active]:bg-transparent data-[state=active]:text-[#38B854] data-[state=active]:bg-[#38B854]/30 ${
               isDark ? "text-zinc-50" : "text-zinc-950"
             }`}
@@ -197,7 +200,11 @@ const Favorite = ({ isDark }) => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {favorites?.map((product) => (
-              <ProductCard key={product._id} product={product} isDark={isDark}/>
+              <ProductCard
+                key={product._id}
+                product={product}
+                isDark={isDark}
+              />
             ))}
           </div>
         </div>

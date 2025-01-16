@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { debounce } from "lodash";
+import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { CircleCheckBig } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,13 +11,12 @@ import { removeFromCart } from "@/redux/slices/cartSlice";
 import { calculateDiscount, configure } from "@/utils/misc";
 import { addToFavorites } from "@/redux/slices/favoriteSlice";
 export default function Cart() {
+  const router = useRouter();
   const { toast } = useToast();
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.cart);
   const { isDark } = useSelector((state) => state.theme);
-  const {
-    user: { token },
-  } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const showToast = (icon, message, variant) => {
     toast({
       title: (
@@ -34,7 +34,7 @@ export default function Cart() {
       variant,
     });
   };
-  const config = configure(token);
+  const config = configure(user?.token);
   const handleFavorite = debounce((product) => {
     dispatch(addToFavorites({ product, config }));
     dispatch(removeFromCart({ product, config }));
@@ -44,6 +44,17 @@ export default function Cart() {
     dispatch(removeFromCart({ product, config }));
     showToast(<CircleCheckBig />, "Removed from cart", "success");
   }, 300);
+  const handleCheckout = () => {
+    const total = cart?.reduce(
+      (acc, item) => acc + calculateDiscount(item.price, item.discount),
+      0
+    );
+    router.push(
+      `/checkout?key=${encodeURIComponent(
+        JSON.stringify({ total, token: user?.token })
+      )}`
+    );
+  };
   return (
     <div
       className={`px-3 md:px-5 lg:px-10 ${
@@ -55,7 +66,7 @@ export default function Cart() {
           <h1 className="hidden md:block uppercase text-lg lg:text-xl">
             shopping bag ({cart?.length})
           </h1>
-          <div className="w-full flex flex-col lg:flex-row gap-5 lg:gap-10">
+          <div className="w-full flex flex-col-reverse py-5 lg:py-0 lg:flex-row gap-5 lg:gap-10">
             <div className="space-y-5 lg:w-[75%] mt-5">
               {cart?.map((product) => (
                 <div
@@ -134,11 +145,7 @@ export default function Cart() {
                 isDark && "border"
               }`}
             >
-              <p
-                className={`capitalize font-semibold px-5 py-3 bg-yellow-50 rounded-t-md ${
-                  isDark ? "text-zinc-950" : "text-zinc-50"
-                }`}
-              >
+              <p className="capitalize font-semibold px-5 py-3 bg-yellow-50 rounded-t-md text-zinc-950">
                 order summary
               </p>
               <div className="px-5 py-3 space-y-2">
@@ -178,6 +185,7 @@ export default function Cart() {
                       ? "bg-zinc-50 text-zinc-950"
                       : "bg-zinc-950 text-zinc-50"
                   }`}
+                  onClick={handleCheckout}
                 >
                   Checkout
                 </Button>

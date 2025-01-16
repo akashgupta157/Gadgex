@@ -1,12 +1,4 @@
 import mongoose from "mongoose";
-
-const AddressSchema = new mongoose.Schema({
-  street: String,
-  city: String,
-  state: String,
-  country: String,
-  pincode: String,
-});
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -27,7 +19,28 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  address: AddressSchema,
+  address: {
+    street: {
+      type: String,
+      default: "",
+    },
+    city: {
+      type: String,
+      default: "",
+    },
+    state: {
+      type: String,
+      default: "",
+    },
+    country: {
+      type: String,
+      default: "",
+    },
+    pinCode: {
+      type: String,
+      default: "",
+    },
+  },
   cart: [
     {
       type: mongoose.Schema.Types.ObjectId,
