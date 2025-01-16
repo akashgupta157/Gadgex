@@ -1,16 +1,18 @@
 "use client";
 import { z } from "zod";
+import axios from "axios";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { configure } from "@/utils/misc";
 import { ChevronLeft } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { clearCart } from "@/redux/slices/cartSlice";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDispatch, useSelector } from "react-redux";
 
 const checkoutSchema = z.object({
-  name: z.string().min(3, "Name must be at least 3 characters."),
   stress: z.string().min(3, "Address must be at least 3 characters."),
   city: z.string().min(3, "City must be at least 3 characters."),
   state: z.string().min(3, "State must be at least 3 characters."),
@@ -22,6 +24,7 @@ const checkoutSchema = z.object({
 });
 
 export default function Checkout() {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { isDark } = useSelector((state) => state.theme);
   const { cart } = useSelector((state) => state.cart);
@@ -30,11 +33,10 @@ export default function Checkout() {
     country: user?.address.country || "India",
     shippingMethod: "Free",
   });
-
+  const config = configure(user?.token);
   const { control, handleSubmit, setValue, watch, formState } = useForm({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
-      name: user?.name || "",
       stress: user?.address.stress || "",
       city: user?.address.city || "",
       state: user?.address.state || "",
@@ -45,8 +47,27 @@ export default function Checkout() {
 
   const { errors } = formState;
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
+  const onSubmit = async (addressData) => {
+    const { data } = await axios.post(
+      "/api/orderhistory",
+      {
+        products: cart,
+        totalAmount: address.shippingMethod === "Free" ? total : total + 100,
+        address: {
+          street: addressData.stress,
+          city: addressData.city,
+          state: addressData.state,
+          country: address.country,
+          pinCode: addressData.pinCode,
+        },
+      },
+      config
+    );
+    if (data.success) {
+      dispatch(clearCart());
+      await axios.patch("/api/user/emptyCart", config);
+      redirect("/orderconfirm?id=" + data.newOrder._id);
+    }
   };
   return (
     <div
@@ -73,17 +94,10 @@ export default function Checkout() {
             <p>Customer Information</p>
             <p>Step 1 of 3</p>
           </div>
-          <Controller
-            name="name"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                placeholder="Enter your Name"
-                value={user?.name}
-                className={`${isDark && "bg-zinc-950 text-zinc-50"}`}
-              />
-            )}
+          <Input
+            placeholder="Enter your Name"
+            defaultValue={user?.name}
+            className={`${isDark && "bg-zinc-950 text-zinc-50"}`}
           />
           {errors.name && (
             <p className="text-red-500 text-sm">{errors.name.message}</p>

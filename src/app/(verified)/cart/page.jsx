@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { CircleCheckBig } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
+import emptyCart from "../../../../public/emptyCart.svg";
 import { removeFromCart } from "@/redux/slices/cartSlice";
 import { calculateDiscount, configure } from "@/utils/misc";
 import { addToFavorites } from "@/redux/slices/favoriteSlice";
@@ -185,7 +186,7 @@ export default function Cart() {
       ) : (
         <div className="flex flex-col items-center justify-center gap-3 h-[70svh]">
           <Image
-            src="https://res.cloudinary.com/dm5uvtj7t/image/upload/v1736594593/atwymgd8/ceqzvjsgf4vnx8ytihqi.svg"
+            src={emptyCart}
             width={0}
             height={0}
             sizes="100vw"
