@@ -3,11 +3,11 @@ import { z } from "zod";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { ChevronLeft } from "lucide-react";
+import { redirect } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { redirect, useSearchParams } from "next/navigation";
 
 const checkoutSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters."),
@@ -22,11 +22,10 @@ const checkoutSchema = z.object({
 });
 
 export default function Checkout() {
-  const searchParams = useSearchParams();
   const { user } = useSelector((state) => state.user);
   const { isDark } = useSelector((state) => state.theme);
-  const { total } = JSON.parse(decodeURIComponent(searchParams.get("key")));
-
+  const { cart } = useSelector((state) => state.cart);
+  const total = cart.reduce((acc, item) => acc + item.price, 0);
   const [address, setAddress] = useState({
     country: user?.address.country || "India",
     shippingMethod: "Free",

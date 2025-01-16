@@ -44,17 +44,6 @@ export default function Cart() {
     dispatch(removeFromCart({ product, config }));
     showToast(<CircleCheckBig />, "Removed from cart", "success");
   }, 300);
-  const handleCheckout = () => {
-    const total = cart?.reduce(
-      (acc, item) => acc + calculateDiscount(item.price, item.discount),
-      0
-    );
-    router.push(
-      `/checkout?key=${encodeURIComponent(
-        JSON.stringify({ total, token: user?.token })
-      )}`
-    );
-  };
   return (
     <div
       className={`px-3 md:px-5 lg:px-10 ${
@@ -185,7 +174,7 @@ export default function Cart() {
                       ? "bg-zinc-50 text-zinc-950"
                       : "bg-zinc-950 text-zinc-50"
                   }`}
-                  onClick={handleCheckout}
+                  onClick={() => router.push("/checkout")}
                 >
                   Checkout
                 </Button>
