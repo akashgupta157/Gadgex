@@ -11,7 +11,7 @@ export default function OrderConfirm() {
   useEffect(() => {
     setTimeout(() => {
       redirect("/");
-    }, 10000);
+    }, 5000);
   }, []);
   if (!searchParams?.get("id")) redirect("/");
   return (

@@ -15,9 +15,9 @@ export default function Cart() {
   const router = useRouter();
   const { toast } = useToast();
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
   const { isDark } = useSelector((state) => state.theme);
-  const { user } = useSelector((state) => state.user);
   const showToast = (icon, message, variant) => {
     toast({
       title: (
@@ -172,7 +172,7 @@ export default function Cart() {
                 <Button
                   className={`w-full text-xs md:text-sm py-2 ${
                     isDark
-                      ? "bg-zinc-50 text-zinc-950"
+                      ? "bg-zinc-50 text-zinc-950 hover:bg-zinc-50/80"
                       : "bg-zinc-950 text-zinc-50"
                   }`}
                   onClick={() => router.push("/checkout")}

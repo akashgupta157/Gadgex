@@ -7,10 +7,11 @@ import { Button } from "@/components/ui/button";
 import { addToCart } from "@/redux/slices/cartSlice";
 import RatingDisplay from "@/components/RatingDisplay";
 import { useDispatch, useSelector } from "react-redux";
-import React, { useEffect, useRef, useState } from "react";
 import { calculateDiscount, configure } from "@/utils/misc";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CircleAlert, CircleCheckBig, Heart } from "lucide-react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   addToFavorites,
   removeFromFavorites,
@@ -22,70 +23,99 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-export default function ProductDetailPage() {
+
+const ProductDetailPage = React.memo(() => {
   const router = useRouter();
   const { toast } = useToast();
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
+
   const { isDark } = useSelector((state) => state.theme);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isAddedToCart, setIsAddedToCart] = useState(false);
   const { favorites } = useSelector((state) => state.favorites);
   const { cart } = useSelector((state) => state.cart);
-  const product = JSON.parse(decodeURIComponent(searchParams.get("product")));
   const { user, isAuthenticated } = useSelector((state) => state.user);
+
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
   const [nav1, setNav1] = useState(null);
   const [nav2, setNav2] = useState(null);
-  let sliderRef1 = useRef(null);
-  let sliderRef2 = useRef(null);
+
+  const sliderRef1 = useRef(null);
+  const sliderRef2 = useRef(null);
+
+  const product = JSON.parse(decodeURIComponent(searchParams.get("product")));
+
   useEffect(() => {
-    setNav1(sliderRef1);
-    setNav2(sliderRef2);
+    setNav1(sliderRef1.current);
+    setNav2(sliderRef2.current);
   }, []);
+
   useEffect(() => {
-    const isFav = favorites.some((favorite) => favorite._id === product._id);
-    setIsFavorite(isFav);
-  }, [favorites]);
+    setIsFavorite(favorites.some((favorite) => favorite._id === product._id));
+  }, [favorites, product._id]);
+
   useEffect(() => {
-    const isAdded = cart.some((cartItem) => cartItem._id === product._id);
-    setIsAddedToCart(isAdded);
-  }, [cart]);
-  const showToast = (icon, message, variant) => {
-    toast({
-      title: (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-          }}
-        >
-          {icon}
-          {message}
-        </div>
-      ),
-      variant,
-    });
-  };
+    setIsAddedToCart(cart.some((cartItem) => cartItem._id === product._id));
+  }, [cart, product._id]);
+
+  const showToast = useCallback(
+    (icon, message, variant) => {
+      toast({
+        title: (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+            }}
+          >
+            {icon}
+            {message}
+          </div>
+        ),
+        variant,
+      });
+    },
+    [toast]
+  );
+
   const handleFavorite = debounce(() => {
     if (isAuthenticated) {
       const config = configure(user.token);
       if (isFavorite) {
-        setIsFavorite(false);
-        dispatch(removeFromFavorites({ product, config })).catch(() =>
-          showToast(<CircleAlert />, "Failed to remove favorite", "destructive")
-        );
-        showToast(
-          <CircleCheckBig />,
-          "Product removed from favorites",
-          "success"
-        );
+        dispatch(removeFromFavorites({ product, config }))
+          .then(() => {
+            setIsFavorite(false);
+            showToast(
+              <CircleCheckBig />,
+              "Product removed from favorites",
+              "success"
+            );
+          })
+          .catch(() =>
+            showToast(
+              <CircleAlert />,
+              "Failed to remove favorite",
+              "destructive"
+            )
+          );
       } else {
-        setIsFavorite(true);
-        dispatch(addToFavorites({ product, config })).catch(() =>
-          showToast(<CircleAlert />, "Failed to add to favorite", "destructive")
-        );
-        showToast(<CircleCheckBig />, "Product added to favorites", "success");
+        dispatch(addToFavorites({ product, config }))
+          .then(() => {
+            setIsFavorite(true);
+            showToast(
+              <CircleCheckBig />,
+              "Product added to favorites",
+              "success"
+            );
+          })
+          .catch(() =>
+            showToast(
+              <CircleAlert />,
+              "Failed to add to favorite",
+              "destructive"
+            )
+          );
       }
     } else {
       showToast(
@@ -95,20 +125,25 @@ export default function ProductDetailPage() {
       );
     }
   }, 300);
+
   const handleAddToCart = debounce(() => {
     if (isAuthenticated) {
       const config = configure(user.token);
       if (!isAddedToCart) {
-        setIsAddedToCart(true);
-        dispatch(addToCart({ product, config })).catch(() =>
-          showToast(<CircleAlert />, "Failed to add to cart", "destructive")
-        );
-        showToast(<CircleCheckBig />, "Product added to cart", "success");
+        dispatch(addToCart({ product, config }))
+          .then(() => {
+            setIsAddedToCart(true);
+            showToast(<CircleCheckBig />, "Product added to cart", "success");
+          })
+          .catch(() =>
+            showToast(<CircleAlert />, "Failed to add to cart", "destructive")
+          );
       }
     } else {
       showToast(<CircleAlert />, "Please login to add to cart", "destructive");
     }
-  });
+  }, 300);
+
   return (
     <div
       className={`${
@@ -132,22 +167,10 @@ export default function ProductDetailPage() {
             <BreadcrumbPage
               className={`${
                 isDark ? "text-zinc-50" : "text-zinc-950"
-              } cursor-pointer`}
+              } cursor-pointer capitalize`}
+              onClick={() => router.push(`/category/${product.category}s`)}
             >
-              Category
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>
-              <p
-                className={`${
-                  isDark ? "text-zinc-50" : "text-zinc-950"
-                } cursor-pointer capitalize`}
-                onClick={() => router.push(`/category/${product.category}s`)}
-              >
-                {product.category}
-              </p>
+              {product.category || "Category"}
             </BreadcrumbPage>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -160,7 +183,7 @@ export default function ProductDetailPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="flex flex-col lg:flex-row gap-5 lg:gap-14 mt-5">
+      <div className="flex flex-col lg:flex-row gap-5 lg:gap-14 my-5 lg:my-10">
         <div className="lg:w-[40%]">
           <div className="relative z-20">
             <Heart
@@ -168,6 +191,7 @@ export default function ProductDetailPage() {
                 isFavorite && "fill-pink-500 text-pink-500"
               } hover:fill-pink-500 hover:text-pink-500 absolute top-0 right-0 `}
               aria-label="Toggle Favorite"
+              aria-pressed={isFavorite}
               role="button"
               onClick={handleFavorite}
             />
@@ -175,12 +199,12 @@ export default function ProductDetailPage() {
           <div className="slider-container">
             <Slider
               asNavFor={nav2}
-              ref={(slider) => (sliderRef1 = slider)}
+              ref={sliderRef1}
               arrows={false}
-              infinite={true}
+              infinite
               slidesToShow={1}
               slidesToScroll={1}
-              focusOnSelect={true}
+              focusOnSelect
             >
               {product.image.map((image, index) => (
                 <div key={index}>
@@ -199,10 +223,10 @@ export default function ProductDetailPage() {
             <div className="thumb">
               <Slider
                 asNavFor={nav1}
-                ref={(slider) => (sliderRef2 = slider)}
+                ref={sliderRef2}
                 slidesToShow={5}
-                swipeToSlide={true}
-                focusOnSelect={true}
+                swipeToSlide
+                focusOnSelect
               >
                 {product.image.map((image, index) => (
                   <div key={index}>
@@ -225,7 +249,9 @@ export default function ProductDetailPage() {
           <p className="md:text-lg mb-3 md:mb-5 underline underline-offset-4 decoration-[#FFC501] font-semibold">
             Product Information
           </p>
-          <h1 className="text-xl capitalize font-semibold">{product.name}</h1>
+          <h1 className="text-lg md:text-xl capitalize font-semibold">
+            {product.name}
+          </h1>
           <RatingDisplay rating={product.rating} />
           <div className="my-5">
             <p className="text-2xl font-semibold text-[#38B854]">
@@ -236,19 +262,15 @@ export default function ProductDetailPage() {
               ).toLocaleString("en-IN")}
             </p>
             <p className="text-xs">(Inclusive all Taxes)</p>
-            <div
-              className={`h-[1px] ${
-                isDark ? "bg-zinc-50" : "bg-zinc-950"
-              } my-3`}
-            />
-            <p className="text-zinc-500 line-through">
+            <div className="h-[1px] bg-gray-300 my-3" />
+            <p className="text-zinc-500 line-through text-sm md:text-base">
               MRP: ₹{product.price.toLocaleString("en-IN")}
             </p>
-            <p className="text-zinc-500">
+            <p className="text-zinc-500 text-sm md:text-base pt-1">
               Discount: {product.discount}% off (Save ₹
               {(
                 product.price -
-                parseInt(calculateDiscount(product.price, product.discount))
+                calculateDiscount(product.price, product.discount)
               ).toLocaleString("en-IN")}
               )
             </p>
@@ -262,18 +284,48 @@ export default function ProductDetailPage() {
             </Button>
             <Button className="bg-transparent text-[#38B854]">Buy Now</Button>
           </div>
-          <div className="my-5 border rounded-md p-5">
-            <p className="font-semibold mb-3">Key Features</p>
+        </div>
+      </div>
+      <Tabs defaultValue="description">
+        <TabsList className="w-full flex justify-start items-end bg-transparent p-0 gap-0">
+          <TabsTrigger
+            value="description"
+            className="border-b border-gray-300 rounded-none md:text-base data-[state=active]:bg-transparent data-[state=active]:text-[#FFC501] data-[state=active]:border-b-2 data-[state=active]:border-[#FFC501] data-[state=active]:rounded-none"
+          >
+            Description
+          </TabsTrigger>
+          <div className="w-[2%] border-b border-gray-300"></div>
+          <TabsTrigger
+            value="reviews"
+            className="border-b border-gray-300 rounded-none md:text-base data-[state=active]:bg-transparent data-[state=active]:text-[#FFC501] data-[state=active]:border-b-2 data-[state=active]:border-[#FFC501] data-[state=active]:rounded-none"
+          >
+            Reviews
+          </TabsTrigger>
+          <div className="w-full border-b border-gray-300"></div>
+        </TabsList>
+        <TabsContent value="description">
+          <div className="md:text-lg py-5">
             <ul className="space-y-1">
               {product.description.split("\n").map((spec, index) => (
-                <li key={index} className="flex gap-1">
+                <li key={index} className="flex gap-1 items-center">
                   <p>• {spec}</p>
                 </li>
               ))}
             </ul>
           </div>
-        </div>
-      </div>
+        </TabsContent>
+        <TabsContent value="reviews">
+          <div className="flex flex-col items-center justify-center py-10 text-center text-gray-500">
+            <p className="text-lg font-semibold">No Reviews Yet</p>
+            <p className="text-sm">
+              Be the first to review this product. Your feedback is valuable to
+              us!
+            </p>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
-}
+});
+
+export default ProductDetailPage;
