@@ -1,6 +1,10 @@
 "use client";
+import { ChevronsUpDown } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { uploadCloudinary } from "@/utils/misc";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Sheet,
   SheetClose,
@@ -8,16 +12,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
+  
 } from "@/components/ui/select";
-import { uploadCloudinary } from "@/utils/misc";
 import axios from "axios";
 import {
   Command,
@@ -30,7 +32,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChevronsUpDown } from "lucide-react";
 export default function page() {
   return (
     <div className="border max-h-[90svh] w-[80svw] p-4">
@@ -64,6 +65,48 @@ const brands = [
   "Acer",
   "Haier",
   "Whirlpool",
+];
+const categories = [
+  {
+    label: "Mobile",
+    value: "mobile",
+  },
+  {
+    label: "Tablet",
+    value: "tablet",
+  },
+  {
+    label: "Laptop",
+    value: "laptop",
+  },
+  {
+    label: "Television",
+    value: "television",
+  },
+  {
+    label: "Washing Machine",
+    value: "washing_machine",
+  },
+  {
+    label: "Refrigerator",
+    value: "refrigerator",
+  },
+  {
+    label: "Air Purifier",
+    value: "air_purifier",
+  },
+  {
+    label: "Headphone",
+    value: "headphone",
+  },
+  {
+    label: "Watch",
+    value: "watch",
+  },
+  {
+    label: "Air Conditioner",
+    value: "air_conditioner",
+  },
 ];
 const AddNewProduct = () => {
   const [openPop, setOpenPop] = useState(false);
@@ -217,21 +260,11 @@ const AddNewProduct = () => {
                   <SelectValue placeholder="Product Category" />
                 </SelectTrigger>
                 <SelectContent value={product.category}>
-                  <SelectItem value="television">Television</SelectItem>
-                  <SelectItem value="laptop">Laptop</SelectItem>
-                  <SelectItem value="mobile">Mobile</SelectItem>
-                  <SelectItem value="tablet">Tablet</SelectItem>
-                  <SelectItem value="washing_machine">
-                    Washing Machine
-                  </SelectItem>
-                  <SelectItem value="refrigerator">Refrigerator</SelectItem>
-                  <SelectItem value="air_purifier">Air Purifier</SelectItem>
-                  <SelectItem value="headphone">Headphone</SelectItem>
-                  <SelectItem value="watch">Watch</SelectItem>
-                  <SelectItem value="air_conditioner">
-                    Air Conditioner
-                  </SelectItem>
-                  <SelectItem value="tablet">Tablet</SelectItem>
+                  {categories.map((category, index) => (
+                    <SelectItem key={index} value={category.value}>
+                      {category.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <div

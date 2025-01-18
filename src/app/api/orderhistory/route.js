@@ -1,7 +1,7 @@
 import orderHistory from "@/models/orderHistory";
 import dbConnect from "@/utils/db";
 import { NextResponse } from "next/server";
-
+import Product from "@/models/product";
 
 export async function POST(req) {
   try {
@@ -19,7 +19,7 @@ export async function POST(req) {
     return NextResponse.json({
       message: "Order placed successfully",
       newOrder,
-      success: true
+      success: true,
     });
   } catch (error) {
     console.error(error);
@@ -31,8 +31,9 @@ export async function GET(req) {
     await dbConnect();
     const userId = req.headers.get("userid");
 
-    const orders = await orderHistory.find({ user: userId })
-      .populate("products.product")
+    const orders = await orderHistory
+      .find({ user: userId })
+      .populate("products")
       .sort({ orderedAt: -1 });
 
     return NextResponse.json({ orders });

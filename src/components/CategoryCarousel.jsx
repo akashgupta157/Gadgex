@@ -18,54 +18,44 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-const products = [
+const categories = [
   {
-    id: 1,
     name: "mobiles",
     image: mobile,
   },
   {
-    id: 2,
     name: "televisions",
     image: tv,
   },
   {
-    id: 3,
     name: "laptops",
     image: laptop,
   },
   {
-    id: 4,
     name: "headphones",
     image: headphone,
   },
   {
-    id: 5,
     name: "washing machines",
     image: washing_machine,
   },
   {
-    id: 6,
     name: "air conditioners",
     image: ac,
   },
   {
-    id: 7,
     name: "air purifiers",
     image: air_purifier,
   },
   {
-    id: 8,
     name: "refrigerators",
     image: refrigerator,
   },
   {
-    id: 9,
     name: "tablets",
     image: tablet,
   },
   {
-    id: 10,
     name: "watches",
     image: watch,
   },
@@ -73,7 +63,7 @@ const products = [
 export default function CategoryCarousel({ isDark }) {
   const router = useRouter();
   return (
-    <div className="px-3 py-5 md:p-5 lg:px-28">
+    <div className="px-3 py-5 lg:py-10 md:p-5 lg:px-28">
       <h1
         className={`text-lg md:text-2xl mb-5 md:mb-8 lg:mb-10 font-semibold text-center my-1 ${
           isDark ? "text-zinc-50" : "text-zinc-950"
@@ -87,10 +77,12 @@ export default function CategoryCarousel({ isDark }) {
           loop: true,
         }}
       >
-        <CarouselPrevious className={`hidden lg:flex ${isDark && "text-zinc-950" }`} />
+        <CarouselPrevious
+          className={`hidden lg:flex ${isDark && "text-zinc-950"}`}
+        />
         <CarouselContent>
-          {products.map((product) => (
-            <CarouselItem key={product.id} className="basis-1/3 md:basis-1/6">
+          {categories.map((product, index) => (
+            <CarouselItem key={index} className="basis-1/3 md:basis-1/6">
               <div
                 className="text-center flex flex-col items-center justify-center gap-3 rounded-lg cursor-pointer w-fit mx-auto"
                 onClick={() => router.push(`/category/${product.name}`)}
@@ -113,7 +105,9 @@ export default function CategoryCarousel({ isDark }) {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselNext className={`hidden lg:flex ${isDark && "text-zinc-950" }`} />
+        <CarouselNext
+          className={`hidden lg:flex ${isDark && "text-zinc-950"}`}
+        />
       </Carousel>
     </div>
   );
