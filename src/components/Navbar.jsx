@@ -5,7 +5,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { configure } from "@/utils/misc";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { setUser } from "@/redux/slices/userSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,6 +49,7 @@ export default function Navbar() {
   const { favorites } = useSelector((state) => state.favorites);
   const { cart } = useSelector((state) => state.cart);
   const { user, isAuthenticated } = useSelector((state) => state.user);
+  const [search, setSearch] = useState(useSearchParams().get("query") || "");
   useEffect(() => {
     if (isAuthenticated) {
       const config = configure(user.token);
@@ -80,6 +81,11 @@ export default function Navbar() {
       variant,
     });
   };
+  const handleSearch = () => {
+    if (search && search.length > 3) {
+      router.push(`/search?query=${search.trim()}`);
+    }
+  };
   return (
     <nav
       className={`sticky top-0 z-50 ${
@@ -100,8 +106,15 @@ export default function Navbar() {
           type="text"
           placeholder="Search Products here"
           className="outline-none w-full bg-transparent"
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSearch();
+            }
+          }}
         />
-        <Search className="cursor-pointer" />
+        <Search className="cursor-pointer" onClick={handleSearch} />
       </div>
       <div className="flex items-center gap-5">
         <Popover>
@@ -117,6 +130,13 @@ export default function Navbar() {
               className={`outline-none w-full bg-transparent ${
                 isDark ? "text-zinc-50" : "text-zinc-950"
               }`}
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
             />
           </PopoverContent>
         </Popover>
