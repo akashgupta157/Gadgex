@@ -22,31 +22,43 @@ Gadgex is a comprehensive e-commerce platform designed to provide customers with
 
 Here are some key pages from the Gadgex platform to give you a quick preview of its design and features:
 
-1. **Homepage**  
+1. **Homepage** 
+
    ![Homepage Screenshot](https://github.com/user-attachments/assets/03ad0e29-2a3f-49fd-8c77-68af83dc624b)
    _Showcases the hero section, featured products, and categories._
 
 2. **Product Listing Page**  
-   ![Product Listing Screenshot](path/to/product-listing-screenshot.png)  
+
+   ![Product Listing Screenshot](https://github.com/user-attachments/assets/8edb6fdc-af12-4fb2-ac3a-3eeb5b4129d8)
    _Browse through a wide range of products with filters and sorting options._
 
-3. **Product Details Page**  
-   ![Product Details Screenshot](path/to/product-details-screenshot.png)  
+3. **Product Details Page** 
+
+   ![Product Details Screenshot](https://github.com/user-attachments/assets/741bfe55-b191-484a-a1cb-25cf5e943846)
    _View detailed information about a specific product, including specifications and reviews._
 
 4. **Cart Page**  
-   ![Cart Screenshot](path/to/cart-screenshot.png)  
+
+    ![Cart Screenshot](https://github.com/user-attachments/assets/123cb275-cd89-4e65-a8f6-5789132d95e0)
    _Displays the items added to the cart, along with options to adjust quantities and proceed to checkout._
 
 5. **Checkout Page**  
-   ![Checkout Screenshot](path/to/checkout-screenshot.png)  
+
+   ![Checkout Screenshot](https://github.com/user-attachments/assets/04ceccb4-e995-448a-808e-4f97cf864608)
    _Showcases the billing, shipping, and payment process._
 
 6. **Login/Sign-Up Page**  
-   ![Login/Sign-Up Screenshot](path/to/login-signup-screenshot.png)  
+  
+   ![Login/Sign-Up Screenshot](https://github.com/user-attachments/assets/1eb2b92c-f48b-4459-a42a-288e76fc5df2)
    _User-friendly forms for account creation and login._
 
-7. **Order History Page (Optional)**  
+7. **Favorite Product Page**
+
+   ![Favorite Product Screenshot](https://github.com/user-attachments/assets/83e9ef36-d20f-4d1d-81ba-bf48c4c4ad36)
+   *Shows a list of products that the user has added to their favorites for quick access.*
+
+8. **Order History Page**  
+
    ![Order History Screenshot](path/to/order-history-screenshot.png)  
    _Displays users' past orders and their statuses._
 
