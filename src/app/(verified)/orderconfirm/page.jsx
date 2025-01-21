@@ -21,7 +21,7 @@ export default function OrderConfirm() {
       }`}
     >
       <div className="flex flex-col items-center justify-center h-[50svh] gap-5 ">
-        <Image src={verified} alt="banner"/>
+        <Image src={verified} alt="banner" className="w-52" />
         <h1 className="text-2xl font-semibold">Thank you for your order</h1>
         <p className="text-sm text-zinc-500">
           Your order has been placed successfully
