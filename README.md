@@ -23,7 +23,7 @@ Gadgex is a comprehensive e-commerce platform designed to provide customers with
 Here are some key pages from the Gadgex platform to give you a quick preview of its design and features:
 
 1. **Homepage**  
-   ![Homepage Screenshot]()  
+   ![Homepage Screenshot](https://github.com/user-attachments/assets/03ad0e29-2a3f-49fd-8c77-68af83dc624b)
    _Showcases the hero section, featured products, and categories._
 
 2. **Product Listing Page**  
