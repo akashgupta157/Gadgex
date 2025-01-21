@@ -52,7 +52,7 @@ export default function Profile() {
       }`}
     >
       <Tabs
-        defaultValue={`${searchParams.get("tab") || "address"}`}
+        defaultValue={`${searchParams.get("tab") || "favorite"}`}
         className="md:flex"
       >
         <TabsList
@@ -61,23 +61,6 @@ export default function Profile() {
             isDark ? "bg-zinc-950 " : "bg-white"
           }`}
         >
-          <TabsTrigger
-            value="address"
-            ref={tabsRefs.address}
-            onClick={() => {
-              scrollToCenter(tabsRefs.address);
-              router.push(`/profile/${_id}?tab=address`);
-            }}
-            className={`flex-shrink-0 w-auto md:w-full flex justify-between items-center data-[state=active]:shadow-none md:data-[state=active]:bg-transparent data-[state=active]:text-[#38B854] data-[state=active]:bg-[#38B854]/30 ${
-              isDark ? "text-zinc-50" : "text-zinc-950"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <MapPin className="size-5" />
-              Address Information
-            </div>
-            <ChevronRight className="hidden md:block" />
-          </TabsTrigger>
           <TabsTrigger
             value="favorite"
             ref={tabsRefs.favorite}
@@ -106,6 +89,23 @@ export default function Profile() {
             <div className="flex items-center gap-2">
               <History className="size-5" />
               Order History
+            </div>
+            <ChevronRight className="hidden md:block" />
+          </TabsTrigger>
+          <TabsTrigger
+            value="address"
+            ref={tabsRefs.address}
+            onClick={() => {
+              scrollToCenter(tabsRefs.address);
+              router.push(`/profile/${_id}?tab=address`);
+            }}
+            className={`flex-shrink-0 w-auto md:w-full flex justify-between items-center data-[state=active]:shadow-none md:data-[state=active]:bg-transparent data-[state=active]:text-[#38B854] data-[state=active]:bg-[#38B854]/30 ${
+              isDark ? "text-zinc-50" : "text-zinc-950"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <MapPin className="size-5" />
+              Address Information
             </div>
             <ChevronRight className="hidden md:block" />
           </TabsTrigger>
