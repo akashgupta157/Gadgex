@@ -16,7 +16,7 @@ export default function Search() {
   const router = useRouter();
   const query = useSearchParams().get("query");
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { isDark } = useSelector((state) => state.theme);
   const fetchProducts = async () => {
     setLoading(true);
