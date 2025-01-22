@@ -1,7 +1,7 @@
-import orderHistory from "@/models/orderHistory";
 import dbConnect from "@/utils/db";
-import { NextResponse } from "next/server";
 import Product from "@/models/product";
+import { NextResponse } from "next/server";
+import orderHistory from "@/models/orderHistory";
 
 export async function POST(req) {
   try {

@@ -64,6 +64,13 @@ export default function Cart() {
                   className={`w-full flex flex-wrap md:flex-nowrap items-center gap-3 shadow hover:shadow-md cursor-pointer rounded-md p-5 md:py-0 ${
                     isDark && "border"
                   }`}
+                  onClick={() => {
+                    router.push(
+                      `/category/${product.category}/${
+                        product._id
+                      }?product=${encodeURIComponent(JSON.stringify(product))}`
+                    );
+                  }}
                 >
                   <Image
                     src={product.image[0]}
@@ -82,7 +89,10 @@ export default function Cart() {
                             ? "text-zinc-50"
                             : "text-zinc-950 border-zinc-950"
                         } text-xs md:text-sm`}
-                        onClick={() => handleFavorite(product)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleFavorite(product);
+                        }}
                       >
                         Move to Favorites
                       </Button>
@@ -92,7 +102,10 @@ export default function Cart() {
                             ? "text-zinc-50"
                             : "text-zinc-950 border-zinc-950"
                         } text-xs md:text-sm`}
-                        onClick={() => handleRemoveFromCart(product)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveFromCart(product);
+                        }}
                       >
                         Remove
                       </Button>

@@ -81,7 +81,10 @@ export default function Profile() {
           <TabsTrigger
             value="order"
             ref={tabsRefs.order}
-            onClick={() => scrollToCenter(tabsRefs.order)}
+            onClick={() => {
+              scrollToCenter(tabsRefs.order);
+              router.push(`/profile/${_id}?tab=order`);
+            }}
             className={`flex-shrink-0 w-auto md:w-full flex justify-between items-center data-[state=active]:shadow-none md:data-[state=active]:bg-transparent data-[state=active]:text-[#38B854]  data-[state=active]:bg-[#38B854]/30 ${
               isDark ? "text-zinc-50" : "text-zinc-950"
             }`}
@@ -177,11 +180,13 @@ export default function Profile() {
           </TabsTrigger>
         </TabsList>
         <div className="md:flex-1 md:pl-5 pt-14 px-3 md:p-0">
-          <TabsContent value="address">Update your address here.</TabsContent>
           <TabsContent value="favorite">
             <Favorite isDark={isDark} />
           </TabsContent>
-          <TabsContent value="order">View your order history here.</TabsContent>
+          <TabsContent value="order">
+            <Order isDark={isDark} />
+          </TabsContent>
+          <TabsContent value="address">Update your address here.</TabsContent>
           <TabsContent value="mail">Change your email here.</TabsContent>
           <TabsContent value="password">Change your password here.</TabsContent>
         </div>
@@ -216,5 +221,14 @@ const Favorite = ({ isDark }) => {
         </div>
       )}
     </>
+  );
+};
+const Order = () => {
+  return (
+    <div>
+      <div className="text-center font-medium text-xl">
+        You have no order history.
+      </div>
+    </div>
   );
 };

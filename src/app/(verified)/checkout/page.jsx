@@ -65,7 +65,7 @@ export default function Checkout() {
     );
     if (data.success) {
       dispatch(clearCart());
-      await axios.patch("/api/user/emptyCart", config);
+      await axios.patch("/api/user/emptyCart", {}, config);
       redirect("/orderconfirm?id=" + data.newOrder._id);
     }
   };
