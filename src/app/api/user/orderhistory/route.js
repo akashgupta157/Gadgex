@@ -30,7 +30,6 @@ export async function GET(req) {
   try {
     await dbConnect();
     const userId = req.headers.get("userid");
-
     const orders = await orderHistory
       .find({ user: userId })
       .populate("products")

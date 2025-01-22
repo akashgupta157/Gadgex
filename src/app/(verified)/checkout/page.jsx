@@ -49,7 +49,7 @@ export default function Checkout() {
 
   const onSubmit = async (addressData) => {
     const { data } = await axios.post(
-      "/api/orderhistory",
+      "/api/user/orderhistory",
       {
         products: cart,
         totalAmount: address.shippingMethod === "Free" ? total : total + 100,

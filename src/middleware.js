@@ -25,5 +25,5 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/api/user","/api/user/emptyCart",'/api/orderhistory'],
+  matcher: ["/api/user","/api/user/emptyCart",'/api/user/orderhistory'],
 };
