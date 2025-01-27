@@ -7,8 +7,8 @@ import { MoveRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDispatch, useSelector } from "react-redux";
-import { clearProducts, fetchProducts } from "@/redux/slices/productSlice";
 import React, { useCallback, useEffect, useState } from "react";
+import { clearProducts, fetchProducts } from "@/redux/slices/productSlice";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   useParams,

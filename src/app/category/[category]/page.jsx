@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/breadcrumb";
 export default function Category() {
   const router = useRouter();
-  const category = useParams().category.slice(0, -1).split("%20").join(" ");
   const { isDark } = useSelector((state) => state.theme);
   const { products, loading } = useSelector((state) => state.products);
   return (
