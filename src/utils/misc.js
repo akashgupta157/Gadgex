@@ -45,4 +45,7 @@ export const brands = [
   "Acer",
   "Haier",
   "Whirlpool",
+  "boAt",
+  "noise",
+  "FIRE-BOLTT"
 ];
