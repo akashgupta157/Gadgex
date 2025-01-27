@@ -49,7 +49,7 @@ export default function Category() {
           <BreadcrumbItem>
             <BreadcrumbPage>
               <p className="text-[#38B854] capitalize cursor-pointer">
-                {category}
+                {useParams().category.split("%20").join(" ")}
               </p>
             </BreadcrumbPage>
           </BreadcrumbItem>
