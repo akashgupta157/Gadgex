@@ -59,7 +59,7 @@ Here are some key pages from the Gadgex platform to give you a quick preview of 
 
 8. **Order History Page**  
 
-   ![Order History Screenshot](path/to/order-history-screenshot.png)  
+   ![Order History Screenshot](https://github.com/user-attachments/assets/5be8d9d6-bf1e-4312-85d2-7cead0f8be1a)
    _Displays users' past orders and their statuses._
 
 ## Getting Started 💻
