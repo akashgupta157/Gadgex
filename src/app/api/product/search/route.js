@@ -1,4 +1,5 @@
 import dbConnect from "@/utils/db";
+import { brands } from "@/utils/misc";
 import Product from "@/models/product";
 import { NextResponse } from "next/server";
 
@@ -20,33 +21,6 @@ export const GET = async (req) => {
       "refrigerator",
       "tablet",
       "watch",
-    ];
-
-    const brands = [
-      "Apple",
-      "Samsung",
-      "Xiaomi",
-      "OnePlus",
-      "Oppo",
-      "Vivo",
-      "Realme",
-      "Motorola",
-      "LG",
-      "Nokia",
-      "Sony",
-      "Toshiba",
-      "MI",
-      "Asus",
-      "Lenovo",
-      "Huawei",
-      "HP",
-      "Google",
-      "Dell",
-      "Redmi",
-      "Honor",
-      "Acer",
-      "Haier",
-      "Whirlpool",
     ];
 
     const priceRegex = /under (\d+)/;

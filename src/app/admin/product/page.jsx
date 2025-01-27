@@ -1,7 +1,7 @@
 "use client";
 import { ChevronsUpDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { uploadCloudinary } from "@/utils/misc";
+import { brands, uploadCloudinary } from "@/utils/misc";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
@@ -40,32 +40,6 @@ export default function page() {
     </div>
   );
 }
-const brands = [
-  "Apple",
-  "Samsung",
-  "Xiaomi",
-  "OnePlus",
-  "Oppo",
-  "Vivo",
-  "Realme",
-  "Motorola",
-  "LG",
-  "Nokia",
-  "Sony",
-  "Toshiba",
-  "MI",
-  "Asus",
-  "Lenovo",
-  "Huawei",
-  "HP",
-  "Google",
-  "Dell",
-  "Redmi",
-  "Honor",
-  "Acer",
-  "Haier",
-  "Whirlpool",
-];
 const categories = [
   {
     label: "Mobile",
