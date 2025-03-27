@@ -346,7 +346,7 @@ const Login = ({
                       }`}
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? <Eye /> : <EyeOff />}
+                      {showPassword ? <EyeOff /> : <Eye />}
                     </span>
                   </FormLabel>
                   <FormControl>
@@ -523,7 +523,7 @@ const Signup = ({
                       }`}
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? <Eye /> : <EyeOff />}
+                      {showPassword ? <EyeOff /> : <Eye />}
                     </span>
                   </FormLabel>
                   <FormControl>
