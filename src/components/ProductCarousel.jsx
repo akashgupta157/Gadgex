@@ -44,7 +44,7 @@ export default function ProductCarousel({ isDark, api, title }) {
         ]}
       >
         <CarouselPrevious className="hidden" />
-        <CarouselContent className="md:px-1">
+        <CarouselContent className="md:px-1 md:py-1">
           {products.map((product) => (
             <CarouselItem
               key={product._id}
