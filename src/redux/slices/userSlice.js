@@ -10,12 +10,12 @@ const userSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
       state.isAuthenticated = true;
-      localStorage.setItem("user", JSON.stringify(action.payload));
+      sessionStorage.setItem("user", JSON.stringify(action.payload));
     },
     removeUser: (state) => {
       state.user = null;
       state.isAuthenticated = false;
-      localStorage.removeItem("user");
+      sessionStorage.removeItem("user");
     },
   },
 });

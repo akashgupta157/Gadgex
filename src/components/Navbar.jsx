@@ -5,11 +5,11 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { configure } from "@/utils/misc";
 import { useForm } from "react-hook-form";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { setUser } from "@/redux/slices/userSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector, useDispatch } from "react-redux";
+import { useRouter, useSearchParams } from "next/navigation";
 import { clearCart, fetchCart } from "@/redux/slices/cartSlice";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
@@ -61,8 +61,8 @@ export default function Navbar() {
     }
   }, [user]);
   useLayoutEffect(() => {
-    if (localStorage.getItem("user"))
-      dispatch(setUser(JSON.parse(localStorage.getItem("user"))));
+    if (sessionStorage.getItem("user"))
+      dispatch(setUser(JSON.parse(sessionStorage.getItem("user"))));
   }, []);
   const showToast = (icon, message, variant) => {
     toast({
@@ -568,7 +568,3 @@ const Signup = ({
     </Dialog>
   );
 };
-
-// https://www.behance.net/gallery/214187865/Electronics-(E-Commerce)-Landing-Page-Design?tracking_source=search_projects|electronics+ecommerce&l=12
-
-// https://www.behance.net/gallery/208574617/Gadget-E-Commerse-Website?tracking_source=search_projects|electronics+ecommerce&l=5
