@@ -1,6 +1,5 @@
 import User from "@/models/user";
 import dbConnect from "@/utils/db";
-import Product from "@/models/product";
 import { NextResponse } from "next/server";
 
 export async function PATCH(req) {

@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Slider from "react-slick";
 import { debounce } from "lodash";
+import AIChat from "@/components/AIChat";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { addToCart } from "@/redux/slices/cartSlice";
@@ -296,6 +297,13 @@ const ProductDetailPage = React.memo(() => {
           </TabsTrigger>
           <div className="w-[2%] border-b border-gray-300"></div>
           <TabsTrigger
+            value="ai"
+            className="border-b border-gray-300 rounded-none md:text-base data-[state=active]:bg-transparent data-[state=active]:text-[#FFC501] data-[state=active]:border-b-2 data-[state=active]:border-[#FFC501] data-[state=active]:rounded-none"
+          >
+            Ask AI ✨
+          </TabsTrigger>
+          <div className="w-[2%] border-b border-gray-300"></div>
+          <TabsTrigger
             value="reviews"
             className="border-b border-gray-300 rounded-none md:text-base data-[state=active]:bg-transparent data-[state=active]:text-[#FFC501] data-[state=active]:border-b-2 data-[state=active]:border-[#FFC501] data-[state=active]:rounded-none"
           >
@@ -313,6 +321,9 @@ const ProductDetailPage = React.memo(() => {
               ))}
             </ul>
           </div>
+        </TabsContent>
+        <TabsContent value="ai">
+          <AIChat productId={product._id} />
         </TabsContent>
         <TabsContent value="reviews">
           <div className="flex flex-col items-center justify-center py-10 text-center text-gray-500">
