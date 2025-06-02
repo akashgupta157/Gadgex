@@ -114,7 +114,7 @@ export default function AIChat({ productId, showChat, setShowChat }) {
         behavior: "smooth",
         block: "nearest",
       });
-    }, 100);
+    }, 1);
   };
 
   const handleSubmit = (e) => {
