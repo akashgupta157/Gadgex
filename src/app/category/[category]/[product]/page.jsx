@@ -3,6 +3,7 @@ import Image from "next/image";
 import Slider from "react-slick";
 import { debounce } from "lodash";
 import AIChat from "@/components/AIChat";
+import chatbot from "@/assets/chatbot.jpeg";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { addToCart } from "@/redux/slices/cartSlice";
@@ -10,7 +11,7 @@ import RatingDisplay from "@/components/RatingDisplay";
 import { useDispatch, useSelector } from "react-redux";
 import { calculateDiscount, configure } from "@/utils/misc";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CircleAlert, CircleCheckBig, Heart } from "lucide-react";
+import { CircleAlert, CircleCheckBig, Heart, X } from "lucide-react";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -144,6 +145,7 @@ const ProductDetailPage = React.memo(() => {
       showToast(<CircleAlert />, "Please login to add to cart", "destructive");
     }
   }, 300);
+  const [showChat, setShowChat] = useState(false);
 
   return (
     <div
@@ -297,13 +299,6 @@ const ProductDetailPage = React.memo(() => {
           </TabsTrigger>
           <div className="w-[2%] border-b border-gray-300"></div>
           <TabsTrigger
-            value="ai"
-            className="border-b border-gray-300 rounded-none md:text-base data-[state=active]:bg-transparent data-[state=active]:text-[#FFC501] data-[state=active]:border-b-2 data-[state=active]:border-[#FFC501] data-[state=active]:rounded-none"
-          >
-            Ask AI ✨
-          </TabsTrigger>
-          <div className="w-[2%] border-b border-gray-300"></div>
-          <TabsTrigger
             value="reviews"
             className="border-b border-gray-300 rounded-none md:text-base data-[state=active]:bg-transparent data-[state=active]:text-[#FFC501] data-[state=active]:border-b-2 data-[state=active]:border-[#FFC501] data-[state=active]:rounded-none"
           >
@@ -322,9 +317,6 @@ const ProductDetailPage = React.memo(() => {
             </ul>
           </div>
         </TabsContent>
-        <TabsContent value="ai">
-          <AIChat productId={product._id} />
-        </TabsContent>
         <TabsContent value="reviews">
           <div className="flex flex-col items-center justify-center py-10 text-center text-gray-500">
             <p className="text-lg font-semibold">No Reviews Yet</p>
@@ -335,6 +327,37 @@ const ProductDetailPage = React.memo(() => {
           </div>
         </TabsContent>
       </Tabs>
+
+      {isAuthenticated && (
+        <>
+          {showChat || (
+            <div className="fixed bottom-5 right-5 z-50">
+              <Image
+                src={chatbot}
+                alt="chatbot"
+                width={0}
+                height={0}
+                className="size-14 cursor-pointer rounded-full shadow-lg hover:scale-110 transition-transform duration-300 ease-in-out"
+                priority
+                unoptimized
+                onClick={() => setShowChat((prev) => !prev)}
+              />
+            </div>
+          )}
+
+          <div
+            className={`fixed bottom-5 right-5 w-full sm:w-[400px] rounded-xl bg-[#38B854] shadow-lg transform transition-transform duration-300 ease-in-out z-40 ${
+              showChat ? "translate-x-0" : "translate-x-[105%]"
+            }`}
+          >
+            <AIChat
+              productId={product._id}
+              showChat={showChat}
+              setShowChat={setShowChat}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 });

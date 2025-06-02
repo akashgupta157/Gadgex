@@ -2,12 +2,6 @@ import * as jose from "jose";
 import { NextResponse } from "next/server";
 
 export async function middleware(req) {
-  const path = req.nextUrl.pathname;
-
-  if (path === "/api/product/ai-chat" && req.method === "GET") {
-    return NextResponse.next();
-  }
-
   try {
     const token = req.headers.get("authorization")?.split(" ")[1];
     if (!token) {
@@ -23,7 +17,7 @@ export async function middleware(req) {
     requestHeaders.set("userId", payload.userId);
     return NextResponse.next({ request: { headers: requestHeaders } });
   } catch (error) {
-    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+    return NextResponse.json({ message: error.message }, { status: 401 });
   }
 }
 

@@ -112,21 +112,30 @@ export const POST = async (req) => {
 export const GET = async (req) => {
   try {
     await dbConnect();
+
+    const userId = req.headers.get("userId");
     const { searchParams } = new URL(req.url);
-    const product = searchParams.get("productId");
-    if (!product) {
+    const productId = searchParams.get("productId");
+
+    if (!productId) {
       return NextResponse.json(
         { error: "Product ID is required." },
         { status: 400 }
       );
     }
-    const chat = await Chat.findOne({ product });
-    console.log(chat);
+    const chat = await Chat.findOne({
+      product: productId,
+      user: userId,
+    });
+
     return NextResponse.json({
-      history: chat?.messages.reverse() || [],
+      history: chat?.messages || [],
     });
   } catch (error) {
     console.error("Fetch History Error:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return NextResponse.json(
+      { message: "Failed to fetch history", error: error.message },
+      { status: 500 }
+    );
   }
 };

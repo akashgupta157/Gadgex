@@ -47,5 +47,5 @@ export const brands = [
   "Whirlpool",
   "boAt",
   "noise",
-  "FIRE-BOLTT"
+  "FIRE-BOLTT",
 ];

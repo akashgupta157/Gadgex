@@ -10,6 +10,7 @@ const chatSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
+    index: true,
   },
   messages: [
     {
@@ -20,5 +21,7 @@ const chatSchema = new mongoose.Schema({
   ],
   createdAt: { type: Date, default: Date.now },
 });
+
+chatSchema.index({ product: 1, user: 1 });
 
 export default mongoose.models.Chat || mongoose.model("Chat", chatSchema);
