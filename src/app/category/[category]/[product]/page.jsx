@@ -179,16 +179,16 @@ const ProductDetailPage = React.memo(() => {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage>
-              <p className="text-[#38B854] capitalize cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap max-w-[100px] md:max-w-[300px] lg:max-w-[400px]">
+              <p className="max-w-[100px] md:max-w-[300px] lg:max-w-[400px] overflow-hidden text-[#38B854] text-ellipsis capitalize whitespace-nowrap cursor-pointer">
                 {product.name}
               </p>
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="flex flex-col lg:flex-row gap-5 lg:gap-14 my-5 lg:my-10">
+      <div className="flex lg:flex-row flex-col gap-5 lg:gap-14 my-5 lg:my-10">
         <div className="lg:w-[40%]">
-          <div className="relative z-20">
+          <div className="z-20 relative">
             <Heart
               className={`${
                 isFavorite && "fill-pink-500 text-pink-500"
@@ -199,7 +199,7 @@ const ProductDetailPage = React.memo(() => {
               onClick={handleFavorite}
             />
           </div>
-          <div className="slider-container">
+          <div className="overflow-hidden slider-container">
             <Slider
               asNavFor={nav2}
               ref={sliderRef1}
@@ -249,15 +249,15 @@ const ProductDetailPage = React.memo(() => {
           </div>
         </div>
         <div className="lg:w-[60%]">
-          <p className="md:text-lg mb-3 md:mb-5 underline underline-offset-4 decoration-[#FFC501] font-semibold">
+          <p className="mb-3 md:mb-5 font-semibold md:text-lg decoration-[#FFC501] underline underline-offset-4">
             Product Information
           </p>
-          <h1 className="text-lg md:text-xl capitalize font-semibold">
+          <h1 className="font-semibold text-lg md:text-xl capitalize">
             {product.name}
           </h1>
           <RatingDisplay rating={product.rating} />
           <div className="my-5">
-            <p className="text-2xl font-semibold text-[#38B854]">
+            <p className="font-semibold text-[#38B854] text-2xl">
               ₹
               {calculateDiscount(
                 product.price,
@@ -265,11 +265,11 @@ const ProductDetailPage = React.memo(() => {
               ).toLocaleString("en-IN")}
             </p>
             <p className="text-xs">(Inclusive all Taxes)</p>
-            <div className="h-[1px] bg-gray-300 my-3" />
-            <p className="text-zinc-500 line-through text-sm md:text-base">
+            <div className="bg-gray-300 my-3 h-[1px]" />
+            <p className="text-zinc-500 text-sm md:text-base line-through">
               MRP: ₹{product.price.toLocaleString("en-IN")}
             </p>
-            <p className="text-zinc-500 text-sm md:text-base pt-1">
+            <p className="pt-1 text-zinc-500 text-sm md:text-base">
               Discount: {product.discount}% off (Save ₹
               {(
                 product.price -
@@ -280,7 +280,7 @@ const ProductDetailPage = React.memo(() => {
           </div>
           <div className="flex gap-3">
             <Button
-              className="bg-[#38B854] text-white hover:bg-[#38B854]/70 hover:text-white"
+              className="bg-[#38B854] hover:bg-[#38B854]/70 text-white hover:text-white"
               onClick={handleAddToCart}
             >
               {isAddedToCart ? "Added to Cart" : "Add to Cart"}
@@ -290,27 +290,27 @@ const ProductDetailPage = React.memo(() => {
         </div>
       </div>
       <Tabs defaultValue="description">
-        <TabsList className="w-full flex justify-start items-end bg-transparent p-0 gap-0">
+        <TabsList className="flex justify-start items-end gap-0 bg-transparent p-0 w-full">
           <TabsTrigger
             value="description"
-            className="border-b border-gray-300 rounded-none md:text-base data-[state=active]:bg-transparent data-[state=active]:text-[#FFC501] data-[state=active]:border-b-2 data-[state=active]:border-[#FFC501] data-[state=active]:rounded-none"
+            className="data-[state=active]:bg-transparent border-gray-300 data-[state=active]:border-[#FFC501] border-b data-[state=active]:border-b-2 rounded-none data-[state=active]:rounded-none data-[state=active]:text-[#FFC501] md:text-base"
           >
             Description
           </TabsTrigger>
-          <div className="w-[2%] border-b border-gray-300"></div>
+          <div className="border-gray-300 border-b w-[2%]"></div>
           <TabsTrigger
             value="reviews"
-            className="border-b border-gray-300 rounded-none md:text-base data-[state=active]:bg-transparent data-[state=active]:text-[#FFC501] data-[state=active]:border-b-2 data-[state=active]:border-[#FFC501] data-[state=active]:rounded-none"
+            className="data-[state=active]:bg-transparent border-gray-300 data-[state=active]:border-[#FFC501] border-b data-[state=active]:border-b-2 rounded-none data-[state=active]:rounded-none data-[state=active]:text-[#FFC501] md:text-base"
           >
             Reviews
           </TabsTrigger>
-          <div className="w-full border-b border-gray-300"></div>
+          <div className="border-gray-300 border-b w-full"></div>
         </TabsList>
         <TabsContent value="description">
-          <div className="md:text-lg py-5">
+          <div className="py-5 md:text-lg">
             <ul className="space-y-1">
               {product.description.split("\n").map((spec, index) => (
-                <li key={index} className="flex gap-1 items-center">
+                <li key={index} className="flex items-center gap-1">
                   <p>• {spec}</p>
                 </li>
               ))}
@@ -318,8 +318,8 @@ const ProductDetailPage = React.memo(() => {
           </div>
         </TabsContent>
         <TabsContent value="reviews">
-          <div className="flex flex-col items-center justify-center py-10 text-center text-gray-500">
-            <p className="text-lg font-semibold">No Reviews Yet</p>
+          <div className="flex flex-col justify-center items-center py-10 text-gray-500 text-center">
+            <p className="font-semibold text-lg">No Reviews Yet</p>
             <p className="text-sm">
               Be the first to review this product. Your feedback is valuable to
               us!
@@ -331,13 +331,13 @@ const ProductDetailPage = React.memo(() => {
       {isAuthenticated && (
         <>
           {showChat || (
-            <div className="fixed bottom-5 right-5 z-50">
+            <div className="right-5 bottom-5 z-50 fixed">
               <Image
                 src={chatbot}
                 alt="chatbot"
                 width={0}
                 height={0}
-                className="size-14 cursor-pointer rounded-full shadow-lg hover:scale-110 transition-transform duration-300 ease-in-out"
+                className="shadow-lg rounded-full size-12 sm:size-14 hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer"
                 priority
                 unoptimized
                 onClick={() => setShowChat((prev) => !prev)}
@@ -346,9 +346,13 @@ const ProductDetailPage = React.memo(() => {
           )}
 
           <div
-            className={`fixed bottom-5 right-5 w-full sm:w-[400px] rounded-xl bg-[#38B854] shadow-lg transform transition-transform duration-300 ease-in-out z-40 ${
+            className={`fixed bottom-5 right-5 w-[calc(100%-2.5rem)] sm:w-[400px] rounded-xl bg-[#38B854] shadow-lg transform transition-transform duration-300 ease-in-out z-40 ${
               showChat ? "translate-x-0" : "translate-x-[105%]"
             }`}
+            style={{
+              maxWidth: "calc(100% - 40px)",
+              maxHeight: "80vh",
+            }}
           >
             <AIChat
               productId={product._id}

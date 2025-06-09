@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Bot, CircleAlert, Loader2, Send, X } from "lucide-react";
 import {
   addQuestion,
+  clearMessages,
   fetchChatHistory,
   sendMessage,
 } from "@/redux/slices/aiChatSlice";
@@ -39,6 +40,7 @@ export default function AIChat({ productId, showChat, setShowChat }) {
 
   useEffect(() => {
     if (showChat) {
+      dispatch(clearMessages());
       dispatch(fetchChatHistory({ productId, config: configure(user?.token) }));
     }
   }, [productId, showChat, dispatch, user]);
@@ -132,13 +134,13 @@ export default function AIChat({ productId, showChat, setShowChat }) {
 
   return (
     <div
-      className={`flex flex-col h-[500px] max-w-lg mx-auto rounded-xl shadow-md ${
+      className={`flex flex-col h-[70vh] sm:h-[500px] w-full sm:w-[400px] mx-auto rounded-xl shadow-md ${
         isDark ? "bg-zinc-950" : "bg-white"
       }`}
     >
       {/* Chat Header */}
       <div className="flex justify-between items-center bg-[#38B854] border border-[#38B854] rounded-t-xl">
-        <div className="px-4 py-2 font-semibold text-lg flex items-center gap-2 text-white">
+        <div className="flex items-center gap-2 px-4 py-2 font-semibold text-white text-lg">
           <span role="img" aria-label="AI">
             🤖
           </span>
@@ -148,43 +150,43 @@ export default function AIChat({ productId, showChat, setShowChat }) {
         <Button
           onClick={() => setShowChat(false)}
           aria-label="Close Chat"
-          className="bg-transparent text-white hover:bg-transparent"
+          className="bg-transparent hover:bg-transparent text-white"
         >
           <X />
         </Button>
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-scroll hide-scrollbar px-4 py-2 space-y-4">
+      <div className="flex-1 space-y-4 px-3 sm:px-4 py-2 overflow-y-scroll hide-scrollbar">
         {loading && messages.length === 0 ? (
           <div className="flex justify-center items-center h-full">
-            <Loader2 className="animate-spin size-10 text-[#38B854]" />
+            <Loader2 className="size-10 text-[#38B854] animate-spin" />
           </div>
         ) : messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-gray-400">
-            <CircleAlert className="w-8 h-8 mb-2" />
+          <div className="flex flex-col justify-center items-center px-2 h-full text-gray-400 text-center">
+            <CircleAlert className="mb-2 w-8 h-8" />
             <span>No chat history yet. Start a conversation!</span>
           </div>
         ) : (
           messages.map((msg, idx) => (
             <div key={idx} className="space-y-4">
               {/* User question */}
-              <div className="flex items-start justify-end gap-2">
-                <div className="bg-[#38B854] text-white text-sm px-3 py-2 rounded-lg max-w-[80%]">
+              <div className="flex justify-end items-start gap-2">
+                <div className="bg-[#38B854] px-3 py-2 rounded-lg max-w-[90%] sm:max-w-[80%] text-white text-sm">
                   {msg.question}
                 </div>
-                <div className="size-7 rounded-full bg-[#38B854] text-white flex items-center justify-center text-sm">
+                <div className="flex justify-center items-center bg-[#38B854] rounded-full size-7 text-white text-sm shrink-0">
                   {user?.name[0]?.toUpperCase()}
                 </div>
               </div>
 
               {/* AI answer */}
               <div className="flex items-start gap-2">
-                <div className="size-7 rounded-full bg-gray-200 text-gray-800 flex items-center justify-center">
+                <div className="flex justify-center items-center bg-gray-200 rounded-full size-7 text-gray-800 shrink-0">
                   <Bot className="w-4 h-4" />
                 </div>
                 <div
-                  className={`max-w-[80%] rounded-lg px-3 py-2 ${
+                  className={`max-w-[90%] sm:max-w-[80%] rounded-lg px-3 py-2 ${
                     isDark
                       ? "bg-zinc-800 text-white"
                       : "bg-gray-100 text-gray-800"
@@ -192,13 +194,13 @@ export default function AIChat({ productId, showChat, setShowChat }) {
                 >
                   {msg.isLoading ? (
                     <div className="flex gap-1">
-                      <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" />
+                      <div className="bg-gray-400 rounded-full w-2 h-2 animate-bounce" />
                       <div
-                        className="w-2 h-2 rounded-full bg-gray-400 animate-bounce"
+                        className="bg-gray-400 rounded-full w-2 h-2 animate-bounce"
                         style={{ animationDelay: "0.2s" }}
                       />
                       <div
-                        className="w-2 h-2 rounded-full bg-gray-400 animate-bounce"
+                        className="bg-gray-400 rounded-full w-2 h-2 animate-bounce"
                         style={{ animationDelay: "0.4s" }}
                       />
                     </div>
@@ -227,11 +229,11 @@ export default function AIChat({ productId, showChat, setShowChat }) {
         />
         <Button
           type="submit"
-          className="text-[#38B854] rounded-none bg-transparent h-full rounded-br-xl hover:bg-[#38B854]/20 disabled:opacity-50"
+          className="bg-transparent hover:bg-[#38B854]/20 disabled:opacity-50 rounded-none rounded-br-xl h-full text-[#38B854]"
           disabled={loadingAnswer || !question.trim()}
         >
           {loadingAnswer ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
             <Send />
           )}

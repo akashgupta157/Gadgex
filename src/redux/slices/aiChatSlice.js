@@ -61,6 +61,12 @@ const aiChatSlice = createSlice({
         },
       ];
     },
+    clearMessages: (state) => {
+      state.messages = [];
+      state.loading = false;
+      state.loadingAnswer = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -113,4 +119,4 @@ const aiChatSlice = createSlice({
 });
 export default aiChatSlice.reducer;
 
-export const { clearChat, addQuestion } = aiChatSlice.actions;
+export const { clearChat, addQuestion, clearMessages } = aiChatSlice.actions;
