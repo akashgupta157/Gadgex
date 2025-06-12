@@ -1,6 +1,6 @@
 # Gadgex
 
-Gadgex is a comprehensive e-commerce platform designed to provide customers with a seamless shopping experience for a wide range of electronic products. Explore the latest in technology, from smartphones and cameras to specialized VU TVs, all curated to meet the diverse needs of tech enthusiasts.
+Gadgex is a comprehensive e-commerce platform designed to provide customers with a seamless shopping experience for a wide range of electronic products. Explore the latest in technology, from smartphones and cameras to specialized VU TVs, all curated to meet the diverse needs of tech enthusiasts – now with AI-powered shopping assistance to help you make the perfect choice.
 
 ## Features ✨
 
@@ -18,6 +18,7 @@ Gadgex is a comprehensive e-commerce platform designed to provide customers with
 - **ShadCN**: A customizable component library built with accessibility and performance in mind.
 - **Tailwind CSS**: A utility-first CSS framework for creating modern, responsive designs with ease.
 - **MongoDB**: A NoSQL database solution for flexible and scalable data storage.
+- **Google Gemini**: For AI-powered shopping assistance
 
 ## Screenshots 🖼️
 
@@ -38,11 +39,15 @@ Here are some key pages from the Gadgex platform to give you a quick preview of 
    ![Product Details Screenshot](https://github.com/user-attachments/assets/5cfc74c4-0f26-4e61-8db0-d2c879f9f2d0)
    _View detailed information about a specific product, including specifications and reviews._
 
+4. **AI Chat Interface**
+
+   ![AI Chat Screenshot]
+   _Shows the conversation interface with product questions and AI responses._
+
 5. **Cart Page**  
 
     ![Cart Screenshot](https://github.com/user-attachments/assets/123cb275-cd89-4e65-a8f6-5789132d95e0)
    _Displays the items added to the cart, along with options to adjust quantities and proceed to checkout._
-
 
 6. **Checkout Page**  
 
