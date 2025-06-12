@@ -41,7 +41,7 @@ Here are some key pages from the Gadgex platform to give you a quick preview of 
 
 4. **AI Chat Interface**
 
-   ![AI Chat Screenshot]
+   ![AI Chat Screenshot](https://github.com/user-attachments/assets/53db4faa-4d42-45ef-8c4e-e69a62428993)
    _Shows the conversation interface with product questions and AI responses._
 
 5. **Cart Page**  
