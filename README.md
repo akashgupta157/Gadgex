@@ -60,7 +60,7 @@ Here are some key pages from the Gadgex platform to give you a quick preview of 
 
 7. **Payment with Razorpay Integration**  
 
-   ![Checkout Screenshot]()
+   ![Checkout Screenshot](https://github.com/user-attachments/assets/508d07cd-2627-4bc8-a9f0-41141f13f52b)
    _Showcases the payment process with Razorpay integration._
 
 8. **Login/Sign-Up Page**
@@ -74,7 +74,6 @@ Here are some key pages from the Gadgex platform to give you a quick preview of 
    _Shows a list of products that the user has added to their favorites for quick access._
 
 10. **Order History Page**
-
    ![Order History Screenshot](https://github.com/user-attachments/assets/5be8d9d6-bf1e-4312-85d2-7cead0f8be1a)
    _Displays users' past orders and their statuses._
 
