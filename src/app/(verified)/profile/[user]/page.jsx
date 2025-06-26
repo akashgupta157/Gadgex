@@ -188,7 +188,7 @@ export default function Profile() {
             Logout
           </TabsTrigger>
         </TabsList>
-        <div className="md:flex-1 md:pl-5 pt-14 px-3 md:p-0 md:border-l">
+        <div className="md:flex-1 md:p-0 px-3 pt-14 md:pl-5 md:border-l">
           <TabsContent value="favorite">
             <Favorite isDark={isDark} />
           </TabsContent>
@@ -208,11 +208,11 @@ const Favorite = ({ isDark }) => {
   return (
     <>
       {favorites?.length ? (
-        <div className="my-5 space-y-5 md:my-10">
-          <div className="text-center font-medium text-xl">
+        <div className="space-y-5 my-5 md:my-10">
+          <div className="font-medium text-xl text-center">
             You have {favorites?.length} favorite items.
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="gap-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {favorites?.map((product) => (
               <ProductCard
                 key={product._id}
@@ -224,7 +224,7 @@ const Favorite = ({ isDark }) => {
         </div>
       ) : (
         <div>
-          <div className="my-10 text-center font-medium text-xl">
+          <div className="my-10 font-medium text-xl text-center">
             You have no favorite items.
           </div>
         </div>
@@ -238,7 +238,6 @@ const Order = ({ token, name }) => {
     orders: [],
     loading: true,
   });
-  console.log(state);
   const fetchOrders = async () => {
     const { data } = await axios.get("/api/user/orderhistory", config);
     setState({ orders: data.orders, loading: false });
@@ -249,23 +248,23 @@ const Order = ({ token, name }) => {
   return (
     <div>
       {state.loading ? (
-        <div className="w-full lg:min-h-[50vh] flex items-center justify-center">
+        <div className="flex justify-center items-center w-full lg:min-h-[50vh]">
           <BeatLoader color="#38B854" />
         </div>
       ) : (
-        <div className="my-5 space-y-5 md:my-10">
+        <div className="space-y-5 my-5 md:my-10">
           {state.orders?.length === 0 ? (
-            <div className="text-center font-medium text-xl">
+            <div className="font-medium text-xl text-center">
               No orders found.
             </div>
           ) : (
             <div className="space-y-5">
               {state.orders?.map((order, index) => (
                 <div key={index} className="border rounded-lg">
-                  <div className="px-5 py-2 border-b flex flex-wrap justify-between items-start lg:items-center bg-zinc-200 rounded-t-lg">
-                    <div className="flex flex-col lg:flex-row items-start lg:items-center gap-5 text-black w-full lg:w-auto">
+                  <div className="flex flex-wrap justify-between items-start lg:items-center bg-zinc-200 px-5 py-2 border-b rounded-t-lg">
+                    <div className="flex lg:flex-row flex-col items-start lg:items-center gap-5 w-full lg:w-auto text-black">
                       <div className="w-full lg:w-auto">
-                        <p className="text-xs font-medium text-gray-600 uppercase">
+                        <p className="font-medium text-gray-600 text-xs uppercase">
                           order placed
                         </p>
                         <p>
@@ -280,47 +279,47 @@ const Order = ({ token, name }) => {
                         </p>
                       </div>
                       <div className="w-full lg:w-auto">
-                        <p className="text-xs font-medium text-gray-600 uppercase">
+                        <p className="font-medium text-gray-600 text-xs uppercase">
                           total amount
                         </p>
                         <p>₹{order.totalAmount.toLocaleString("en-IN")}</p>
                       </div>
                       <div className="w-full lg:w-auto">
-                        <p className="text-xs font-medium text-gray-600 uppercase">
+                        <p className="font-medium text-gray-600 text-xs uppercase">
                           ship to
                         </p>
-                        <p>
-                          <Popover>
-                            <PopoverTrigger className="flex items-center gap-1">
-                              {name}
-                              <ChevronDown />
-                            </PopoverTrigger>
-                            <PopoverContent className="text-sm">
-                              <h1 className="font-semibold text-base">
-                                {name}
-                              </h1>
-                              <p>{order.address.street}</p>
-                              <p className="uppercase">
-                                {order.address.city}, {order.address.state}
-                              </p>
-                              <p>{order.address.pinCode}</p>
-                              <p>{order.address.country}</p>
-                            </PopoverContent>
-                          </Popover>
-                        </p>
+                        <Popover>
+                          <PopoverTrigger className="flex items-center gap-1">
+                            {name}
+                            <ChevronDown />
+                          </PopoverTrigger>
+                          <PopoverContent className="text-sm">
+                            <h1 className="font-semibold text-base">{name}</h1>
+                            <p>{order.address.street}</p>
+                            <p className="uppercase">
+                              {order.address.city}, {order.address.state}
+                            </p>
+                            <p>{order.address.pinCode}</p>
+                            <p>{order.address.country}</p>
+                          </PopoverContent>
+                        </Popover>
                       </div>
                     </div>
-                    <p className="text-sm font-medium text-gray-600 w-full lg:w-auto mt-2 lg:mt-0">
-                      ORDER # {order._id}
-                    </p>
+                    <div className="space-y-1 mt-2 lg:mt-0 w-full lg:w-auto font-medium text-gray-600 text-sm">
+                      <p>ORDER # {order._id}</p>
+                      <p>Payment Method: {order.paymentMethod}</p>
+                      {order.paymentMethod === "Razorpay" && (
+                        <p>Razorpay Order ID: {order.razorpayOrderId}</p>
+                      )}
+                    </div>
                   </div>
-                  <div className="p-5 space-y-3">
+                  <div className="space-y-3 p-5">
                     {order.products.map((product, index) => (
                       <div
-                        className="flex flex-col sm:flex-row items-start sm:items-center gap-5"
+                        className="flex sm:flex-row flex-col items-start sm:items-center gap-5"
                         key={index}
                       >
-                        <div className="w-[100px] h-[100px] flex justify-center items-center flex-shrink-0">
+                        <div className="flex flex-shrink-0 justify-center items-center w-[100px] h-[100px]">
                           <Image
                             src={product.image[0]}
                             width={100}
@@ -328,7 +327,7 @@ const Order = ({ token, name }) => {
                             alt="product"
                           />
                         </div>
-                        <p className="text-sm font-medium">{product.name}</p>
+                        <p className="font-medium text-sm">{product.name}</p>
                       </div>
                     ))}
                   </div>

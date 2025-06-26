@@ -50,7 +50,6 @@ export default function Checkout() {
   const [loadingCities, setLoadingCities] = useState(false);
 
   const config = configure(user?.token);
-  console.log(user);
   const { control, handleSubmit, formState, watch } = useForm({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {

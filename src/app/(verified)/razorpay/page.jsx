@@ -52,7 +52,6 @@ export default function Razorpay() {
         description: "Order Payment",
         order_id: data.order.id,
         handler: async (response) => {
-          console.log("Payment response:", response);
           const res = await axios.post(
             "/api/user/orderhistory",
             { ...orderData, razorpayOrderId: response.razorpay_order_id },
