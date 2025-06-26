@@ -1,7 +1,6 @@
 "use client";
 import { z } from "zod";
 import axios from "axios";
-import { configure } from "@/utils/misc";
 import { ChevronLeft } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Input } from "@/components/ui/input";
@@ -11,6 +10,7 @@ import { clearCart } from "@/redux/slices/cartSlice";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
+import { calculateDiscount, configure } from "@/utils/misc";
 import { setOrderData } from "@/redux/slices/razorpaySlice";
 import {
   Select,
@@ -36,7 +36,10 @@ export default function Checkout() {
   const { user } = useSelector((state) => state.user);
   const { isDark } = useSelector((state) => state.theme);
   const { cart } = useSelector((state) => state.cart);
-  const total = cart.reduce((acc, item) => acc + item.price, 0);
+  const total = cart.reduce(
+    (acc, item) => acc + calculateDiscount(item.price, item.discount),
+    0
+  );
   const [address, setAddress] = useState({
     country: user?.address.country || "India",
     shippingMethod: "Free",
