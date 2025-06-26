@@ -27,13 +27,23 @@ const orderHistorySchema = new mongoose.Schema(
       country: String,
       pinCode: String,
     },
+    paymentMethod: {
+      type: String,
+      enum: ["COD", "Razorpay"],
+      default: "COD",
+    },
+    razorpayOrderId: {
+      type: String,
+      required: function () {
+        return this.paymentMethod === "Razorpay";
+      },
+    },
     orderedAt: {
       type: Date,
       default: Date.now,
     },
     deliveredAt: {
       type: Date,
-      // default: Date.now,
     },
   },
   {

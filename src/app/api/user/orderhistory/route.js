@@ -1,5 +1,5 @@
+import user from "@/models/user";
 import dbConnect from "@/utils/db";
-import Product from "@/models/product";
 import { NextResponse } from "next/server";
 import orderHistory from "@/models/orderHistory";
 
@@ -7,13 +7,18 @@ export async function POST(req) {
   try {
     await dbConnect();
     const userId = req.headers.get("userid");
-    const { products, totalAmount, address } = await req.json();
+    const { products, totalAmount, address, paymentMethod, razorpayOrderId } =
+      await req.json();
+
+    await user.findByIdAndUpdate(userId, { address }, { new: true });
 
     const newOrder = await orderHistory.create({
       user: userId,
       products,
       totalAmount,
+      paymentMethod,
       address,
+      razorpayOrderId,
     });
 
     return NextResponse.json({

@@ -1,26 +1,34 @@
 "use client";
 import { z } from "zod";
 import axios from "axios";
-import React, { useState } from "react";
 import { configure } from "@/utils/misc";
 import { ChevronLeft } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from "react";
 import { clearCart } from "@/redux/slices/cartSlice";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
+import { setOrderData } from "@/redux/slices/razorpaySlice";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const checkoutSchema = z.object({
-  stress: z.string().min(3, "Address must be at least 3 characters."),
+  street: z.string().min(3, "Address must be at least 3 characters."),
   city: z.string().min(3, "City must be at least 3 characters."),
   state: z.string().min(3, "State must be at least 3 characters."),
   pinCode: z
     .string()
     .length(6, "Pin Code must be exactly 6 digits.")
     .regex(/^\d+$/, "Pin Code must contain only numbers."),
-  paymentOption: z.enum(["COD", "Card", "Paypal"]),
+  paymentOption: z.enum(["COD", "Razorpay"]),
 });
 
 export default function Checkout() {
@@ -33,11 +41,17 @@ export default function Checkout() {
     country: user?.address.country || "India",
     shippingMethod: "Free",
   });
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [loadingStates, setLoadingStates] = useState(false);
+  const [loadingCities, setLoadingCities] = useState(false);
+
   const config = configure(user?.token);
-  const { control, handleSubmit, setValue, watch, formState } = useForm({
+  console.log(user);
+  const { control, handleSubmit, formState, watch } = useForm({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
-      stress: user?.address.stress || "",
+      street: user?.address.street || "",
       city: user?.address.city || "",
       state: user?.address.state || "",
       pinCode: user?.address.pinCode || "",
@@ -45,28 +59,84 @@ export default function Checkout() {
     },
   });
 
+  const selectedState = watch("state");
+
+  useEffect(() => {
+    const fetchStates = async () => {
+      setLoadingStates(true);
+      try {
+        const response = await axios.post(
+          "https://countriesnow.space/api/v0.1/countries/states",
+          {
+            country: "India",
+          }
+        );
+        setStates(response.data.data.states);
+      } catch (error) {
+        console.error("Error fetching states:", error);
+      } finally {
+        setLoadingStates(false);
+      }
+    };
+
+    fetchStates();
+  }, []);
+
+  useEffect(() => {
+    if (selectedState) {
+      const fetchCities = async () => {
+        setLoadingCities(true);
+        try {
+          const response = await axios.post(
+            "https://countriesnow.space/api/v0.1/countries/state/cities",
+            {
+              country: "India",
+              state: selectedState,
+            }
+          );
+          setCities(response.data.data);
+        } catch (error) {
+          console.error("Error fetching cities:", error);
+        } finally {
+          setLoadingCities(false);
+        }
+      };
+
+      fetchCities();
+    } else {
+      setCities([]);
+    }
+  }, [selectedState]);
+
   const { errors } = formState;
 
   const onSubmit = async (addressData) => {
-    const { data } = await axios.post(
-      "/api/user/orderhistory",
-      {
-        products: cart,
-        totalAmount: address.shippingMethod === "Free" ? total : total + 100,
-        address: {
-          street: addressData.stress,
-          city: addressData.city,
-          state: addressData.state,
-          country: address.country,
-          pinCode: addressData.pinCode,
-        },
+    const orderData = {
+      products: cart,
+      totalAmount: address.shippingMethod === "Free" ? total : total + 100,
+      address: {
+        street: addressData.street,
+        city: addressData.city,
+        state: addressData.state,
+        country: address.country,
+        pinCode: addressData.pinCode,
       },
-      config
-    );
-    if (data.success) {
-      dispatch(clearCart());
-      await axios.patch("/api/user/emptyCart", {}, config);
-      redirect("/orderconfirm?id=" + data.newOrder._id);
+      paymentMethod: addressData.paymentOption,
+    };
+    if (addressData.paymentOption === "COD") {
+      const { data } = await axios.post(
+        "/api/user/orderhistory",
+        orderData,
+        config
+      );
+      if (data.success) {
+        dispatch(clearCart());
+        await axios.patch("/api/user/emptyCart", {}, config);
+        redirect("/orderconfirm?id=" + data.newOrder._id);
+      }
+    } else {
+      dispatch(setOrderData(orderData));
+      redirect("/razorpay");
     }
   };
   return (
@@ -75,22 +145,20 @@ export default function Checkout() {
         isDark ? "bg-zinc-950 text-zinc-50" : "bg-white"
       }`}
     >
-      <div className="flex items-center gap-2 py-5">
+      <div
+        className="flex items-center gap-2 py-5 hover:underline cursor-pointer"
+        onClick={() => redirect("/cart")}
+      >
         <ChevronLeft />
-        <span
-          className="cursor-pointer hover:underline"
-          onClick={() => redirect("/cart")}
-        >
-          Back
-        </span>
+        <span>Back</span>
       </div>
-      <h1 className="text-lg md:text-xl lg:text-2xl font-medium">Checkout</h1>
-      <div className="py-5 flex justify-between flex-col-reverse gap-10 lg:flex-row">
+      <h1 className="font-medium text-lg md:text-xl lg:text-2xl">Checkout</h1>
+      <div className="flex lg:flex-row flex-col-reverse justify-between gap-10 py-5">
         <form
-          className="lg:w-[70%] space-y-5"
+          className="space-y-5 lg:w-[70%]"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="bg-yellow-50 text-zinc-950 flex justify-between items-center px-5 py-2 rounded">
+          <div className="flex justify-between items-center bg-yellow-50 px-5 py-2 rounded text-zinc-950">
             <p>Customer Information</p>
             <p>Step 1 of 3</p>
           </div>
@@ -102,12 +170,12 @@ export default function Checkout() {
           {errors.name && (
             <p className="text-red-500 text-sm">{errors.name.message}</p>
           )}
-          <div className="bg-yellow-50 text-zinc-950 flex justify-between items-center px-5 py-2 rounded">
+          <div className="flex justify-between items-center bg-yellow-50 px-5 py-2 rounded text-zinc-950">
             <p>Shipping Information</p>
             <p>Step 2 of 3</p>
           </div>
           <Controller
-            name="stress"
+            name="street"
             control={control}
             render={({ field }) => (
               <Input
@@ -117,59 +185,111 @@ export default function Checkout() {
               />
             )}
           />
-          {errors.stress && (
-            <p className="text-red-500 text-sm">{errors.stress.message}</p>
+          {errors.street && (
+            <p className="text-red-500 text-sm">{errors.street.message}</p>
           )}
-          <Controller
-            name="city"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                placeholder="Enter your City"
-                className={`${isDark && "bg-zinc-950 text-zinc-50"}`}
+          <div className="gap-4 space-y-5 md:space-y-0 md:grid md:grid-cols-2">
+            <div>
+              <Controller
+                name="state"
+                control={control}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className={isDark ? "bg-zinc-950" : ""}>
+                      <SelectValue placeholder="Select state" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {loadingStates ? (
+                        <SelectItem value="loading-states" disabled>
+                          Loading states...
+                        </SelectItem>
+                      ) : states.length > 0 ? (
+                        states.map((state) => (
+                          <SelectItem key={state.name} value={state.name}>
+                            {state.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-states" disabled>
+                          No states available
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                )}
               />
-            )}
-          />
-          {errors.city && (
-            <p className="text-red-500 text-sm">{errors.city.message}</p>
-          )}
-          <Controller
-            name="state"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                placeholder="Enter your State"
-                className={`${isDark && "bg-zinc-950 text-zinc-50"}`}
+              {errors.state && (
+                <p className="text-red-500 text-sm">{errors.state.message}</p>
+              )}
+            </div>
+            <div>
+              <Controller
+                name="city"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={!selectedState || loadingCities}
+                  >
+                    <SelectTrigger className={isDark ? "bg-zinc-950" : ""}>
+                      <SelectValue placeholder="Select city" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {loadingCities ? (
+                        <SelectItem value="loading-cities" disabled>
+                          Loading cities...
+                        </SelectItem>
+                      ) : cities.length > 0 ? (
+                        cities.map((city) => (
+                          <SelectItem key={city} value={city}>
+                            {city}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-cities" disabled>
+                          {selectedState
+                            ? "No cities found"
+                            : "Select state first"}
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                )}
               />
-            )}
-          />
-          {errors.state && (
-            <p className="text-red-500 text-sm">{errors.state.message}</p>
-          )}
-          <Input
-            placeholder="Enter your Country"
-            className={`${isDark && "bg-zinc-950 text-zinc-50"}`}
-            defaultValue={address.country}
-            readOnly
-          />
-          <Controller
-            name="pinCode"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                placeholder="Enter your Pin Code"
-                className={`${isDark && "bg-zinc-950 text-zinc-50"}`}
+              {errors.city && (
+                <p className="text-red-500 text-sm">{errors.city.message}</p>
+              )}
+            </div>
+          </div>
+          <div className="gap-4 space-y-5 md:space-y-0 md:grid md:grid-cols-2">
+            <div>
+              <Controller
+                name="pinCode"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    placeholder="Pin Code"
+                    className={`${isDark && "bg-zinc-950 text-zinc-50"}`}
+                  />
+                )}
               />
-            )}
-          />
-          {errors.pinCode && (
-            <p className="text-red-500 text-sm">{errors.pinCode.message}</p>
-          )}
+              {errors.pinCode && (
+                <p className="text-red-500 text-sm">{errors.pinCode.message}</p>
+              )}
+            </div>
+            <div>
+              <Input
+                placeholder="Country"
+                className={`${isDark && "bg-zinc-950 text-zinc-50"}`}
+                defaultValue={address.country}
+                readOnly
+              />
+            </div>
+          </div>
           <div className="space-y-2">
-            <h1 className="font-medium text-lg mb-3">Shipping Method</h1>
+            <h1 className="mb-3 font-medium text-lg">Shipping Method</h1>
             <div className="flex items-center gap-2">
               <input
                 type="radio"
@@ -193,11 +313,11 @@ export default function Checkout() {
                 checked={address.shippingMethod === "Standard"}
               />
               <label htmlFor="shipping" className="flex gap-3">
-                Standard Shipping <p className="font-semibold">₹100</p>
+                Fast Shipping <p className="font-semibold">₹100</p>
               </label>
             </div>
           </div>
-          <div className="bg-yellow-50 text-zinc-950 flex justify-between items-center px-5 py-2 rounded">
+          <div className="flex justify-between items-center bg-yellow-50 px-5 py-2 rounded text-zinc-950">
             <p>Payment</p>
             <p>Step 3 of 3</p>
           </div>
@@ -220,41 +340,10 @@ export default function Checkout() {
                     <input
                       {...field}
                       type="radio"
-                      value="Card"
-                      checked={field.value === "Card"}
+                      value="Razorpay"
+                      checked={field.value === "Razorpay"}
                     />
-                    <label>Card</label>
-                  </div>
-                  {watch("paymentOption") === "Card" && (
-                    <div className="space-y-2 border w-[50%] p-10 rounded">
-                      <Input
-                        placeholder="Card Number"
-                        className={`${isDark && "bg-zinc-950 text-zinc-50"}`}
-                      />
-                      <Input
-                        placeholder="Card Holder Name"
-                        className={`${isDark && "bg-zinc-950 text-zinc-50"}`}
-                      />
-                      <div className="flex justify-between gap-5">
-                        <Input
-                          placeholder="Expiry Date"
-                          className={`${isDark && "bg-zinc-950 text-zinc-50"}`}
-                        />
-                        <Input
-                          placeholder="CVV"
-                          className={`${isDark && "bg-zinc-950 text-zinc-50"}`}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  <div className="flex items-center gap-2">
-                    <input
-                      {...field}
-                      type="radio"
-                      value="Paypal"
-                      checked={field.value === "Paypal"}
-                    />
-                    <label>Paypal</label>
+                    <label>Razorpay</label>
                   </div>
                 </div>
               )}
@@ -271,10 +360,10 @@ export default function Checkout() {
             isDark && "border"
           }`}
         >
-          <p className="capitalize font-semibold px-5 py-3 bg-yellow-50 rounded-t-md text-zinc-950">
+          <p className="bg-yellow-50 px-5 py-3 rounded-t-md font-semibold text-zinc-950 capitalize">
             order summary
           </p>
-          <div className="px-5 py-3 space-y-2">
+          <div className="space-y-2 px-5 py-3">
             <p className="flex justify-between text-sm md:text-base">
               <span>Subtotal:</span>
               <span>₹{total.toLocaleString("en-IN")}</span>
@@ -283,7 +372,7 @@ export default function Checkout() {
               <span>Shipping:</span>
               <span>{address.shippingMethod === "Free" ? "FREE" : "₹100"}</span>
             </p>
-            <p className="flex justify-between text-sm md:text-base font-semibold">
+            <p className="flex justify-between font-semibold text-sm md:text-base">
               <span>Order Total:</span>
               <span>
                 ₹
