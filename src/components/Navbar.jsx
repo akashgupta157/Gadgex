@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { Login } from "./Login";
 import { Signup } from "./Signup";
 import { configure } from "@/utils/misc";
@@ -27,6 +28,7 @@ export default function Navbar() {
   const { favorites } = useSelector((state) => state.favorites);
   const { cart } = useSelector((state) => state.cart);
   const { user, isAuthenticated } = useSelector((state) => state.user);
+  console.log("user", user);
   const [search, setSearch] = useState(useSearchParams().get("query") || "");
   useEffect(() => {
     if (isAuthenticated) {
@@ -157,12 +159,23 @@ export default function Navbar() {
           </p>
         </div>
         {isAuthenticated ? (
-          <p
-            onClick={() => router.push(`/profile/${user._id}`)}
-            className="lg:hidden flex justify-center items-center bg-[#38B854] rounded-full size-8 text-white text-lg noSelect"
-          >
-            {user?.name[0].toUpperCase()}
-          </p>
+          user.image ? (
+            <Image
+              src={user.image}
+              alt={user.name}
+              width={32}
+              height={32}
+              className="lg:hidden rounded-full cursor-pointer"
+              onClick={() => router.push(`/profile/${user._id}`)}
+            />
+          ) : (
+            <p
+              onClick={() => router.push(`/profile/${user._id}`)}
+              className="lg:hidden flex justify-center items-center bg-[#38B854] rounded-full size-8 text-white text-lg noSelect"
+            >
+              {user?.name[0].toUpperCase()}
+            </p>
+          )
         ) : (
           <Login
             openLogin={openLogin}
@@ -176,17 +189,33 @@ export default function Navbar() {
       </div>
       <div className="hidden lg:block">
         {isAuthenticated ? (
-          <div className="flex items-center gap-1 noSelect">
+          user.image ? (
             <div
               onClick={() => router.push(`/profile/${user._id}`)}
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-2 cursor-pointer noSelect"
             >
-              <p className="flex justify-center items-center bg-[#38B854] rounded-full size-9 text-white text-xl">
-                {user?.name[0].toUpperCase()}
-              </p>
+              <Image
+                src={user.image}
+                alt={user.name}
+                width={32}
+                height={32}
+                className="rounded-full"
+              />
               <p>{user?.name}</p>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center gap-1 noSelect">
+              <div
+                onClick={() => router.push(`/profile/${user._id}`)}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <p className="flex justify-center items-center bg-[#38B854] rounded-full size-9 text-white text-xl">
+                  {user?.name[0].toUpperCase()}
+                </p>
+                <p>{user?.name}</p>
+              </div>
+            </div>
+          )
         ) : (
           <div className="flex items-center">
             <Login

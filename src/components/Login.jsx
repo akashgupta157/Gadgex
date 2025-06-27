@@ -45,6 +45,7 @@ export const Login = ({
   const { toast } = useToast();
   const dispatch = useDispatch();
   const { data: session, status } = useSession();
+  console.log(session);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
