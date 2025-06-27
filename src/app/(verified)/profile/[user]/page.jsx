@@ -2,6 +2,7 @@
 import axios from "axios";
 import Image from "next/image";
 import { configure } from "@/utils/misc";
+import { signOut } from "next-auth/react";
 import { BeatLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
@@ -52,6 +53,15 @@ export default function Profile() {
         block: "nearest",
         inline: "center",
       });
+    }
+  };
+  const handleLogout = async () => {
+    try {
+      await signOut({ redirect: false });
+      dispatch(removeUser());
+      sessionStorage.removeItem("user");
+    } catch (error) {
+      console.error("Logout error:", error);
     }
   };
   return (
@@ -180,9 +190,7 @@ export default function Profile() {
             className={`flex-shrink-0 w-auto md:w-full flex justify-start gap-2 items-center data-[state=active]:shadow-none data-[state=active]:bg-transparent ${
               isDark ? "text-zinc-50" : "text-zinc-950"
             }`}
-            onClick={() => {
-              dispatch(removeUser());
-            }}
+            onClick={handleLogout}
           >
             <LogOut className="size-5" />
             Logout

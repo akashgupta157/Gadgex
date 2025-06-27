@@ -77,37 +77,6 @@ Here are some key pages from the Gadgex platform to give you a quick preview of 
    ![Order History Screenshot](https://github.com/user-attachments/assets/5be8d9d6-bf1e-4312-85d2-7cead0f8be1a)
    _Displays users' past orders and their statuses._
 
-## Getting Started 💻
-
-Follow these steps to set up the project locally:
-
-1. _Clone the repository_:
-
-   ```bash
-   git clone https://github.com/akashgupta157/Gadgex.git
-   ```
-
-2. _Install dependencies_:
-
-   ```bash
-   cd Gadgex
-   npm install
-   ```
-
-3. _Create a .env.local file in the root of the project and add the following environment variables:_
-   ```bash
-   GEMINI_API_KEY=your_gemini_api_key
-   MONGODB_URI=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_secret_key
-   RAZORPAY_KEY_ID=your_razorpay_api_key
-   RAZORPAY_KEY_SECRET=your_razorpay_api_secret
-   NEXT_PUBLIC_RAZORPAY_KEY_ID=your_public_razorpay_key
-   ```
-4. _Start the development server:_
-   ```bash
-    npm run dev
-   ```
-5. Open your browser and visit http://localhost:3000 to experience the application.
 
 ## Deployment 🚀
 
