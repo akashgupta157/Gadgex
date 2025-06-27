@@ -1,13 +1,9 @@
 "use client";
-import { z } from "zod";
-import axios from "axios";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Login } from "./Login";
+import { Signup } from "./Signup";
 import { configure } from "@/utils/misc";
-import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import { setUser } from "@/redux/slices/userSlice";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter, useSearchParams } from "next/navigation";
 import { clearCart, fetchCart } from "@/redux/slices/cartSlice";
@@ -16,29 +12,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { clearFavorites, fetchFavorites } from "@/redux/slices/favoriteSlice";
 import {
   CircleAlert,
-  CircleCheckBig,
-  Eye,
-  EyeOff,
   Heart,
   Search,
   ShoppingCart,
   UserRound,
 } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form";
 export default function Navbar() {
   const router = useRouter();
   const { toast } = useToast();
@@ -93,19 +71,19 @@ export default function Navbar() {
       } shadow flex justify-between items-center px-3 py-2 md:px-5 md:py-3 lg:px-10`}
     >
       <div className="relative" onClick={() => router.push("/")}>
-        <h1 className="logo text-4xl font-bold md:text-5xl cursor-pointer noSelect">
+        <h1 className="font-bold text-4xl md:text-5xl cursor-pointer logo noSelect">
           Gadgex
         </h1>
         <div>
-          <p className="w-1/2 h-1 bg-[#FFC501]"></p>
-          <p className="w-1/2 h-1 bg-[#38B854] absolute top-1 -right-1"></p>
+          <p className="bg-[#FFC501] w-1/2 h-1"></p>
+          <p className="top-1 -right-1 absolute bg-[#38B854] w-1/2 h-1"></p>
         </div>
       </div>
-      <div className="hidden md:w-1/2 md:flex border items-center gap-2 px-5 py-2 rounded-full">
+      <div className="hidden md:flex items-center gap-2 px-5 py-2 border rounded-full md:w-1/2">
         <input
           type="text"
           placeholder="Search Products here"
-          className="outline-none w-full bg-transparent"
+          className="bg-transparent outline-none w-full"
           onChange={(e) => setSearch(e.target.value)}
           value={search}
           onKeyDown={(e) => {
@@ -141,7 +119,7 @@ export default function Navbar() {
           </PopoverContent>
         </Popover>
         <div
-          className="relative cursor-pointer hidden md:block noSelect"
+          className="hidden md:block relative cursor-pointer noSelect"
           onClick={() => {
             if (!isAuthenticated) {
               showToast(<CircleAlert />, "Please login first!", "destructive");
@@ -181,7 +159,7 @@ export default function Navbar() {
         {isAuthenticated ? (
           <p
             onClick={() => router.push(`/profile/${user._id}`)}
-            className="size-8 rounded-full bg-[#38B854] text-white flex items-center justify-center text-lg lg:hidden noSelect"
+            className="lg:hidden flex justify-center items-center bg-[#38B854] rounded-full size-8 text-white text-lg noSelect"
           >
             {user?.name[0].toUpperCase()}
           </p>
@@ -203,7 +181,7 @@ export default function Navbar() {
               onClick={() => router.push(`/profile/${user._id}`)}
               className="flex items-center gap-2 cursor-pointer"
             >
-              <p className="size-9 rounded-full bg-[#38B854] text-white flex items-center justify-center text-xl">
+              <p className="flex justify-center items-center bg-[#38B854] rounded-full size-9 text-white text-xl">
                 {user?.name[0].toUpperCase()}
               </p>
               <p>{user?.name}</p>
@@ -217,7 +195,7 @@ export default function Navbar() {
               setOpenSignup={setOpenSignup}
               isDark={isDark}
             >
-              <p className="px-5 py-1.5 bg-[#38B854] hover:bg-[#38B854]/90 text-white rounded">
+              <p className="bg-[#38B854] hover:bg-[#38B854]/90 px-5 py-1.5 rounded text-white cursor-pointer">
                 Log In
               </p>
             </Login>
@@ -227,7 +205,7 @@ export default function Navbar() {
               setOpenSignup={setOpenSignup}
               setOpenLogin={setOpenLogin}
             >
-              <p className="px-3">Sign Up</p>
+              <p className="px-5 py-1.5 cursor-pointer">Sign Up</p>
             </Signup>
           </div>
         )}
@@ -235,336 +213,3 @@ export default function Navbar() {
     </nav>
   );
 }
-const loginFormSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address",
-  }),
-  password: z.string().min(6, {
-    message: "Password must be at least 6 characters",
-  }),
-});
-const Login = ({
-  children,
-  openLogin,
-  setOpenLogin,
-  setOpenSignup,
-  isDark,
-}) => {
-  const { toast } = useToast();
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const form = useForm({
-    resolver: zodResolver(loginFormSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-  const onSubmit = async (credentials) => {
-    setLoading(true);
-    const { data } = await axios.post("/api/auth/login", credentials);
-    if (data.success) {
-      setLoading(false);
-      toast({
-        title: (
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <CircleCheckBig />
-            {data.message}
-          </div>
-        ),
-        variant: "success",
-      });
-      dispatch(setUser(data.user));
-      handleReset();
-      setOpenLogin(false);
-    } else {
-      setLoading(false);
-      toast({
-        title: (
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <CircleAlert />
-            {data.message}
-          </div>
-        ),
-        variant: "destructive",
-      });
-    }
-  };
-  function handleReset() {
-    form.reset();
-  }
-  return (
-    <Dialog
-      open={openLogin}
-      onOpenChange={() => {
-        handleReset();
-        setOpenLogin();
-      }}
-    >
-      <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent
-        className={isDark ? "bg-zinc-950 text-zinc-50" : "bg-white"}
-      >
-        <DialogHeader>
-          <DialogTitle>Log In</DialogTitle>
-        </DialogHeader>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
-          >
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="abc@example.com"
-                      {...field}
-                      className={`bg-transparent ${
-                        isDark ? "text-zinc-50 " : "text-zinc-950"
-                      }`}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex justify-between items-center">
-                    Password
-                    <span
-                      className={`cursor-pointer ${
-                        isDark ? "text-zinc-50" : "text-zinc-950"
-                      }`}
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff /> : <Eye />}
-                    </span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      {...field}
-                      className={`bg-transparent ${
-                        isDark ? "text-zinc-50 " : "text-zinc-950"
-                      }`}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              disabled={loading}
-              className={`${
-                isDark && "bg-white text-zinc-950 hover:bg-zinc-300"
-              } `}
-            >
-              {loading ? "Loading..." : "Login"}
-            </Button>
-            <p className="text-center text-sm lg:hidden">
-              Don't have an account?{" "}
-              <span
-                className="text-blue-500 cursor-pointer"
-                onClick={() => {
-                  handleReset();
-                  setOpenLogin(false);
-                  setOpenSignup(true);
-                }}
-              >
-                Signup
-              </span>
-            </p>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
-  );
-};
-const signupFormSchema = z.object({
-  name: z.string().min(3, {
-    message: "Name must be at least 3 characters",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address",
-  }),
-  password: z.string().min(6, {
-    message: "Password must be at least 6 characters",
-  }),
-});
-const Signup = ({
-  children,
-  openSignup,
-  setOpenSignup,
-  setOpenLogin,
-  isDark,
-}) => {
-  const dispatch = useDispatch();
-  const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const form = useForm({
-    resolver: zodResolver(signupFormSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-    },
-  });
-  const onSubmit = async (credentials) => {
-    setLoading(true);
-    const { data } = await axios.post("/api/auth/signup", credentials);
-    if (data.success) {
-      setLoading(false);
-      toast({
-        title: (
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <CircleCheckBig />
-            {data.message}
-          </div>
-        ),
-        variant: "success",
-      });
-      dispatch(setUser(data.user));
-      handleReset();
-      setOpenSignup(false);
-    } else {
-      setLoading(false);
-      toast({
-        title: (
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <CircleAlert />
-            {data.message}
-          </div>
-        ),
-        variant: "destructive",
-      });
-    }
-  };
-  function handleReset() {
-    form.reset();
-  }
-  return (
-    <Dialog
-      open={openSignup}
-      onOpenChange={() => {
-        handleReset();
-        setOpenSignup();
-      }}
-    >
-      <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent className={isDark ? "bg-zinc-950 text-white" : "bg-white"}>
-        <DialogHeader>
-          <DialogTitle>Sign Up</DialogTitle>
-        </DialogHeader>
-        <Form {...form}>
-          <form
-            className="flex flex-col gap-4"
-            onSubmit={form.handleSubmit(onSubmit)}
-          >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="John Doe"
-                      {...field}
-                      className={`bg-transparent ${
-                        isDark ? "text-zinc-50 " : "text-zinc-950"
-                      }`}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="abc@example.com"
-                      {...field}
-                      className={`bg-transparent ${
-                        isDark ? "text-zinc-50 " : "text-zinc-950"
-                      }`}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex justify-between items-center">
-                    Password
-                    <span
-                      className={`cursor-pointer ${
-                        isDark ? "text-zinc-50" : "text-zinc-950"
-                      }`}
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff /> : <Eye />}
-                    </span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      {...field}
-                      className={`bg-transparent ${
-                        isDark ? "text-zinc-50 " : "text-zinc-950"
-                      }`}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              disabled={loading}
-              className={`${
-                isDark && "bg-white text-zinc-950 hover:bg-zinc-300"
-              } `}
-            >
-              {loading ? "Loading..." : "Signup"}
-            </Button>
-            <p className="text-center text-sm lg:hidden">
-              Already have an account?{" "}
-              <span
-                className="text-blue-500 cursor-pointer"
-                onClick={() => {
-                  handleReset();
-                  setOpenSignup(false);
-                  setOpenLogin(true);
-                }}
-              >
-                Login
-              </span>
-            </p>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
-  );
-};
