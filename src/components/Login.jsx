@@ -206,22 +206,25 @@ export const Login = ({
             >
               {loading ? "Loading..." : "Login"}
             </Button>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="border-t w-full" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-muted-foreground bg">
-                  Or continue with
-                </span>
-              </div>
-            </div>
           </form>
         </Form>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="border-t w-full" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span
+              className={`${
+                isDark && "text-white bg-black"
+              } px-2 text-muted-foreground bg-white`}
+            >
+              Or continue with
+            </span>
+          </div>
+        </div>
         <Button
           variant="outline"
-          className="w-full"
+          className={`w-full ${isDark && "text-zinc-950"}`}
           onClick={handleGoogleLogin}
           disabled={isGoogleLoading}
         >
